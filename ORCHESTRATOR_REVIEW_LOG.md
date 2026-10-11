@@ -10,8 +10,9 @@
 | WO | Task | Tier | Owner | Status | QA Gate | Notes |
 |----|------|------|-------|--------|---------|-------|
 | 1 | Project Structure | A | A1 | ✅ COMPLETE | ✅ PASS | All 7 QA gates passed; merged to main |
-| 2 | Docker Compose | A | A2 | 🟡 RUNNING | ⏳ | Dispatched: Wave 1, parallel with WO7 |
-| 3 | Alerts Poller | B | B1 | ⏳ QUEUED | ⏳ | Waiting: WO2 complete + QA pass |
+| 2 | Docker Compose | A | A2 | ✅ COMPLETE | ✅ PASS | Valid YAML, 7 services, merged to main |
+| 3 | Alerts Poller | B | B1 | ✅ COMPLETE | ✅ PASS | 5 tests pass, type hints, exponential backoff, leader election |
+| 4 | Batch Loaders | A | A3 | 🟠 REVISION | ⚠️ | 21 tests PASS, 1 remaining PEP 8 violation (test line 46); agent fixing |
 | 4 | Batch Loaders | A | A3 | ⏳ QUEUED | ⏳ | Waiting: WO1 complete + WO7 parallel |
 | 5 | Telegram Consumer | B | B2 | ⏳ QUEUED | ⏳ | Waiting: WO1, WO7 parallel |
 | 6 | Weather Loader | A | A4 | ⏳ QUEUED | ⏳ | Waiting: WO1, WO7 parallel |
