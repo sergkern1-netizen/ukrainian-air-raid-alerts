@@ -1,72 +1,206 @@
 version: '3.8'
 
 services:
-  # Redpanda Brokers (Kafka compatible)
+  # Redpanda Cluster (Kafka-compatible, KRaft mode)
   redpanda-broker-1:
-    image: docker.redpanda.com/redpanda/redpanda:latest
+    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
     container_name: redpanda-broker-1
+    hostname: redpanda-broker-1
+    ports:
+      - "9092:9092"
+      - "19092:19092"
+    environment:
+      REDPANDA_CLUSTER_UUID: "MkQwODAwMDAwMDAwMDAwMDA="
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:29092
+      - --advertise-kafka-addr internal://redpanda-broker-1:9092,external://localhost:9092
+      - --rpc-addr 0.0.0.0:33145
+      - --advertise-rpc-addr redpanda-broker-1:33145
+      - --schema-registry-addr 0.0.0.0:8081
+      - --mode dev-container
+      - --smp 1
+      - --memory 1G
+      - --default-topic-replications 3
+      - --default-topic-partitions 1
+    volumes:
+      - redpanda-data-1:/var/lib/redpanda/data
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD", "rpk", "cluster", "info"]
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      REDPANDA_ID: 1
+    depends_on:
+      - redpanda-broker-2
+      - redpanda-broker-3
 
   redpanda-broker-2:
-    image: docker.redpanda.com/redpanda/redpanda:latest
+    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
     container_name: redpanda-broker-2
+    hostname: redpanda-broker-2
+    ports:
+      - "9093:9093"
+      - "19093:19093"
+    environment:
+      REDPANDA_CLUSTER_UUID: "MkQwODAwMDAwMDAwMDAwMDA="
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9093,external://0.0.0.0:29093
+      - --advertise-kafka-addr internal://redpanda-broker-2:9093,external://localhost:9093
+      - --rpc-addr 0.0.0.0:33146
+      - --advertise-rpc-addr redpanda-broker-2:33146
+      - --schema-registry-addr 0.0.0.0:8081
+      - --mode dev-container
+      - --smp 1
+      - --memory 1G
+      - --default-topic-replications 3
+      - --default-topic-partitions 1
+      - --seeds redpanda-broker-1:33145
+    volumes:
+      - redpanda-data-2:/var/lib/redpanda/data
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD", "rpk", "cluster", "info"]
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      REDPANDA_ID: 2
+    depends_on:
+      - redpanda-broker-1
 
   redpanda-broker-3:
-    image: docker.redpanda.com/redpanda/redpanda:latest
+    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
     container_name: redpanda-broker-3
+    hostname: redpanda-broker-3
+    ports:
+      - "9094:9094"
+      - "19094:19094"
+    environment:
+      REDPANDA_CLUSTER_UUID: "MkQwODAwMDAwMDAwMDAwMDA="
+    command:
+      - redpanda
+      - start
+      - --kafka-addr internal://0.0.0.0:9094,external://0.0.0.0:29094
+      - --advertise-kafka-addr internal://redpanda-broker-3:9094,external://localhost:9094
+      - --rpc-addr 0.0.0.0:33147
+      - --advertise-rpc-addr redpanda-broker-3:33147
+      - --schema-registry-addr 0.0.0.0:8081
+      - --mode dev-container
+      - --smp 1
+      - --memory 1G
+      - --default-topic-replications 3
+      - --default-topic-partitions 1
+      - --seeds redpanda-broker-1:33145
+    volumes:
+      - redpanda-data-3:/var/lib/redpanda/data
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD", "rpk", "cluster", "info"]
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      REDPANDA_ID: 3
+    depends_on:
+      - redpanda-broker-1
 
-  # TimescaleDB (PostgreSQL with time series extensions)
+  # Redpanda Console (Web UI for debugging)
+  redpanda-console:
+    image: docker.redpanda.com/redpanda/console:v0.20.1
+    container_name: redpanda-console
+    hostname: redpanda-console
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: "redpanda-broker-1:9092,redpanda-broker-2:9093,redpanda-broker-3:9094"
+    networks:
+      - redpanda-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/cluster"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      - redpanda-broker-1
+      - redpanda-broker-2
+      - redpanda-broker-3
+
+  # TimescaleDB (PostgreSQL 15 with TimescaleDB + PostGIS)
   timescaledb:
     image: timescale/timescaledb:latest-pg15
     container_name: timescaledb
+    hostname: timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-airraids}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - timescaledb-data:/var/lib/postgresql/data
+      - ./init-timescale.sql:/docker-entrypoint-initdb.d/01-init-timescale.sql:ro
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d airraids"]
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      POSTGRES_DB: airraids
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
 
-  # Redis Cache
+  # Redis Cache (7-alpine with persistence)
   redis:
     image: redis:7-alpine
     container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+    command: redis-server /etc/redis/redis.conf
+    volumes:
+      - ./init-redis.conf:/etc/redis/redis.conf:ro
+      - redis-data:/data
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 3
 
-  # Schema Registry
+  # Schema Registry (Confluent)
   schema-registry:
     image: confluentinc/cp-schema-registry:7.5.0
     container_name: schema-registry
+    hostname: schema-registry
+    ports:
+      - "8081:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "redpanda-broker-1:9092,redpanda-broker-2:9093,redpanda-broker-3:9094"
+      SCHEMA_REGISTRY_DEBUG: "false"
+      SCHEMA_REGISTRY_SUBJECT_NAME_STRATEGY: io.confluent.kafka.schemaregistry.strategies.TopicNameStrategy
+    networks:
+      - redpanda-net
     healthcheck:
-      test: ["CMD", "true"]
+      test: ["CMD", "curl", "-f", "http://localhost:8081/subjects"]
       interval: 10s
       timeout: 5s
       retries: 3
-    environment:
-      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    depends_on:
+      - redpanda-broker-1
+      - redpanda-broker-2
+      - redpanda-broker-3
+
+networks:
+  redpanda-net:
+    driver: bridge
+
+volumes:
+  redpanda-data-1:
+  redpanda-data-2:
+  redpanda-data-3:
+  timescaledb-data:
+  redis-data:

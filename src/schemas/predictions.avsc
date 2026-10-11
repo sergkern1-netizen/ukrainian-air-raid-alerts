@@ -1,0 +1,75 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "predictions",
+  "type": "record",
+  "doc": "ML model predictions for alert onset and count forecasts. Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC) when prediction was generated"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Source identifier (e.g., 'ml_pipeline')"
+    },
+    {
+      "name": "onset_probability_15m",
+      "type": "float",
+      "doc": "Probability of alert onset within 15 minutes (0-1)"
+    },
+    {
+      "name": "onset_probability_30m",
+      "type": "float",
+      "doc": "Probability of alert onset within 30 minutes (0-1)"
+    },
+    {
+      "name": "onset_probability_60m",
+      "type": "float",
+      "doc": "Probability of alert onset within 60 minutes (0-1)"
+    },
+    {
+      "name": "count_forecast_6h",
+      "type": "float",
+      "doc": "Forecasted alert count for next 6 hours"
+    },
+    {
+      "name": "count_forecast_24h",
+      "type": "float",
+      "doc": "Forecasted alert count for next 24 hours"
+    },
+    {
+      "name": "count_forecast_72h",
+      "type": "float",
+      "doc": "Forecasted alert count for next 72 hours"
+    },
+    {
+      "name": "confidence_interval_lower",
+      "type": "float",
+      "doc": "Lower bound of 95% confidence interval for count forecast"
+    },
+    {
+      "name": "confidence_interval_upper",
+      "type": "float",
+      "doc": "Upper bound of 95% confidence interval for count forecast"
+    },
+    {
+      "name": "model_mode",
+      "type": {
+        "name": "model_mode_enum",
+        "type": "enum",
+        "symbols": [
+          "ml",
+          "fallback"
+        ]
+      },
+      "doc": "Whether prediction came from ML model or fallback heuristic"
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "weather_raw",
+  "type": "record",
+  "doc": "Raw weather data from Open-Meteo API. Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Source identifier (e.g., 'open_meteo')"
+    },
+    {
+      "name": "pressure",
+      "type": "float",
+      "doc": "Atmospheric pressure in hPa"
+    },
+    {
+      "name": "wind_speed",
+      "type": "float",
+      "doc": "Wind speed in m/s"
+    },
+    {
+      "name": "cloud_cover",
+      "type": "float",
+      "doc": "Cloud cover percentage (0-100)"
+    },
+    {
+      "name": "convective_potential",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Convective available potential energy (CAPE) in J/kg, null if not available"
+    },
+    {
+      "name": "visibility",
+      "type": "float",
+      "doc": "Visibility in meters"
+    }
+  ]
+}

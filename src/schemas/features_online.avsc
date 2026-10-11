@@ -1,0 +1,228 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "features_online",
+  "type": "record",
+  "doc": "Processed feature vector combining all sources for ML pipeline. Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Primary source identifier"
+    },
+    {
+      "name": "alert_count_15m",
+      "type": "int",
+      "doc": "Number of alerts in last 15 minutes"
+    },
+    {
+      "name": "alert_count_1h",
+      "type": "int",
+      "doc": "Number of alerts in last 1 hour"
+    },
+    {
+      "name": "alert_count_6h",
+      "type": "int",
+      "doc": "Number of alerts in last 6 hours"
+    },
+    {
+      "name": "alert_count_24h",
+      "type": "int",
+      "doc": "Number of alerts in last 24 hours"
+    },
+    {
+      "name": "active_flag",
+      "type": "boolean",
+      "doc": "Whether an active alert is ongoing"
+    },
+    {
+      "name": "oblast",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Ukrainian oblast (region) name"
+    },
+    {
+      "name": "h3",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "H3 geospatial index"
+    },
+    {
+      "name": "duration",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Alert duration in milliseconds"
+    },
+    {
+      "name": "time_since_last_alert",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Milliseconds since previous alert"
+    },
+    {
+      "name": "neighbor_active_count",
+      "type": "int",
+      "doc": "Number of active alerts in neighboring regions"
+    },
+    {
+      "name": "inferred_end_flag",
+      "type": "boolean",
+      "doc": "True if alert end time was inferred"
+    },
+    {
+      "name": "mentioned_locations",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "doc": "List of locations from Telegram extraction"
+    },
+    {
+      "name": "telegram_event_type",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Event type from Telegram (launch, uav, missile, all_clear)"
+    },
+    {
+      "name": "msg_time",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null,
+      "doc": "Unix timestamp when Telegram message was posted"
+    },
+    {
+      "name": "extraction_confidence",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "NLP extraction confidence score (0-1)"
+    },
+    {
+      "name": "osint_event_type",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Event type from OSINT sources"
+    },
+    {
+      "name": "fatality_estimate",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Estimated fatalities from OSINT"
+    },
+    {
+      "name": "source_confidence",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "OSINT source confidence score (0-1)"
+    },
+    {
+      "name": "threat_level_by_region",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Threat assessment by region"
+    },
+    {
+      "name": "ops_intensity_index",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Operations intensity index (0-1)"
+    },
+    {
+      "name": "distance_frontline_km",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Distance from frontline in kilometers"
+    },
+    {
+      "name": "pressure",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Atmospheric pressure in hPa"
+    },
+    {
+      "name": "wind_speed",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Wind speed in m/s"
+    },
+    {
+      "name": "cloud_cover",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Cloud cover percentage (0-100)"
+    },
+    {
+      "name": "convective_potential",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Convective available potential energy (CAPE) in J/kg"
+    },
+    {
+      "name": "visibility",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Visibility in meters"
+    }
+  ]
+}

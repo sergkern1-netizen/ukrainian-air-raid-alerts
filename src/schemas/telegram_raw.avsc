@@ -1,0 +1,55 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "telegram_raw",
+  "type": "record",
+  "doc": "Raw alerts from Ukrainian Air Force Telegram (@kpszsu). Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Source identifier (e.g., 'telegram.kpszsu')"
+    },
+    {
+      "name": "mentioned_locations",
+      "type": {
+        "type": "array",
+        "items": "string"
+      },
+      "doc": "List of locations mentioned in message (oblast, city, region names)"
+    },
+    {
+      "name": "event_type",
+      "type": {
+        "name": "event_type_enum",
+        "type": "enum",
+        "symbols": [
+          "launch",
+          "uav",
+          "missile",
+          "all_clear"
+        ]
+      },
+      "doc": "Type of event reported"
+    },
+    {
+      "name": "msg_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when message was posted"
+    },
+    {
+      "name": "extraction_confidence",
+      "type": "float",
+      "doc": "Confidence score (0-1) for NLP extraction of event type and locations"
+    }
+  ]
+}

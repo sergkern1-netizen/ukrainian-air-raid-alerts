@@ -1,0 +1,78 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "osint_batch",
+  "type": "record",
+  "doc": "Batch OSINT data from ACLED, ISW, and related sources. Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Source identifier (e.g., 'acled', 'isw')"
+    },
+    {
+      "name": "event_type",
+      "type": "string",
+      "doc": "ACLED event type or ISW operation classification"
+    },
+    {
+      "name": "h3",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "H3 geospatial index where event occurred, null if unavailable"
+    },
+    {
+      "name": "fatality_estimate",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Estimated fatalities from event, null if not reported"
+    },
+    {
+      "name": "source_confidence",
+      "type": "float",
+      "doc": "Confidence score (0-1) in data quality from primary source"
+    },
+    {
+      "name": "threat_level_by_region",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Threat assessment by region (e.g., 'high', 'moderate', 'low'), null if not available"
+    },
+    {
+      "name": "ops_intensity_index",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Operations intensity index (normalized 0-1), null if not calculated"
+    },
+    {
+      "name": "distance_frontline_km",
+      "type": [
+        "null",
+        "float"
+      ],
+      "default": null,
+      "doc": "Distance from frontline in kilometers, null if not applicable"
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "namespace": "com.alerts.airraid",
+  "name": "alerts_raw",
+  "type": "record",
+  "doc": "Raw air alerts from alerts.in.ua API. Compatible with v1.",
+  "fields": [
+    {
+      "name": "event_time",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds (UTC)"
+    },
+    {
+      "name": "ingested_at",
+      "type": "long",
+      "doc": "Unix timestamp in milliseconds when record was ingested"
+    },
+    {
+      "name": "source_id",
+      "type": "string",
+      "doc": "Source identifier (e.g., 'alerts.in.ua')"
+    },
+    {
+      "name": "alert_count_15m",
+      "type": "int",
+      "doc": "Number of alerts in last 15 minutes"
+    },
+    {
+      "name": "alert_count_1h",
+      "type": "int",
+      "doc": "Number of alerts in last 1 hour"
+    },
+    {
+      "name": "alert_count_6h",
+      "type": "int",
+      "doc": "Number of alerts in last 6 hours"
+    },
+    {
+      "name": "alert_count_24h",
+      "type": "int",
+      "doc": "Number of alerts in last 24 hours"
+    },
+    {
+      "name": "active_flag",
+      "type": "boolean",
+      "doc": "Whether an active alert is ongoing"
+    },
+    {
+      "name": "oblast",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "Ukrainian oblast (region) name, null if not specified"
+    },
+    {
+      "name": "h3",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null,
+      "doc": "H3 geospatial index (hexadecimal), null if not available"
+    },
+    {
+      "name": "duration",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Alert duration in milliseconds, null if ongoing"
+    },
+    {
+      "name": "time_since_last_alert",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null,
+      "doc": "Milliseconds since previous alert, null if no prior alert"
+    },
+    {
+      "name": "neighbor_active_count",
+      "type": "int",
+      "doc": "Number of active alerts in neighboring regions"
+    },
+    {
+      "name": "inferred_end_flag",
+      "type": "boolean",
+      "doc": "True if alert end time was inferred rather than confirmed"
+    }
+  ]
+}
