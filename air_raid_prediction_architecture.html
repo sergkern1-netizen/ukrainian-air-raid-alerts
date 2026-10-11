@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Raid Prediction Architecture</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #0d1117;
+                color: #e6edf3;
+            }
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        @media (prefers-color-scheme: dark) {
+            .container {
+                background: #161b22;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            }
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #0366d6;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        @media (prefers-color-scheme: dark) {
+            .subtitle { color: #8b949e; border-color: #30363d; }
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #0366d6;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        @media (prefers-color-scheme: dark) {
+            h2 { border-color: #30363d; }
+        }
+        h3 {
+            font-size: 1.1em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        @media (prefers-color-scheme: dark) {
+            h3 { color: #c9d1d9; }
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .diagram {
+            background: #f6f8fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 20px 0;
+            white-space: pre;
+            line-height: 1.4;
+        }
+        @media (prefers-color-scheme: dark) {
+            .diagram {
+                background: #0d1117;
+                border-color: #30363d;
+                color: #e6edf3;
+            }
+        }
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .tech-card {
+            background: #f6f8fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 15px;
+            border-left: 4px solid #0366d6;
+        }
+        @media (prefers-color-scheme: dark) {
+            .tech-card {
+                background: #0d1117;
+                border-color: #30363d;
+            }
+        }
+        .tech-card strong {
+            color: #0366d6;
+        }
+        .tech-card p {
+            font-size: 0.95em;
+            margin-top: 8px;
+        }
+        .constraint-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+        }
+        @media (prefers-color-scheme: dark) {
+            .constraint-box {
+                background: #332701;
+                border-color: #8b6914;
+            }
+        }
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .highlight {
+                background: #332701;
+            }
+        }
+        .key-metric {
+            display: inline-block;
+            background: #ddf4ff;
+            border: 1px solid #0366d6;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            margin: 5px 5px 5px 0;
+        }
+        @media (prefers-color-scheme: dark) {
+            .key-metric {
+                background: #0d3a66;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Air Raid Prediction System</h1>
+        <div class="subtitle">Production-Grade Architecture & Operations Brief | Principal Systems Architect Assessment</div>
+
+        <div class="constraint-box">
+            <strong>Critical Operating Constraints:</strong> Network outages (conflict environment) | API rate limits (alerts.in.ua: 8-10 req/min) | Upstream failures (Telegram down, satellite delays) | Traffic spikes during major strikes
+        </div>
+
+        <h2>1. System Architecture Overview</h2>
+        <p>Five-layer architecture optimized for resilience under extreme conditions:</p>
+
+        <div class="diagram">┌─────────────────────────────────────────────┐
+│         USER-FACING API LAYER              │
+│  (HTTP REST + WebSocket for live alerts)   │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│        MODEL SERVING & FALLBACK            │
+│  (Online inference + rule-based baseline)  │
+└──────────────────┬──────────────────────────┘
+                   │
+┌──────────────────▼──────────────────────────┐
+│      FEATURE STORE & CACHE LAYER           │
+│  (Redis: hot features | DuckDB: OLAP)      │
+└──────────────────┬──────────────────────────┘
+                   │
+        ┌──────────┴──────────┬──────────┐
+        │                     │          │
+┌───────▼────────┐  ┌────────▼────┐  ┌─▼───────────┐
+│ TIME-SERIES DB │  │GEOSPATIAL DB│  │ FEATURE     │
+│ (TimescaleDB)  │  │ (PostGIS)    │  │ COMPUTATION │
+│ alerts, weather│  │ oblast maps, │  │ (Airflow)   │
+│ trajectory     │  │ cities, dist │  │             │
+└────────┬───────┘  └────────┬─────┘  └─┬───────────┘
+         │                   │          │
+         └───────────────────┼──────────┘
+                             │
+        ┌────────────────────┴─────────────────┐
+        │   REAL-TIME STREAMING PIPELINE       │
+        │  (Kafka cluster × 2 replicas)        │
+        │  Consumer: Spark Structured Streaming│
+        └────────────────────┬─────────────────┘
+                             │
+        ┌────────────┬───────┴────────┬─────────────┐
+        │            │                │             │
+    ┌───▼──┐  ┌─────▼────┐  ┌────────▼─┐  ┌──────▼────┐
+    │API   │  │ Telegram │  │ Satellite│  │ Weather   │
+    │alerts│  │ webhooks │  │ imagery  │  │ API feeds │
+    │.in.ua│  │          │  │ (batch)  │  │           │
+    └──────┘  └──────────┘  └──────────┘  └───────────┘
+        </div>
+
+        <p><strong>Data Flow:</strong> Sources push/poll into Kafka cluster (2 brokers, 3x replication). Spark consumes, computes features, writes hot paths to Redis. Cold queries hit TimescaleDB (49 data sources × 10+ features). Geospatial queries use PostGIS for oblast-level alerts. Feature store (Redis) serves inference at <50ms latency. Fallback: rule-based alerts (missile type + trajectory + distance to cities).</p>
+
+        <h2>2. Technology Stack & Rationale</h2>
+
+        <div class="tech-stack">
+            <div class="tech-card">
+                <strong>TimescaleDB</strong>
+                <p>Time-series storage (alerts, weather, missile launches). 1M+ points/sec ingest. Handles gaps during network outages (backfill once connected).</p>
+            </div>
+            <div class="tech-card">
+                <strong>PostGIS (PostgreSQL)</strong>
+                <p>Geospatial queries (oblast boundaries, nearest cities). Sub-100ms polygon containment checks. Stands as fallback when feature store fails.</p>
+            </div>
+            <div class="tech-card">
+                <strong>Redis Cluster</strong>
+                <p>Feature cache (hot path <50ms). Handles 10k req/sec peak. Async replication to disk. Auto-failover across 3+ nodes.</p>
+            </div>
+            <div class="tech-card">
+                <strong>DuckDB (OLAP)</strong>
+                <p>Historical analytics & model training. Compressed columnar storage. Sidestep network by running local inference on cached data.</p>
+            </div>
+            <div class="tech-card">
+                <strong>Apache Kafka</strong>
+                <p>Ingest backbone. 2-broker cluster, 3x replication. Survives single broker outage. Consumer lag monitoring (alert if >5min behind).</p>
+            </div>
+            <div class="tech-card">
+                <strong>Spark Structured Streaming</strong>
+                <p>Real-time feature computation. Micro-batch semantics (1-5sec windows). Exactly-once processing to avoid double-alerts.</p>
+            </div>
+        </div>
+
+        <h3>Trade-off Analysis</h3>
+        <ul>
+            <li><span class="highlight">Latency vs. Durability:</span> Redis for <50ms inference; TimescaleDB for durability. Kafka ensures replay if Redis fails.</li>
+            <li><span class="highlight">Cost vs. Redundancy:</span> 2-broker Kafka (not 3) acceptable because sources re-send failed payloads. 3x replication in Kafka itself adds safety.</li>
+            <li><span class="highlight">Complexity vs. Resilience:</span> Accept complexity of multi-DB (TimescaleDB + PostGIS + Redis) because no single DB handles all access patterns at required latency.</li>
+        </ul>
+
+        <h2>3. Real-Time Streaming Pipeline</h2>
+
+        <div class="constraint-box">
+            <strong>Challenge:</strong> Track "alert in progress" state across 49 regions while handling 8-10 req/min rate limit on alerts.in.ua API.
+        </div>
+
+        <h3>Ingest Strategy</h3>
+        <ul>
+            <li><strong>Kafka Topics:</strong>
+                <ul>
+                    <li><code>alerts-raw</code> (alerts.in.ua polling, 90sec interval max)</li>
+                    <li><code>telegram-webhooks</code> (push from Telegram bots, rate-limited)</li>
+                    <li><code>weather-feeds</code> (NOAA, Meteosource batch, hourly)</li>
+                    <li><code>satellite-imagery</code> (batch daily, triggers feature recompute)</li>
+                </ul>
+            </li>
+            <li><strong>Producers:</strong> Dedicated Lambda-like containers poll alerts.in.ua at 2 req/min, spread load across 4 containers (8 req/min total, under limit). Exponential backoff if rate-limited (503 response).</li>
+        </ul>
+
+        <h3>State Management & Windowing</h3>
+        <pre style="background: #f6f8fa; padding: 15px; border-radius: 6px; border-left: 4px solid #0366d6; overflow-x: auto;">Spark job maintains state:
+  - Alert cache: regionId -> {start, lastUpdate, severity, trajectory}
+  - State TTL: 24h (stale alerts auto-expire)
+  - Deduplication: deduplicate within 60sec window
+
+Output:
+  - NEW_ALERT: timestamp, region, confidence
+  - ALERT_UPDATE: severity change, trajectory refined
+  - ALERT_END: confidence drops below threshold
+        </pre>
+
+        <h3>Fault Tolerance</h3>
+        <ul>
+            <li><strong>Kafka broker failure:</strong> Rebalance (automatic), no data loss (3x replication).</li>
+            <li><strong>Spark driver failure:</strong> Kubernetes restarts pod, resumes from last checkpoint (S3-backed).</li>
+            <li><strong>alerts.in.ua down:</strong> Fall back to Telegram bot messages + cached baseline model. Resume API polling when back online.</li>
+        </ul>
+
+        <h2>4. Model Serving Strategy</h2>
+
+        <h3>Dual-Mode Inference</h3>
+        <ol>
+            <li><strong>Online Path (real-time):</strong>
+                <ul>
+                    <li>Features from Redis + hot Kafka stream</li>
+                    <li>3-model ensemble (gradient boosting + neural net + rule-based)</li>
+                    <li>Latency SLA: <100ms p95, <50ms p50</li>
+                    <li>Deployed as stateless Python service (Uvicorn + Ray Serve)</li>
+                </ul>
+            </li>
+            <li><strong>Fallback Path (if online fails):</strong>
+                <ul>
+                    <li>Rule-based: missile_type + trajectory + distance_to_nearest_city</li>
+                    <li>Zero ML dependencies; responds in <10ms</li>
+                    <li>Automatic activation if Redis latency >200ms or model inference fails 3x</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>Model Deployment</h3>
+        <ul>
+            <li><strong>Nightly retraining:</strong> Run on DuckDB + historical data. Test on holdout week (measure precision/recall). If metrics degrade >1%, don't deploy (alert ops).</li>
+            <li><strong>Canary roll:</strong> 10% traffic for 1h, compare alert volume vs. baseline. If discrepancy >5%, rollback automatically.</li>
+            <li><strong>Versioning:</strong> Models stored as Docker images with git commit + model version. Kubernetes manages A/B routing via sidecar.</li>
+            <li><strong>Uncertainty quantification:</strong> Return confidence intervals (e.g., 85-92% alert probability). Threshold at 80% for public alerts, 75% for researcher alerts.</li>
+        </ul>
+
+        <h2>5. Resilience & Disaster Recovery</h2>
+
+        <div class="tech-stack">
+            <div class="tech-card">
+                <strong>Network Outage (hours)</strong>
+                <p>Systems continue with cached data. Kafka local storage keeps 24h backlog. Resume sync when connectivity returns (backfill gaps from TimescaleDB).</p>
+            </div>
+            <div class="tech-card">
+                <strong>Rate-Limit Hit</strong>
+                <p>Switch to raid.fly.dev backup API (hits it at 2 req/min instead). Alerts delayed 90-180sec but maintain continuity.</p>
+            </div>
+            <div class="tech-card">
+                <strong>Model Serving Failure</strong>
+                <p>Automatic fallback to rule-based alerts. Ops notified immediately. Manual model restart or rollback available in <30sec.</p>
+            </div>
+            <div class="tech-card">
+                <strong>Data Loss Prevention</strong>
+                <p>TimescaleDB: WAL to EBS (6h retention). S3 nightly backups (daily snapshots). Kafka: 24h retention on all topics.</p>
+            </div>
+        </div>
+
+        <h3>RTO/RPO Targets</h3>
+        <ul>
+            <li><span class="key-metric">RTO: 2-5 minutes</span> (Kubernetes auto-restarts, Kafka rebalance)</li>
+            <li><span class="key-metric">RPO: 60 seconds</span> (S3 backups, Kafka checkpoint)</li>
+            <li><span class="key-metric">Alert latency (normal):</span> 10-30sec from detection to user</li>
+            <li><span class="key-metric">Alert latency (degraded):</span> 2-3min (Telegram bot only, no model)</li>
+        </ul>
+
+        <h3>Health Monitoring KPIs</h3>
+        <ul>
+            <li>Kafka consumer lag (alert if >5min)</li>
+            <li>Redis cache hit rate (alert if <85%)</li>
+            <li>TimescaleDB replication lag (alert if >10sec)</li>
+            <li>Model inference latency p95 (alert if >150ms)</li>
+            <li>Alert.in.ua API availability (alert if <99.5% in 5min window)</li>
+            <li>Fallback rule-based alert rate (spike indicates model failure)</li>
+        </ul>
+
+        <h2>6. Deployment & Operations</h2>
+
+        <h3>Infrastructure</h3>
+        <ul>
+            <li><strong>Orchestration:</strong> Kubernetes (EKS or self-hosted). Spans 2+ availability zones within safe region (Poland, Romania, or EU).</li>
+            <li><strong>Node pools:</strong>
+                <ul>
+                    <li><code>ingestion</code> (CPU-optimized): Kafka brokers, Spark executor nodes</li>
+                    <li><code>serving</code> (balanced): Model serving, Redis, feature API</li>
+                    <li><code>batch</code> (GPU-optional): Model training, feature recompute</li>
+                </ul>
+            </li>
+            <li><strong>CI/CD:</strong> GitHub Actions. Test models in Docker before push. Run integration tests (real Kafka, test data) before production deploy.</li>
+            <li><strong>Secrets:</strong> Sealed secrets (K8s native). API keys for alerts.in.ua, Telegram, Meteosource in AWS Secrets Manager.</li>
+        </ul>
+
+        <h3>Operational Playbook</h3>
+        <table style="width:100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="border-bottom: 2px solid #ddd;">
+                <th style="text-align: left; padding: 10px; background: #f6f8fa;">Incident</th>
+                <th style="text-align: left; padding: 10px; background: #f6f8fa;">Immediate Action</th>
+                <th style="text-align: left; padding: 10px; background: #f6f8fa;">Recovery</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Kafka broker down</td>
+                <td style="padding: 10px;">Monitor logs; K8s auto-restarts</td>
+                <td style="padding: 10px;">If 2nd broker fails → manual rebalance (30min)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Redis cache failure</td>
+                <td style="padding: 10px;">Ops switches to TimescaleDB fallback (auto-redirect)</td>
+                <td style="padding: 10px;">Restart Redis; rebuild cache (5min warm-up)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">Model latency spike</td>
+                <td style="padding: 10px;">Trigger rule-based alerts; page on-call ML eng</td>
+                <td style="padding: 10px;">Debug Spark job; rollback model if needed (2min)</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 10px;">alerts.in.ua API down</td>
+                <td style="padding: 10px;">Switch to raid.fly.dev backup; alert Telegram users</td>
+                <td style="padding: 10px;">Maintain backup polling; resume primary when live</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">Network outage (hours)</td>
+                <td style="padding: 10px;">Run on local cache; use fallback rules</td>
+                <td style="padding: 10px;">Backfill TimescaleDB once connected; validate data</td>
+            </tr>
+        </table>
+
+        <h2>7. Scalability Strategy</h2>
+
+        <h3>Current Capacity (Day 1)</h3>
+        <ul>
+            <li><span class="key-metric">Ingest:</span> 1000s events/sec (49 regions × 20 features/sec)</li>
+            <li><span class="key-metric">Inference:</span> 5000 req/sec p99 (spikes to 15k during major strike)</li>
+            <li><span class="key-metric">Storage:</span> ~500GB/year (time-series + geospatial)</li>
+        </ul>
+
+        <h3>Scaling Levers</h3>
+        <ol>
+            <li><strong>Kafka:</strong> Increase partitions (currently 48, max 144 for 49 regions). Add brokers if throughput >10k msg/sec.</li>
+            <li><strong>Spark:</strong> Horizontal scaling via executor pods. Auto-scale based on Kafka lag (if lag >5min, +10 executors).</li>
+            <li><strong>Redis:</strong> Cluster mode (16 shards). Cache eviction policy: allkeys-lru (100GB heap per shard).</li>
+            <li><strong>Model Serving:</strong> Ray Serve auto-scales (0-100 replicas based on request queue). Max latency target: 200ms p99.</li>
+            <li><strong>TimescaleDB:</strong> Partitioning by region + time (yearly). Compression for data >30d old.</li>
+        </ol>
+
+        <h3>Geographic Expansion Path</h3>
+        <ul>
+            <li><strong>Phase 1 (Ukraine only):</strong> 49 regions, 1 cluster</li>
+            <li><strong>Phase 2 (Poland, Moldova):</strong> Add 25 regions, same cluster (scale Kafka × 2)</li>
+            <li><strong>Phase 3 (EU-wide):</strong> Multi-cluster with CDC (Change Data Capture) replication. Route requests to nearest cluster.</li>
+        </ul>
+
+        <h2>Summary: Key Decisions</h2>
+
+        <div style="background: #ddf4ff; border: 1px solid #0366d6; border-radius: 6px; padding: 20px; margin: 20px 0;">
+            <h3 style="margin-top: 0;">Architecture Principles</h3>
+            <ul>
+                <li><strong>Assume failure:</strong> Every component can fail independently. Always have a fallback.</li>
+                <li><strong>Degrade gracefully:</strong> Lose features (satellite imagery), not alerts. Fall back to rules over silence.</li>
+                <li><strong>Optimize for latency under load:</strong> 10-30sec alert delivery during normal operations; <2min during degradation.</li>
+                <li><strong>Embrace immutability:</strong> Models, data pipelines versioned. Rollback always possible.</li>
+                <li><strong>Monitor obsessively:</strong> Alerting thresholds tuned to conflict environment (high variance acceptable; missed alerts unacceptable).</li>
+            </ul>
+        </div>
+
+        <p style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ddd; font-size: 0.95em; color: #666;">
+            <strong>Next Steps:</strong> Validate architecture against real data (2-week POC with Telegram bot + TimescaleDB). Stress-test Kafka under rate-limit conditions. Model ensemble validation on historical Ukrainian alerts (2022-2024).
+        </p>
+    </div>
+</body>
+</html>

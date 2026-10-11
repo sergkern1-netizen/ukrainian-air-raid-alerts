@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Redpanda Brokers (Kafka compatible)
+  redpanda-broker-1:
+    image: docker.redpanda.com/redpanda/redpanda:latest
+    container_name: redpanda-broker-1
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      REDPANDA_ID: 1
+
+  redpanda-broker-2:
+    image: docker.redpanda.com/redpanda/redpanda:latest
+    container_name: redpanda-broker-2
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      REDPANDA_ID: 2
+
+  redpanda-broker-3:
+    image: docker.redpanda.com/redpanda/redpanda:latest
+    container_name: redpanda-broker-3
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      REDPANDA_ID: 3
+
+  # TimescaleDB (PostgreSQL with time series extensions)
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: timescaledb
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      POSTGRES_DB: airraids
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # Schema Registry
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.5.0
+    container_name: schema-registry
+    healthcheck:
+      test: ["CMD", "true"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
