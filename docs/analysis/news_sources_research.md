@@ -52,3 +52,26 @@ Limits to state up front:
   to volunteer alerts within ±10 minutes (recall), not volunteer alerts to official ones within
   5 minutes (precision). Our precision figures in `docs/analysis/feed_integrity.md` are Sumska
   50.1% before December 2025 and 46.5% after (overlap window). Quote the measure with its number.
+
+## 5. Sample test: GDELT, 2026-10-09 (2026-10-12)
+
+Downloaded with owner approval: `http://data.gdeltproject.org/events/20261009.export.CSV.zip`,
+7,315,169 bytes, SHA-256 `680968bc40825ae05c8fe50d6a3032b34f99979d02161b0bd4f441896eabbd68`.
+Stored in the session scratch folder, not in the repository. It contains one GDELT 1.0 daily
+events file (45,494,980 bytes, 116,062 rows, 58 columns).
+
+Findings:
+- **Ukraine events** (ActionGeo country `UP`): 1,863 of 116,062 rows.
+- **Attack-like CAMEO codes** (180–195, the "use force / employ weapons" family): 232.
+  Code 190 ("use conventional military force") is 161 of the 232. It is broad and does not name
+  an air raid. Code 195 ("employ aerial weapons") is only 9.
+- **Time resolution: none.** `DATEADDED` and `SQLDATE` are day-level (`YYYYMMDD`) in the 1.0 daily
+  file. It cannot be aligned with alert waves, which are timed to the minute. This corrects the
+  PoC plan above, which assumed time-stamped events.
+- **Source domains** for the attack-like events are mixed (Interfax-Ukraine, The Moscow Times,
+  Daily Kos, AOL and others). Each event carries a URL that a person must read to judge.
+
+Next step for timing: GDELT 2.0 publishes 15-minute files
+(`http://data.gdeltproject.org/gdeltv2/YYYYMMDDHHMMSS.export.CSV.zip`). The existence of two
+test files was confirmed by HEAD requests only (65 KB at 12:00 UTC and 148 KB at 00:00 UTC on
+2026-10-09). A full day is 96 files. Downloading them needs separate owner approval.
