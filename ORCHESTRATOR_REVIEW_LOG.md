@@ -14,10 +14,10 @@
 | 3 | Alerts Poller | B | B1 | ✅ COMPLETE | ✅ PASS | 5 tests pass, type hints, exponential backoff, leader election |
 | 4 | Batch Loaders | A | A3 | 🟠 REVISION | ⚠️ | 21 tests PASS, 1 remaining PEP 8 violation (test line 46); agent fixing |
 | 4 | Batch Loaders | A | A3 | ⏳ QUEUED | ⏳ | Waiting: WO1 complete + WO7 parallel |
-| 5 | Telegram Consumer | B | B2 | ⏳ QUEUED | ⏳ | Waiting: WO1, WO7 parallel |
-| 6 | Weather Loader | A | A4 | ⏳ QUEUED | ⏳ | Waiting: WO1, WO7 parallel |
+| 5 | Telegram Consumer | B | B2 | ✅ COMPLETE | ✅ PASS | 2026-10-12: fixed Ukrainian inflection matching (prefix stems) in telegram_nlp; 54/54 unit tests pass |
+| 6 | Weather Loader | A | A4 | ✅ COMPLETE | ✅ PASS | 4 tests pass, hourly scheduling, JSON parsing verified |
 | 7 | Schema Registry | A | A1 | ⏳ QUEUED | ⏳ | Waiting: WO1 complete (same owner) |
-| 8 | Load Tests | A | A2 | ⏳ QUEUED | ⏳ | Waiting: WO2-6 complete |
+| 8 | Load Tests | A | A2 | 🟡 CODE DONE | ⏳ | Offline tests pass (60); live tests (poller 10 min, Redis p99, Kafka lag) need RUN_LOAD_TESTS=1 + Docker stack, not yet run |
 
 ---
 
