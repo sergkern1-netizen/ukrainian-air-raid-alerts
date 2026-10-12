@@ -7,6 +7,10 @@ one-week-ahead forecast of national alert counts, with a backtest against the ba
 it in a 52-origin backtest, or in shorter sensitivity windows. The decision and its limits are in
 [`docs/gate3_results.md`](docs/gate3_results.md).
 
+**Status:** MVP shipped 2026-10-12 with documented misses. Weekly WAPE and interval coverage
+missed their criteria, and real-time monitoring was descoped. See
+[`docs/gate4_status.md`](docs/gate4_status.md).
+
 ## What it does
 
 `python run_pipeline.py` runs these stages, each logged with a UTC timestamp:
@@ -99,8 +103,9 @@ tests/                       offline unit and pipeline tests
 `src/ingestion/` also contains a real-time alerts poller, a Telegram consumer, a weather
 loader, batch loaders for other sources, a Redis-backed cache with in-memory fallback, and
 Confluent wire-format publishing. They are tested in isolation. `run_pipeline.py` does not call
-them, and the live Kafka, Redis and Telegram paths have not been run end to end (they need the
-Docker stack, which was not available for this work).
+them. The Docker stack (`docker compose up -d`) runs all seven services, and the live Redis and
+Kafka tests pass against it (2026-10-12). The Telegram path has not been run end to end. The
+real-time alerts poller needs an alerts.in.ua API token and is future work.
 
 ## Limitations
 
@@ -135,7 +140,8 @@ Replaces the RMSE < 5 target in CLAUDE.md, approved by the project owner.
       has no model-based intervals and was not checked against this band; no candidate met it.
 - [x] `python run_pipeline.py` runs from the repository root on the stated data
 - [x] Requirements pinned to the versions the tests were run against
-- [ ] Real-time monitoring latency below 5 minutes: not measured (no live pipeline run)
+- [ ] Real-time monitoring latency below 5 minutes: descoped from the MVP by the project owner
+      (2026-10-12). Not measured. It needs the alerts.in.ua API token, which is not yet available.
 
 ## Disclaimer
 
