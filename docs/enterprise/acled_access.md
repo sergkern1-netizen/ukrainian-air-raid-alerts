@@ -1,3 +1,7 @@
+> **STATUS: DISMISSED 2026-10-12.** The owner dismissed ACLED because API access is not
+> available for this account (Open tier, see "Account check" below). Re-open only if Research
+> access is granted later.
+
 # ACLED API access (enterprise source, replaces ISW)
 
 Checked: 2026-10-12. Sources: https://acleddata.com/myacled-faqs (access FAQ, fetched);
