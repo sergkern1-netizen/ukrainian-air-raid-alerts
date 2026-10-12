@@ -108,10 +108,9 @@ def main() -> None:
         "Co-occurrence means both oblasts appeared in the same wave. It does not show that one caused",
         "the other, and it does not identify which oblast was targeted.",
         "",
-        "Caution: the top Jaccard pairs are western oblasts. Gate 3 documents that the volunteer feed",
-        "over-reports in the west relative to the official feed (docs/gate3_results.md). A western",
-        "co-occurrence cluster may therefore reflect the reporting channel as much as the events. Check",
-        "it against the official feed's oblast-level matches before reading it as a geographic pattern.",
+        "Caution: the top Jaccard pairs are western oblasts. The volunteer feed over-reports in the west",
+        "(docs/gate3_results.md). The official feed shows the same western pairs alerting together",
+        "(docs/analysis/western_cluster_check.md), so the cluster is not only a reporting artefact.",
         "",
     ]
     OUT_DOC.write_text("\n".join(lines), encoding="utf-8")
