@@ -46,8 +46,8 @@ these figures are not per person.
 The full table for all 25 oblasts and Kyiv city is in `output/analysis/chapter02_region_table.csv`
 (gitignored). The top five oblasts account for 46% of alerts, and the top ten for 74%.
 
-**Oblast-level differences in the record come partly from how often each oblast is reported.** We
-cannot separate the two with this data.
+**Oblast-level differences in the record may partly reflect how often each oblast is reported.**
+This data cannot separate reporting from events.
 
 ---
 
@@ -73,7 +73,7 @@ The western figures are low in this record. That does **not** mean the west is s
 ![Median alert duration by oblast](figures/ch02_median_duration.png)
 
 Duration is where the oblasts differ most. The median ranges from **23 minutes** in Dnipropetrovska
-to **44 minutes** in Chernivetska. The share of alerts over one hour shows the same spread:
+to **45 minutes** in Chernivetska. The share of alerts over one hour shows the same spread:
 
 | Oblast | Median (min) | Over one hour | Over the 90th percentile (min) |
 |---|---:|---:|---:|
@@ -96,8 +96,8 @@ official feed's granularity change). Its row is shown in the data but is not use
 ## 4. Night share by oblast
 
 Overall, 34% of alert starts fall between 22:00 and 07:00 (see Chapter 1). By oblast the night share
-varies from about **30%** (Dnipropetrovska, Zakarpatska, Ivano-Frankivska) to about **46%**
-(Khmelnytska). Kyiv city is at 41%.
+varies from about **30%** (Dnipropetrovska) to about **46%** (Khmelnytska). Zakarpatska and
+Ivano-Frankivska are at 32% and 34%. Kyiv city is at 41%.
 
 Night-heavy oblasts are not always the most affected by alerts overall. A higher night share means
 more of their alerts start after dark. It is one of the most useful figures for sleep planning, and
