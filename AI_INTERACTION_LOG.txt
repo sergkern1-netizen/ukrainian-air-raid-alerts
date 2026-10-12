@@ -1003,3 +1003,32 @@ Next actions once the machine is restarted and the token arrives:
 3. Run RUN_LOAD_TESTS=1 pytest for the live latency and lag tests.
 4. Measure real-time latency against the < 5 minute criterion; update
    docs/gate4_status.md; commit.
+
+--------------------------------------------------------------------------------
+[2026-10-12 ~15:15-16:20] USER MESSAGES:
+"lets continue where we stopped i have restarted pc"
+"docker is ready"
+
+ASSISTANT:
+- Checked state: working tree clean at start; Gate 4 status doc read.
+- After the restart: WSL up, Docker Server 29.8.2, Compose v5.5.1.
+- docker compose up failed on four config errors, fixed in the working tree (not committed):
+  - Circular depends_on between redpanda-broker-1 and brokers 2/3. Removed broker-1 dependency.
+  - Wrong Redpanda image path (redpanda/ -> redpandadata/). Console v0.20.1 does not exist; set v2.5.2.
+  - Broker flags "--flag value" in one list item and --default-topic-* rejected by v24.1.1.
+    Converted to --flag=value; removed the two default-topic flags (brokers now default RF 1).
+  - Schema Registry needs KAFKASTORE_TOPIC_REPLICATION_FACTOR=3.
+  - init-redis.conf: removed invalid "role master"; renamed lazy-freeing-* to lazyfree-*.
+- All seven services healthy.
+- Live tests (RUN_LOAD_TESTS=1): redis latency passed; kafka lag failed (host clients could not
+  resolve redpanda-broker-N advertised names). Fixed by moving external listeners to published
+  ports 19092-19094 and setting KAFKA_BROKERS in .env and .env.example to those. Kafka test then passed.
+- Sustained poller test passed, but it swallows exceptions, so it measured 401 responses. Does not
+  satisfy criterion 3. Flagged in docs/gate4_status.md; test change not made.
+- Updated docs/gate4_status.md (Blocker 1 resolved, test status, criterion 3 row). Gate 4 still NOT
+  PASSED. Did not commit.
+
+STATE AT END OF THIS SESSION (2026-10-12, second session):
+- Stack healthy. Criterion 3 not measured (no real API token).
+- Open: commit the compose/redis/env/doc fixes (awaiting owner go-ahead); decide replication
+  factor for brokers; fix the poller test exception handling before it is used for measurement.
