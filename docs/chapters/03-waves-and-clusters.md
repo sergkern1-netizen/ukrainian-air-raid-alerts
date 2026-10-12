@@ -48,7 +48,7 @@ much notice people had.
 
 Just under half of all waves (48%) last under an hour, and about 92% last under four hours. Only about 2% of
 waves exceed six hours. Those long waves need care: they can be long stretches of repeated alert records or
-artefacts of how the record was kept. Chapter 5 examines them.
+recording errors in how the record was kept. Chapter 5 examines them.
 
 **Within a wave, the alerts are spread out.** The median time from the first start to the last start
 in a wave is **9 minutes**, and the 90th percentile is **70 minutes**. So most waves are a short burst
@@ -126,7 +126,7 @@ headline number about waves should name its gap.
 - **What caused a wave.** A wave is a grouping of records, not a known attack.
 - **What was launched.** The record does not record threat types.
 - **How much notice people had.** There are no launch or impact times.
-- **Whether a long wave was real.** The longest waves may be record artefacts, and Chapter 5 tests that.
+- **Whether a long wave was real.** The longest waves may be recording errors, and Chapter 5 tests that.
 
 ---
 
