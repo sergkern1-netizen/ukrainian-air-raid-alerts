@@ -1,282 +1,143 @@
-# Ukrainian Air Raid Alerts Time Series Analysis
+# Ukrainian Air Raid Alerts: Weekly Forecast Pipeline
 
-A Python project to analyze and forecast temporal patterns in air raid alerts in Ukraine using open-source time series data and machine learning techniques.
+A reproducible pipeline that downloads public siren-alert records, checks them, and produces a
+one-week-ahead forecast of national alert counts, with a backtest against the baseline.
 
-## Project Overview
+**Current result:** the trailing four-week mean is the deliverable. No more complex model beat
+it in a 52-origin backtest, or in shorter sensitivity windows. The decision and its limits are in
+[`docs/gate3_results.md`](docs/gate3_results.md).
 
-This project applies statistical and machine learning methods to understand alert frequency patterns in Ukrainian air raid alerts, enabling better preparedness and resource allocation. The research is focused on **defensive intelligence analysis** for understanding alert systems and patterns.
+## What it does
 
-## Data Sources
+`python run_pipeline.py` runs these stages, each logged with a UTC timestamp:
 
-### Primary Alert Data Sources
+1. **Acquire.** Downloads the two Vadimkin CSV files into `data/raw/` (git-ignored) and records
+   their SHA-256 and download time in `data/raw/MANIFEST.json`.
+2. **Validate and preprocess.** Checks required columns and non-empty files. Drops rows that are
+   identical in every column (the official file has 38% such copies; see
+   [`docs/data_inspection_gate1.md`](docs/data_inspection_gate1.md)).
+3. **Weekly target.** Counts volunteer-feed alerts per Monday-start week. Partial first and last
+   weeks are dropped.
+4. **Checks (fail fast).** Stops if a complete week has zero alerts (possible collection stall),
+   if there are too few weeks, or if the newest record is more than 14 days older than the
+   `--as-of` date.
+5. **Backtest.** 52 one-week-ahead origins. Each origin refits only on earlier weeks. Compares the
+   baseline with a negative-binomial regression and ARIMA(1,1,0) on log-scale weekly totals.
+6. **Forecast.** The baseline's point forecast for the next week, with intervals from the
+   backtest residuals (see limits below).
+7. **Report.** Writes `output/forecast_results.csv` and `output/pipeline_report.json`.
 
-1. **Vadimkin/ukrainian-air-raid-sirens-dataset** (GitHub)
-   - URL: https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset
-   - Format: CSV (Git LFS)
-   - Coverage: Feb 24, 2022 - Sep 7, 2026 (official), volunteer feed ongoing
-   - Records: 299,000+ alerts
-   - License: MIT (commercial-friendly)
-   - Status: VERIFIED ACTIVE
+## Data sources
 
-2. **Kaggle - Air Alerts in Ukraine (p0stscriptum)**
-   - URL: https://www.kaggle.com/datasets/p0stscriptum/air-raid-dataset
-   - Format: CSV
-   - Coverage: Feb 25, 2022 - present (daily updates)
-   - Granularity: Oblast-level (27 regions)
-   - License: CC-BY-NC-SA 4.0 (non-commercial)
-   - Status: VERIFIED ACTIVE
-   - Note: ~30% have inferred end times (known bias)
+| Source | Used for | Coverage | Notes |
+|---|---|---|---|
+| [Vadimkin/ukrainian-air-raid-sirens-dataset](https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset) `volunteer_data_en.csv` | Target series | 2022-02-25 onward, oblast level | Manually posted by volunteers; 5% of end times are inferred (`naive`). MIT licence per the dataset. Credit: eTryvoga volunteer channel. |
+| Same repository, `official_data_en.csv` | Cross-check | 2022-03-15 to 2026-09-07 | Ends with the official Telegram feed. Changes to mostly raion level from December 2025. |
 
-3. **alerts.in.ua API** (Ukrainian Air Force Official)
-   - URL: https://devs.alerts.in.ua/
-   - Format: JSON REST API
-   - Coverage: Real-time + historical
-   - Granularity: Multi-level (oblast, raion, hromada, city)
-   - Auth: API token required
-   - Rate Limit: 8-10 requests/minute
-   - Status: VERIFIED ACTIVE
+Not used: Kaggle datasets (not needed; the Vadimkin data covers the same period), alerts.in.ua
+and UkraineAlarm (no credentials available), ISW, Oryx, ACLED (not needed for the current
+target). Other GitHub projects on this data are not independent sources.
 
-### Ground Truth Validation Sources
+## Results (52 origins, weekly WAPE)
 
-4. **ISW (Institute for the Study of War)** - https://www.understandingwar.org
-5. **Oryx** - https://www.oryxspioenkop.com/ (equipment loss tracking)
-6. **Ukrainian Air Force Telegram** - https://t.me/kpszsu (official announcements)
-7. **ACLED** - https://acleddata.com/ (conflict events database)
+| Model | Weekly WAPE | vs baseline (Diebold–Mariano) |
+|---|---|---|
+| **Trailing 4-week mean (deliverable)** | **8.52%** | — |
+| Negative binomial (lags, 4-week mean, regime) | 12.40% | worse, p = 0.027 |
+| ARIMA(1,1,0) on log1p | 8.55% | no difference, p = 0.97 |
 
-See `RESEARCH_FINDINGS_MASTER.md` for complete source documentation.
+Shorter windows (26 and 13 origins) give the same ranking. See `docs/gate3_results.md`.
 
-## Research Status
+## Install
 
-**Status:** Research Phase Complete  
-**Viability:** 75-85% for MVP, 70-75% for Enterprise  
-**Date:** 2026-10-11
+Requires Python 3.11 (tested on Windows).
 
-### Research Methodology
-
-- Multi-source data validation (9 sources across 3 tiers)
-- 4-agent stress test (Red Team, Engineer, Value Defender, Arbitrator reviews)
-- Ground truth cross-validation strategy
-- Data leakage prevention protocols
-
-### Key Findings
-
-✅ All primary data sources verified and accessible  
-✅ MVP scope: 8-12 weeks, $25K-$50K, 1 engineer  
-✅ Enterprise scope: 6-7 months, $200K-$340K, 4 engineers  
-⚠️ 2 blockers identified (Vadimkin status, ACLED currency)  
-
-See `RESEARCH_FINDINGS_MASTER.md` for detailed audit results.
-
-## Project Structure
-
-```
-air-raid-alerts/
-├── README.md                          # This file
-├── requirements.txt                   # Python dependencies (pinned versions)
-├── run_pipeline.py                    # Main orchestration script
-├── data/
-│   ├── raw/                          # Downloaded datasets (to be created)
-│   └── processed/                    # Cleaned, preprocessed data (to be created)
-├── src/
-│   ├── __init__.py
-│   ├── data_loader.py               # Download and validate data
-│   ├── preprocessing.py             # Cleaning and normalization
-│   ├── features.py                  # Time-based feature engineering
-│   ├── model.py                     # Model training (ARIMA/Prophet)
-│   └── forecast.py                  # Generate forecasts
-├── notebooks/
-│   └── exploration.ipynb            # EDA and analysis (to be created)
-├── output/
-│   └── forecast_results.csv         # Results (to be created)
-├── docs/
-│   ├── RESEARCH_FINDINGS_MASTER.md
-│   ├── DATA_SOURCES_REFERENCE.json
-│   ├── CONVERSATION_SUMMARY.md
-│   └── AI_INTERACTION_LOG.txt
-└── .gitignore
-```
-
-## Installation & Setup
-
-### Prerequisites
-- Python 3.10 or higher
-- pip package manager
-- Virtual environment (recommended)
-
-### Step 1: Clone Repository
 ```bash
-git clone https://github.com/[your-username]/air-raid-alerts.git
-cd air-raid-alerts
-```
-
-### Step 2: Create Virtual Environment
-```bash
-# On macOS/Linux:
-python3 -m venv venv
-source venv/bin/activate
-
-# On Windows:
 python -m venv venv
-venv\Scripts\activate
-```
-
-### Step 3: Install Dependencies
-```bash
+venv\Scripts\activate            # Windows; on macOS/Linux: source venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements-dev.txt   # optional: tests and lint
 ```
 
-## Usage
+`requirements-gazetteer.txt` is only needed to regenerate the Telegram keyword lists
+(`scripts/build_telegram_forms.py`). It is not used at runtime.
 
-### Run Complete Pipeline
+## Run
+
 ```bash
-python run_pipeline.py
+python run_pipeline.py                      # download if needed, then run
+python run_pipeline.py --offline            # use files already in data/raw/
+python run_pipeline.py --as-of 2026-10-12   # fix the freshness reference date (reproducible runs)
+python run_pipeline.py --origins 26         # shorter backtest window
 ```
 
-This will:
-1. Download the latest air raid alert data
-2. Preprocess and validate the data
-3. Compute temporal features
-4. Train forecasting models
-5. Generate predictions
-6. Export results to `output/forecast_results.csv`
+Exit code is 0 on success and 1 if a check fails. Outputs go to `output/` (git-ignored).
 
-### Interactive Exploration
+## Tests
+
 ```bash
-jupyter notebook notebooks/exploration.ipynb
+pytest                          # offline suite; live tests are skipped
+RUN_LOAD_TESTS=1 pytest         # also runs live tests (needs the Docker stack and .env)
 ```
 
-## Data Leakage Prevention
+## Repository layout
 
-✅ **Implemented:**
-- Training data strictly before forecast point
-- Test set separated from training set
-- No future data leakage in features
-- Historical sources versioned
+```
+run_pipeline.py              entry point: acquire -> validate -> weekly -> backtest -> forecast
+src/forecasting/             weekly target, backtest, metrics
+src/ingestion/vadimkin.py    download, manifest, schema checks, loading
+src/ingestion/alert_dedupe.py exact-duplicate ingest rule
+src/ingestion/              real-time and batch components (see below)
+src/schemas/                Avro schemas
+scripts/                     inspection, EDA, backtest CLI, gazetteer generator
+docs/                        decisions, data inspection, EDA, Gate 3 results
+tests/                       offline unit and pipeline tests
+```
 
-## Model Selection
+### Components not wired into the pipeline
 
-The project uses multiple time series approaches:
-- **ARIMA** for traditional autoregressive modeling
-- **Prophet** for trend + seasonality decomposition
-- **Ensemble** averaging for robust predictions
+`src/ingestion/` also contains a real-time alerts poller, a Telegram consumer, a weather
+loader, batch loaders for other sources, a Redis-backed cache with in-memory fallback, and
+Confluent wire-format publishing. They are tested in isolation. `run_pipeline.py` does not call
+them, and the live Kafka, Redis and Telegram paths have not been run end to end (they need the
+Docker stack, which was not available for this work).
 
-Model selection is based on data characteristics (stationarity, autocorrelation, seasonality).
+## Limitations
 
-## Results
+Full list: [`docs/gate3_results.md`](docs/gate3_results.md). The main ones:
 
-Forecast results are saved to `output/forecast_results.csv` with:
-- Point predictions
-- Confidence intervals (95%)
-- Model attribution
-- Evaluation metrics
+- **Alert types are not in the data.** Yellow alerts, red alerts and drone threats cannot be
+  separated from these files, so the series counts whatever the dataset records.
+- **One volunteer channel, no ground truth.** Coverage depends on volunteer staffing. The feed
+  reports more alerts than the official feed in some western oblasts, and this is documented,
+  not corrected.
+- **Intervals are empirical and optimistic.** The baseline's intervals come from residual
+  quantiles of the same backtest, so their coverage is not an out-of-sample check.
+- **Weekly granularity only.** The weekly forecast does not support daily alerting.
+- **Short post-break window.** About 40 weeks since the December 2025 change in the official
+  feed. Little data to judge regime-specific behaviour.
 
-## How to Extend
+## Decisions and provenance
 
-### Future Improvements
+- [`docs/gate2_decisions.md`](docs/gate2_decisions.md): deliberation, rulings, and the approval of
+  the success metrics
+- [`docs/gate3_day1_findings.md`](docs/gate3_day1_findings.md): volunteer-feed checks
+- [`docs/gate3_results.md`](docs/gate3_results.md): backtest results, validation and limitations
+- [`docs/eda_gate2.md`](docs/eda_gate2.md): exploratory analysis of the daily counts
 
-1. **Real-Time Integration**
-   - Add streaming data ingestion from alerts.in.ua API
-   - Implement continuous model updating
-   - Deploy as web service (FastAPI, Django)
+## Success criteria (approved)
 
-2. **Advanced Models**
-   - LSTM neural networks for temporal patterns
-   - Transformer architectures for sequence modeling
-   - Ensemble methods with learned weights
+Replaces the RMSE < 5 target in CLAUDE.md, approved by the project owner.
 
-3. **Geographic Breakdown**
-   - Per-oblast forecasting (not national aggregate)
-   - Regional threat assessment
-   - Hyper-local alerts (city/raion level)
-
-4. **External Features**
-   - Military intelligence indicators
-   - Satellite imagery (Maxar, Planet Labs)
-   - Weather patterns
-   - Social media activity
-
-5. **Operational Dashboard**
-   - Real-time alert visualization
-   - Forecast updates
-   - Alert accuracy tracking
-   - Anomaly detection
-
-6. **Alert Severity**
-   - Predict alert types (air_raid vs. artillery_shelling)
-   - Duration forecasting
-   - Multi-class classification
-
-7. **Anomaly Detection**
-   - Identify unusual alert patterns
-   - Detect regime shifts in operations
-   - Signal sudden escalations
-
-## Dependencies
-
-See `requirements.txt` for complete list. Key libraries:
-- **pandas** - Data manipulation
-- **numpy** - Numerical computing
-- **scikit-learn** - Machine learning
-- **statsmodels** - ARIMA modeling
-- **prophet** - Facebook's time series library
-- **matplotlib** - Visualization
-- **jupyter** - Interactive notebooks
-- **requests** - HTTP requests for API access
-
-## Documentation
-
-- `RESEARCH_FINDINGS_MASTER.md` - Complete research audit
-- `DATA_SOURCES_REFERENCE.json` - Structured source metadata
-- `CONVERSATION_SUMMARY.md` - Research methodology and timeline
-- `AI_INTERACTION_LOG.txt` - Full AI conversation transcript
-
-## Important Notes
-
-### Data Quality
-- Kaggle dataset: ~30% have algorithmically-inferred end times
-- Vadimkin official feed stopped Sep 7, 2026 (volunteer feed ongoing)
-- ACLED data quality verified for historical analysis
-
-### Licensing
-- Kaggle (p0stscriptum): CC-BY-NC-SA 4.0 (non-commercial only)
-- For commercial use: Use Vadimkin (MIT license) instead
-
-### Rate Limiting
-- alerts.in.ua API: 8-10 requests/minute (sufficient for real-time ops)
-- Real-time monitoring (27 oblasts): ~2-5 req/min (within limits)
-
-## Research Methodology
-
-This project was developed through:
-1. **Data Source Audit** - 9 sources validated across 3 tiers
-2. **Multi-Agent Stress Testing** - Red Team, Engineer, Value Defender, Arbitrator reviews
-3. **Ground Truth Cross-Validation** - Matched alerts to confirmed strikes
-4. **Data Leakage Prevention** - Strict temporal boundaries
-5. **Implementation Roadmap** - MVP and Enterprise scopes defined
-
-See `CONVERSATION_SUMMARY.md` for full research timeline.
-
-## Author
-
-Generated with Claude Code (Anthropic)
-
-## License
-
-MIT License - See LICENSE file
+- [x] Weekly WAPE is the primary metric; the backtest reports it against the baseline
+- [x] Daily WAPE is reported as a secondary metric
+- [ ] 80% and 95% interval coverage within the bands (80%: 77–83%, 95%: 93–97%). The baseline
+      has no model-based intervals and was not checked against this band; no candidate met it.
+- [x] `python run_pipeline.py` runs from the repository root on the stated data
+- [x] Requirements pinned to the versions the tests were run against
+- [ ] Real-time monitoring latency below 5 minutes: not measured (no live pipeline run)
 
 ## Disclaimer
 
-This analysis is for **educational and defensive purposes only**. All data sourced from publicly available open-source datasets. This project analyzes historical patterns and is not intended for real-time operational decision-making.
-
-## Contact & Support
-
-For questions or issues:
-1. Check `RESEARCH_FINDINGS_MASTER.md` for data source details
-2. Review `CONVERSATION_SUMMARY.md` for methodology
-3. Consult `DATA_SOURCES_REFERENCE.json` for source specifications
-
----
-
-**Last Updated:** 2026-10-11  
-**Research Status:** Complete  
-**Implementation Status:** Ready for Code Phase
+This is an analysis of published, historical alert records. It is not an operational warning
+system and must not be used for safety decisions.

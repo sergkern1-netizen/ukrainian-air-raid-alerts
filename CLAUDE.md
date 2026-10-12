@@ -71,8 +71,8 @@ Build a reproducible Python pipeline to analyze and forecast temporal patterns i
    - Rate Limit: 8-10 requests/minute (sufficient for real-time monitoring at 2-5 req/min)
 
 ### Success Criteria (MVP)
-- [ ] RMSE < 5 alerts/day on validation set
-- [ ] MAE < 3 alerts/day on validation set
+- [ ] Weekly WAPE (primary): candidates must beat the trailing four-week mean baseline (8.52%) on rolling-origin backtest. NOT MET: no candidate beat it; baseline accepted as the deliverable under T1. Daily WAPE secondary. (approved 2026-10-12, see docs/gate2_decisions.md, docs/gate3_results.md)
+- [ ] 80%/95% interval coverage within 77–83% / 93–97% (approved metric, see docs/gate2_decisions.md)
 - [ ] Real-time monitoring latency < 5 minutes
 - [ ] Code reproducible with `python run_pipeline.py`
 - [ ] README + requirements.txt + run_pipeline.py complete
