@@ -75,3 +75,28 @@ Next step for timing: GDELT 2.0 publishes 15-minute files
 (`http://data.gdeltproject.org/gdeltv2/YYYYMMDDHHMMSS.export.CSV.zip`). The existence of two
 test files was confirmed by HEAD requests only (65 KB at 12:00 UTC and 148 KB at 00:00 UTC on
 2026-10-09). A full day is 96 files. Downloading them needs separate owner approval.
+
+## 6. GDELT 2.0, 96 files for 2026-10-09 (2026-10-12)
+
+Downloaded with owner approval: `http://data.gdeltproject.org/gdeltv2/YYYYMMDDHHMMSS.export.CSV.zip`
+for every 15 minutes of 2026-10-09 UTC. All 96 files exist, total 7.11 MB, and all extracted.
+Files stored in the session scratch folder, not in the repository.
+
+- **Cross-check:** the 2.0 files give 1,863 Ukraine events and 232 attack-coded events, the same
+  totals as the 1.0 daily file for the same date.
+- **Hourly attack-coded events** are present in 23 of 24 hours (peak 36 at 07:00 UTC).
+- **Volunteer alert starts** for the same day: 194 distinct start instants, present in all 24 hours.
+
+**Alignment test (one day, 24 hourly points): inconclusive.** Correlation of hourly counts swings
+between +0.48 (volunteer one hour before GDELT) and −0.03 (same hour), with no consistent sign.
+With one day this cannot separate a real relation from noise. It is not evidence that GDELT tracks
+alerts.
+
+Caveats for the next step:
+- `DATEADDED` is when GDELT recorded the article, not when the event happened. Lags of hours are
+  expected, so the test needs event time, or a window wide enough to contain the lag.
+- Attack-coded events include code 190 ("use conventional military force"), which is broad. A
+  match needs the article text (manual reading) or a narrower code set.
+- One day is too short. The next test should cover several weeks, including the known volunteer
+  wave on 2026-10-09 at 07:00–08:00 UTC (the GDELT peak falls in the same hour, but that is one
+  observation).
