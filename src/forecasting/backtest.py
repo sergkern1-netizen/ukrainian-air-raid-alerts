@@ -94,9 +94,9 @@ def arima_forecast(y: pd.Series, t: int) -> tuple:
     return float(np.expm1(mean_log)), intervals
 
 
-def run_backtest(weekly: pd.DataFrame) -> Dict[str, Forecast]:
+def run_backtest(weekly: pd.DataFrame, origins: int = ORIGINS) -> Dict[str, Forecast]:
     """
-    Run all models over the last ORIGINS weeks.
+    Run all models over the last `origins` weeks.
 
     Args:
         weekly: Output of weekly_totals(): columns `alerts`, `regime`.
@@ -107,7 +107,8 @@ def run_backtest(weekly: pd.DataFrame) -> Dict[str, Forecast]:
     y = weekly["alerts"].astype(float)
     regime = weekly["regime"].astype(int)
     n = len(y)
-    origins = range(n - ORIGINS, n)
+    first = n - origins
+    origin_range = range(first, n)
 
     base = Forecast("baseline_trailing4")
     nb = Forecast("negative_binomial")
@@ -116,7 +117,7 @@ def run_backtest(weekly: pd.DataFrame) -> Dict[str, Forecast]:
     arima.intervals = {level: [] for level in LEVELS}
 
     nb_nonconverged = 0
-    for t in origins:
+    for t in origin_range:
         base.mean.append(baseline_trailing_mean(y, t))
 
         mu, alpha, converged = nb_forecast(y, regime, t)
@@ -130,11 +131,11 @@ def run_backtest(weekly: pd.DataFrame) -> Dict[str, Forecast]:
         for level in LEVELS:
             arima.intervals[level].append(intervals_a[level])
 
-    actual = y.iloc[n - ORIGINS :].values
-    logger.info(f"backtest: {ORIGINS} origins, {n} weeks of history")
+    actual = y.iloc[first:].values
+    logger.info(f"backtest: {origins} origins, {n} weeks of history")
     return {
         "actual": actual,
-        "weeks": weekly.index[n - ORIGINS :],
+        "weeks": weekly.index[first:],
         "nb_nonconverged": nb_nonconverged,
         "baseline": base,
         "nb": nb,

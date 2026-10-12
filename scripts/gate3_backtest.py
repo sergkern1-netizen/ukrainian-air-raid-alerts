@@ -7,6 +7,7 @@ Writes output/gate3_backtest.json. Also prints the official raion-to-oblast roll
 cross-check (docs/gate3_results.md, section on validation).
 """
 
+import argparse
 import json
 import logging
 import sys
@@ -24,6 +25,7 @@ from src.ingestion.alert_dedupe import drop_exact_duplicates  # noqa: E402
 
 RAW = ROOT / "data" / "raw"
 OUT = ROOT / "output" / "gate3_backtest.json"
+DEFAULT_ORIGINS = 52
 
 
 def load(name: str) -> pd.DataFrame:
@@ -61,12 +63,21 @@ def official_rollup_check(official: pd.DataFrame, volunteer_weekly: pd.DataFrame
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--origins",
+        type=int,
+        default=DEFAULT_ORIGINS,
+        help="number of weekly origins at the end of the series (sensitivity runs)",
+    )
+    parser.add_argument("--out", type=Path, default=OUT, help="output JSON path")
+    args = parser.parse_args()
     logging.basicConfig(level=logging.WARNING)
     volunteer = load("volunteer_data_en.csv")
     official = load("official_data_en.csv")
 
     weekly = weekly_totals(volunteer)
-    results = run_backtest(weekly)
+    results = run_backtest(weekly, origins=args.origins)
     daily_counts = (
         volunteer.started_at.dt.floor("D")
         .value_counts()
@@ -97,8 +108,8 @@ def main() -> int:
         "metrics": summary,
         "official_rollup_vs_volunteer": rollup,
     }
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    args.out.parent.mkdir(parents=True, exist_ok=True)
+    args.out.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2, ensure_ascii=False))
     print(f"\nwritten: {OUT}")
     return 0

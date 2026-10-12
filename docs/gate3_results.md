@@ -25,6 +25,27 @@ inside the band.
 Diagnostic (not a pre-specified candidate): NB without the regime term gives 11.96% weekly WAPE,
 still worse than baseline (p = 0.050). The regime term is not what makes the NB model worse.
 
+## Sensitivity: shorter backtest windows
+
+Run with `python scripts/gate3_backtest.py --origins N`. Same models, same data, same metrics. The
+windows are nested (the last 13 origins lie inside the last 26, which lie inside the last 52), so
+they are not independent confirmations.
+
+| Origins | Baseline weekly WAPE | Baseline daily WAPE | NB weekly WAPE (DM p) | ARIMA weekly WAPE (DM p) | NB coverage 80/95 | ARIMA coverage 80/95 |
+|---|---|---|---|---|---|---|
+| 52 | 8.52% | 16.58% | 12.40% (0.027, worse) | 8.55% (0.97) | 88.5 / 94.2 | 94.2 / 100 |
+| 26 | 7.77% | 15.45% | 14.13% (0.026, worse) | 8.58% (0.46) | 84.6 / 92.3 | 92.3 / 100 |
+| 13 | 7.46% | 12.55% | 14.90% (0.118, worse) | 8.01% (0.74) | 84.6 / 92.3 | 92.3 / 100 |
+
+Reading: the ranking is stable. The baseline has the lowest weekly and daily WAPE in every window.
+The negative-binomial model is worse in all three windows, and significantly so at 52 and 26
+origins. ARIMA is never significantly different from the baseline, and its point WAPE is slightly
+higher in every window. Neither model beats the baseline in any window, so T1 holds.
+
+Limits of the sensitivity check: 13 origins give very little power, and the p-values at that
+size should not be read as evidence of no difference. Interval coverage misses its R1 bands in
+every window. The ARIMA 95% interval covers 100% of actuals, which means it is too wide.
+
 ## Corrections to earlier figures
 
 - **The 6.4% weekly baseline in docs/gate2_decisions.md is withdrawn.** It used the rolling mean
