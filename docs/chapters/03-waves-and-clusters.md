@@ -43,7 +43,7 @@ says nothing about impact or warning time.
 | 8 to 24 hours | 0.8% |
 | Over 24 hours | 0.05% |
 
-Half of all waves last under an hour, and most of the rest last under four hours. Only about 2% of
+Just under half of all waves (48%) last under an hour, and about nine in ten last under four hours. Only about 2% of
 waves exceed six hours. Those long waves need care: they can be real periods of repeated alerts or
 artefacts of how the record was kept. Chapter 5 examines them.
 
@@ -60,7 +60,7 @@ of starts, with the duration mostly coming from how long each alert stays on.
 - **One oblast:** 33% of waves.
 - **Two oblasts** (the median): the typical wave.
 - **Ten or more:** about 1 wave in 10.
-- **Twenty or more:** 1% of waves. At the extreme, a few waves reached 24 oblasts, the whole country.
+- **23 or more:** about 1% of waves. At the extreme, a few waves reached 24 oblasts, the whole country.
 
 The widest waves all fall in 2022. The ten widest, each touching 24 oblasts, date from April to
 September 2022, when the record was dense with nationwide alerts.
@@ -79,7 +79,8 @@ September 2022, when the record was dense with nationwide alerts.
 | 2025 | 5,844 | 490 | 8% | 2 |
 | 2026 (to 11 Oct) | 3,668 | 727 | 20% | 4 |
 
-The number of waves per year has risen from 2022 to 2025, and 2026 is on pace to match. The change
+The number of waves per year rose from 2022 to 2025. 2026 has 3,668 waves in 284 days, a pace of about
+4,700 for the year, below 2025. The change
 that stands out is in **breadth**: waves in 2026 touch more oblasts. In plain terms, when a wave now
 starts, it is more likely to reach many oblasts at once than it was before. Chapter 2 showed the same
 shift in the oblast-level rates.
