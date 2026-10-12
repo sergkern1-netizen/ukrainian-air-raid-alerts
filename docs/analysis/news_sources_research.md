@@ -48,5 +48,7 @@ Limits to state up front:
 - The brief says "14 waves lasting >24 h." The data does not show that. At 5–30 min gaps there are
   10 to 11 waves over 24 h. At a 60-min gap there are 54. "14" was a row-level count (14 volunteer
   rows over 24 h), not a wave count.
-- The 39% Sumska figure in the brief matches the overlap-window analysis in
-  `docs/analysis/feed_integrity.md` only approximately; check it against that file before quoting.
+- The 39% Sumska figure in the brief is a different measure: it came from matching official alerts
+  to volunteer alerts within ±10 minutes (recall), not volunteer alerts to official ones within
+  5 minutes (precision). Our precision figures in `docs/analysis/feed_integrity.md` are Sumska
+  50.1% before December 2025 and 46.5% after (overlap window). Quote the measure with its number.
