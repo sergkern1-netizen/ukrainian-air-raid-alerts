@@ -1,0 +1,140 @@
+# Chapter 3: Waves and clusters
+
+*How alerts group into waves, how long a wave lasts, how many oblasts a wave touches, and how that has
+changed.*
+
+Source: the volunteer alert record, 25 February 2022 to 11 October 2026. Reproduce everything with
+`python -m scripts.chapter03_waves`.
+
+A **wave** is a run of alert starts in which each start comes no more than 30 minutes after the
+previous one, counted across all oblasts together. The 30-minute gap is the primary setting. Chapter 1
+introduced the idea; this chapter looks inside the waves.
+
+A wave is a grouping of recorded alerts. It is not an attack, a threat type or a known cause, and it
+says nothing about impact or warning time.
+
+---
+
+## The short version
+
+- **There are 23,681 waves** in the record at the 30-minute gap.
+- **A typical wave lasts about an hour** (median 64 minutes), but **one in ten lasts over three and a
+  half hours** (90th percentile 212 minutes).
+- **Waves usually touch few oblasts.** A third (33%) touch only one. The median is two, and one wave in
+  ten reaches ten or more.
+- **Since 2026, waves have spread wider.** Nearly one wave in five (20%) now touches ten or more
+  oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4.
+- **The longest wave is probably a recording artefact.** It lasts 179 hours across 14 oblasts, from
+  only 16 records. It needs checking before anyone reads it as an event.
+
+---
+
+## 1. How long a wave lasts
+
+![How long a wave lasts](figures/ch03_wave_duration.png)
+
+| Wave length (first to last alert) | Share of waves |
+|---|---:|
+| Under 30 minutes | 17% |
+| 30 to 60 minutes | 30% |
+| 1 to 2 hours | 26% |
+| 2 to 4 hours | 19% |
+| 4 to 8 hours | 7% |
+| 8 to 24 hours | 0.8% |
+| Over 24 hours | 0.05% |
+
+Half of all waves last under an hour, and most of the rest last under four hours. Only about 2% of
+waves exceed six hours. Those long waves need care: they can be real periods of repeated alerts or
+artefacts of how the record was kept. Chapter 5 examines them.
+
+**Within a wave, the alerts are spread out.** The median time from the first start to the last start
+in a wave is **9 minutes**, and the 90th percentile is **70 minutes**. So most waves are a short burst
+of starts, with the duration mostly coming from how long each alert stays on.
+
+---
+
+## 2. How many oblasts a wave touches
+
+![How many oblasts a wave touches](figures/ch03_oblasts_per_wave.png)
+
+- **One oblast:** 33% of waves.
+- **Two oblasts** (the median): the typical wave.
+- **Ten or more:** about 1 wave in 10.
+- **Twenty or more:** 1% of waves. At the extreme, a few waves reached 24 oblasts, the whole country.
+
+The widest waves all fall in 2022. The ten widest, each touching 24 oblasts, date from April to
+September 2022, when the record was dense with nationwide alerts.
+
+---
+
+## 3. Waves over time
+
+![Waves per year](figures/ch03_waves_per_year.png)
+
+| Year | Waves | Waves touching 10+ oblasts | Share of that year's waves | Median oblasts per wave |
+|---|---:|---:|---:|---:|
+| 2022 (from 25 Feb) | 3,434 | 393 | 11% | 2 |
+| 2023 | 5,069 | 328 | 6% | 2 |
+| 2024 | 5,666 | 514 | 9% | 2 |
+| 2025 | 5,844 | 490 | 8% | 2 |
+| 2026 (to 11 Oct) | 3,668 | 727 | 20% | 4 |
+
+The number of waves per year has risen from 2022 to 2025, and 2026 is on pace to match. The change
+that stands out is in **breadth**: waves in 2026 touch more oblasts. In plain terms, when a wave now
+starts, it is more likely to reach many oblasts at once than it was before. Chapter 2 showed the same
+shift in the oblast-level rates.
+
+**Read this with care.** The 2026 change may reflect the events, the way the volunteer record was kept,
+or both. The record cannot separate them. Chapter 8 looks at the reporting side.
+
+---
+
+## 4. The longest wave
+
+The longest wave in the record began on **4 March 2022**. It lasts 179 hours (about seven and a half
+days), touches 14 oblasts, and is built from only 16 records. A wave that long from so few records
+suggests alerts whose end times were never closed or were recorded far too late, rather than a
+continuous sequence of alerts. The record does not say which. Chapter 5 checks it against the
+long-alert register.
+
+---
+
+## 5. Sensitivity to the gap
+
+The 30-minute gap is a choice. Changing it changes the picture.
+
+| Gap | Waves | Median oblasts | 90th percentile oblasts | Median duration (min) | Share over 6 hours |
+|---|---:|---:|---:|---:|---:|
+| 5 min | 61,588 | 1 | 3 | 34 | 0.6% |
+| 10 min | 48,970 | 1 | 5 | 39 | 0.7% |
+| 15 min | 39,974 | 2 | 6 | 45 | 0.9% |
+| **30 min (primary)** | **23,681** | **2** | **10** | **64** | **2.3%** |
+| 60 min | 10,543 | 5 | 16 | 113 | 12.9% |
+
+A shorter gap splits waves into many small bursts. A longer gap joins separate bursts into fewer, larger
+waves. At 60 minutes, about one wave in eight lasts more than six hours, because gaps between alerts
+get absorbed. The 30-minute setting is a reasonable middle, but **no single gap is correct**. Any
+headline number about waves should name its gap.
+
+---
+
+## What this chapter cannot tell you
+
+- **What caused a wave.** A wave is a grouping of records, not a known attack.
+- **Which kind of threat a wave involved.** The record does not record threat types.
+- **How much warning anyone had.** There are no launch or impact times.
+- **Whether a long wave was real.** The longest waves may be record artefacts, and Chapter 5 tests that.
+
+---
+
+## Method
+
+- **Data:** the volunteer alert record, 115,989 rows after removing exact duplicates.
+- **Waves:** start instants (distinct start times across all oblasts) are sorted. A new wave begins
+  whenever the gap to the previous instant is more than the gap setting.
+- **Duration:** from the earliest start to the latest recorded end in the wave.
+- **Spread:** from the earliest start to the latest start in the wave.
+- **Oblasts per wave:** the number of distinct oblast names in the wave.
+- **Years:** calendar year in Kyiv time. The 2026 figures cover 1 January to 11 October.
+- **Script:** `scripts/chapter03_waves.py`. The wave table is saved to `output/analysis/`
+  (gitignored).
