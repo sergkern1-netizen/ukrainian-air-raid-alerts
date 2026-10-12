@@ -18,7 +18,7 @@ import pandas as pd
 from src.ingestion import vadimkin
 
 RAW_DIR = Path("data/raw")
-OUT_DOC = Path("docs/analysis/alert_waves.md")
+OUT_DOC = Path("output/analysis/alert_waves.md")
 OUT_CSV_DIR = Path("output/analysis")
 GAPS_MINUTES = [5, 10, 15, 30, 60]
 

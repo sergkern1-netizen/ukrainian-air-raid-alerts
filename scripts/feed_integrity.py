@@ -20,7 +20,7 @@ import pandas as pd
 from src.ingestion import vadimkin
 
 RAW_DIR = Path("data/raw")
-OUT_DOC = Path("docs/analysis/feed_integrity.md")
+OUT_DOC = Path("output/analysis/feed_integrity.md")
 OUT_DIR = Path("output/analysis")
 TOLERANCE = pd.Timedelta(minutes=5)
 BREAK = pd.Timestamp("2025-12-01", tz="UTC")
