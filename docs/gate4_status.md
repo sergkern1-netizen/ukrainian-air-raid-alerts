@@ -87,4 +87,5 @@ misses are documented, not fixed. The MVP closes with these misses on record:
 - Criterion 3: descoped to future work (see "Scope change").
 
 Gate 4 is therefore closed with documented misses. The thresholds were not changed. Gate 5
-(ship the MVP or expand to the enterprise scope) is the next owner decision.
+(ship the MVP or expand to the enterprise scope) was decided by the owner on 2026-10-12: ship the MVP,
+with the misses above recorded. The enterprise track was closed in `docs/enterprise/STATUS.md`.

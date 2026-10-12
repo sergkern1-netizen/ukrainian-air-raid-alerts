@@ -188,6 +188,8 @@ Each item quotes both places. None changes a number; they are wording or status 
 
 ## 8. Chapter review: no written record, and a gap in Chapter 7
 
+- **Update.** A written review log now exists: `docs/chapters/REVIEW_LOG.md`. Chapters 1 to 4 have
+  no independent Skeptic pass. The text below describes the state before that log was written.
 - **Problem.** Chapters 6 and 7 are marked "Done" in `docs/chapters/README.md` (lines 14–15) and
   "reviewed" in their commit messages (`fd8877b`, `e9bb742`), but there is no review record in the
   repository: who reviewed, against what checklist (`docs/MASTER_PLAN.md` line 55: "every public

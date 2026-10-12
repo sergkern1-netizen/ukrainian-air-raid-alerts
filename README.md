@@ -40,6 +40,7 @@ script. The full list, including planned chapters, is in [docs/chapters/README.m
 | 5 | [Long alerts](docs/chapters/05-long-alerts.md) | The longest records, where they are, and whether they look real or like recording errors |
 | 6 | [Granularity and the official feed](docs/chapters/06-granularity-and-official-feed.md) | How the official record changed from regions to districts, and what that does to comparisons |
 | 7 | [Data provenance and quality](docs/chapters/07-provenance-and-quality.md) | What is in each file, how duplicates were handled, and what is missing |
+| 8 | [Reporting patterns](docs/chapters/08-reporting-patterns.md) | Where the two records agree and disagree, by group of oblasts and year, and what is not known about why |
 
 ### Gate and status documents
 
@@ -73,7 +74,7 @@ Scripts in [`scripts/`](scripts/), by purpose:
 | Download and first inspection | `inspect_vadimkin.py` |
 | Exploratory analysis | `eda_daily.py`, `eda_per_oblast.py` |
 | Forecast backtest | `gate3_backtest.py` |
-| Chapters (one per chapter) | `chapter01_timing.py` to `chapter07_provenance.py` |
+| Chapters (one per chapter) | `chapter01_timing.py` to `chapter08_reporting.py` |
 | Supporting analyses | `alert_waves.py`, `wave_anatomy.py`, `feed_integrity.py`, `western_cluster_check.py`, `pair_gap_investigation.py`, `defensive_profiles.py` |
 | Developer tool (not analysis) | `build_telegram_forms.py` |
 
@@ -129,8 +130,8 @@ Parked and planned items are in [`docs/FUTURE_PLANS.md`](docs/FUTURE_PLANS.md).
 
 | Source | Used for | Coverage | Notes |
 |---|---|---|---|
-| [Vadimkin/ukrainian-air-raid-sirens-dataset](https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset) `volunteer_data_en.csv` | Target series | 2022-02-25 onward, oblast level | Manually posted by volunteers; 5% of end times are inferred (`naive`). MIT licence per the dataset. Credit: eTryvoga volunteer channel. |
-| Same repository, `official_data_en.csv` | Cross-check | 2022-03-15 to 2026-09-07 | Ends with the official Telegram feed. Changes to mostly raion level from December 2025. |
+| [Vadimkin/ukrainian-air-raid-sirens-dataset](https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset) `volunteer_data_en.csv` | Target series | 2022-02-25 onward, oblast level | Manually posted by volunteers; 5% of end times are inferred (`naive`). The repository's root licence is MIT; the licence of the data files is not confirmed. Credit: eTryvoga volunteer channel. |
+| Same repository, `official_data_en.csv` | Cross-check | 2022-03-15 to 2026-09-07 | Ends with the official Telegram feed. Gradually changed from mostly region-level to district-level records during 2025 (see Chapter 6). |
 
 Not used: the Kaggle missile-attack dataset (parked: Telegram-derived; see `docs/FUTURE_PLANS.md`),
 the Kaggle p0stscriptum air-raid dataset, alerts.in.ua and UkraineAlarm (no credentials
@@ -230,7 +231,7 @@ Full list: [`docs/gate3_results.md`](docs/gate3_results.md). The main ones:
 
 Replaces the RMSE < 5 target in CLAUDE.md, approved by the project owner.
 
-- [x] Weekly WAPE is the primary metric; the backtest reports it against the baseline
+- [x] Weekly WAPE is the primary metric (criterion 1, beating the baseline, is not met; see Gate 4)
 - [x] Daily WAPE is reported as a secondary metric
 - [ ] 80% and 95% interval coverage within the bands (80%: 77–83%, 95%: 93–97%). The baseline
       has no model-based intervals and was not checked against this band; no candidate met it.
