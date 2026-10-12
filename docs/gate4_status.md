@@ -79,6 +79,12 @@ fails on any error.
 
 ## Decision
 
-Gate 4 is not passed. Criteria 1 and 2 are unmet and were recorded as such in Gate 3. Criterion 3
-is descoped by owner decision, so it is not a pass. Gate 5 (ship or expand) needs an owner
-decision on criteria 1 and 2 before it can proceed.
+Owner decision (2026-10-12): accept the Gate 3 results for criteria 1 and 2 as final. The
+misses are documented, not fixed. The MVP closes with these misses on record:
+
+- Criterion 1: weekly WAPE 0.0852 for the baseline; no candidate beat it.
+- Criterion 2: ARIMA 94.2% / 100%, NB 88.5% / 94.2% against the 77–83% / 93–97% bands.
+- Criterion 3: descoped to future work (see "Scope change").
+
+Gate 4 is therefore closed with documented misses. The thresholds were not changed. Gate 5
+(ship the MVP or expand to the enterprise scope) is the next owner decision.
