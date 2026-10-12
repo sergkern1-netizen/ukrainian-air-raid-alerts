@@ -3,6 +3,96 @@
 A reproducible pipeline that downloads public siren-alert records, checks them, and produces a
 one-week-ahead forecast of national alert counts, with a backtest against the baseline.
 
+## Map of this repository
+
+### Start here
+
+**What this project is.** An open analysis of published, historical records of air-raid alerts in
+Ukraine. It describes when and where alerts were recorded, how far two public records agree, and
+how well simple methods forecast weekly alert counts.
+
+**What it is not.** It is not a warning system, not an official source, and not live. It does not
+say what caused an alert, what was hit, or how much warning anyone had. For safety instructions
+and live warnings, use the official channels: the Air Force of the Armed Forces of Ukraine, the
+State Emergency Service, and your local authorities.
+
+**Where to read safely.**
+
+| If you want to... | Read |
+|---|---|
+| Know what this project will not publish, and why | [Safety boundaries](docs/SAFETY.md) |
+| Understand the words used (alert, wave, match, WAPE) | [Glossary](docs/GLOSSARY.md) |
+| Read the findings in plain language | [The chapters](docs/chapters/README.md) |
+| Find your way around every folder and file | [Navigation guide](docs/NAVIGATION.md) |
+| See the main open problems and limits | [Project summary](docs/PROJECT_SUMMARY.md) |
+
+### The chapters
+
+Each chapter answers one question, lists what it cannot tell you, and can be rerun from its
+script. The full list, including planned chapters, is in [docs/chapters/README.md](docs/chapters/README.md).
+
+| # | Chapter | What it covers |
+|---|---|---|
+| 1 | [Timing and rhythms](docs/chapters/01-timing-and-rhythms.md) | How long alerts last, when they start, and what that means for nights and routines |
+| 2 | [Where sirens sound](docs/chapters/02-regional-spread.md) | Which oblasts have the most recorded alerts, how long they last there, and how this changed |
+| 3 | [Waves and clusters](docs/chapters/03-waves-and-clusters.md) | How alerts group into waves, how long waves last, and how many oblasts they touch |
+| 4 | [Feed reliability](docs/chapters/04-feed-reliability.md) | How well the volunteer and official records agree, by oblast and over time |
+| 5 | [Long alerts](docs/chapters/05-long-alerts.md) | The longest records, where they are, and whether they look real or like recording errors |
+| 6 | [Granularity and the official feed](docs/chapters/06-granularity-and-official-feed.md) | How the official record changed from regions to districts, and what that does to comparisons |
+| 7 | [Data provenance and quality](docs/chapters/07-provenance-and-quality.md) | What is in each file, how duplicates were handled, and what is missing |
+
+### Gate and status documents
+
+The project moved through decision points ("gates"). These record what was decided and why.
+
+| Document | What it records |
+|---|---|
+| [Gate 3 results](docs/gate3_results.md) | The forecast backtest, the chosen baseline, and the known limits |
+| [Gate 4 status](docs/gate4_status.md) | Which success criteria were met, missed or descoped |
+| [Enterprise status](docs/enterprise/STATUS.md) | Why the extra data sources were dismissed or blocked |
+
+### Methods and provenance
+
+| Document or folder | What it covers |
+|---|---|
+| [Gate 1 data inspection](docs/data_inspection_gate1.md) | First look at the two source files: columns, duplicates, inferred end times |
+| [Gate 2 decisions](docs/gate2_decisions.md) and [Gate 2 EDA](docs/eda_gate2.md) | Exploratory analysis and the rulings on metrics and models |
+| [Per-oblast EDA](docs/eda_per_oblast.md) and [Gate 3 day 1 findings](docs/gate3_day1_findings.md) | Weekly counts by oblast; checks on the volunteer record |
+| [Alert waves](docs/analysis/alert_waves.md) | How waves change with the gap used to define them |
+| [Wave anatomy](docs/analysis/wave_anatomy.md) | Which oblasts take part in waves, and which alert together |
+| [Feed integrity](docs/analysis/feed_integrity.md) | Agreement between the volunteer and official records |
+| [Western cluster check](docs/analysis/western_cluster_check.md) | Whether the western cluster also appears in the official record |
+| [Kirovohrad–Poltava gap](docs/analysis/kirovohrad_poltava_gap.md) | Why two oblasts are often recorded at the same minute |
+| [Alert-record profiles](docs/analysis/defensive_profiles.md) | Duration, night share, lag and long alerts by oblast |
+| [News sources research](docs/analysis/news_sources_research.md) and [terms review](docs/sources/news_sources_review.md) | Why news data was tested and dropped |
+
+Scripts in [`scripts/`](scripts/), by purpose:
+
+| Purpose | Scripts |
+|---|---|
+| Download and first inspection | `inspect_vadimkin.py` |
+| Exploratory analysis | `eda_daily.py`, `eda_per_oblast.py` |
+| Forecast backtest | `gate3_backtest.py` |
+| Chapters (one per chapter) | `chapter01_timing.py` to `chapter07_provenance.py` |
+| Supporting analyses | `alert_waves.py`, `wave_anatomy.py`, `feed_integrity.py`, `western_cluster_check.py`, `pair_gap_investigation.py`, `defensive_profiles.py` |
+| Developer tool (not analysis) | `build_telegram_forms.py` |
+
+### Safety and glossary
+
+- [Safety boundaries](docs/SAFETY.md): what the project will not publish, and the rules every
+  public number must follow.
+- [Glossary](docs/GLOSSARY.md): plain definitions of the terms used across the repository.
+
+### Future plans
+
+- [Future plans and parked items](docs/FUTURE_PLANS.md): paused, blocked and planned work, with
+  what would unblock each item.
+- [Master plan](docs/MASTER_PLAN.md): the phased roadmap (a draft for owner approval).
+
+---
+
+## Project status
+
 **Current result:** the trailing four-week mean is the deliverable. No more complex model beat
 it in a 52-origin backtest, or in shorter sensitivity windows. The decision and its limits are in
 [`docs/gate3_results.md`](docs/gate3_results.md).
