@@ -8,6 +8,7 @@ Tests cover:
 - Hourly scheduling timing
 """
 
+import asyncio
 import json
 import pytest
 from unittest.mock import AsyncMock, Mock, patch

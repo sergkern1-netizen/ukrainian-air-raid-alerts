@@ -12,7 +12,8 @@ from pydantic import ConfigDict
 class Settings(BaseSettings):
     """Application configuration from environment variables."""
 
-    model_config = ConfigDict(env_file=".env", case_sensitive=False)
+    # .env is shared with docker-compose (POSTGRES_* keys), so unknown keys must be ignored
+    model_config = ConfigDict(env_file=".env", case_sensitive=False, extra="ignore")
 
     api_token: str
     """Alerts.in.ua API token for real-time monitoring."""

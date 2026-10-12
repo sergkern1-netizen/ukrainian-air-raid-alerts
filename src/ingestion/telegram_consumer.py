@@ -181,8 +181,7 @@ class TelegramStreamConsumer:
         locations = await self.extract_locations(text)
         event_type = await self.classify_event(text)
 
-        # Calculate confidence
-        confidence = self._calculate_confidence(locations, event_type)
+        confidence = self._calculate_confidence(text)
 
         # Publish to Kafka
         await self.publish_to_kafka(
@@ -308,25 +307,21 @@ class TelegramStreamConsumer:
                 f"at offset {msg.offset()}"
             )
 
-    def _calculate_confidence(self, locations: List[str], event_type: str) -> float:
+    def _calculate_confidence(self, text: str) -> float:
         """
-        Calculate extraction confidence score.
+        Calculate extraction confidence from the event classifier's keyword matches.
+
+        Confidence is 0.0 when no keyword matched: the published event_type is then
+        the schema default ('launch'), not an observation. Locations do not raise
+        confidence, because they say nothing about the event type.
 
         Args:
-            locations: Extracted locations list.
-            event_type: Classified event type.
+            text: Raw message text.
 
         Returns:
             Confidence score between 0.0 and 1.0.
         """
-        # Base confidence from event classifier
-        confidence = 0.7 if event_type else 0.5
-
-        # Boost if locations found
-        if locations:
-            confidence = min(confidence + 0.15, 1.0)
-
-        return confidence
+        return self.event_classifier.get_confidence(text)
 
     async def stop(self) -> None:
         """Stop the consumer and disconnect from Telegram."""

@@ -183,9 +183,9 @@ class TestEventClassifier:
         """Calculate confidence from keyword matches."""
         classifier = EventClassifier()
 
-        # No keywords = base confidence
+        # No keywords = no evidence for the event type
         conf_none = classifier.get_confidence("test message")
-        assert conf_none >= 0.5
+        assert conf_none == 0.0
 
         # Multiple keywords = higher confidence
         conf_multi = classifier.get_confidence(
@@ -322,14 +322,14 @@ async def test_telegram_consumer_initialization(telegram_consumer) -> None:
 
 def test_calculate_confidence(telegram_consumer) -> None:
     """Test confidence score calculation."""
-    # No locations, no event type
-    conf = telegram_consumer._calculate_confidence([], "")
-    assert 0.5 <= conf <= 1.0
+    # No keyword matched: confidence must be 0.0 even though a default event is published
+    assert telegram_consumer._calculate_confidence("Тестовое сообщение") == 0.0
+    assert telegram_consumer._calculate_confidence("") == 0.0
 
-    # With locations and event type
-    conf = telegram_consumer._calculate_confidence(["kyiv", "kharkiv"], "missile")
-    assert conf > telegram_consumer._calculate_confidence([], "")
-    assert conf <= 1.0
+    # Keyword matched: confidence is positive and rises with more matches
+    one = telegram_consumer._calculate_confidence("Атака дронів")
+    many = telegram_consumer._calculate_confidence("запуск дронів крилаті ракети атака")
+    assert 0.0 < one < many <= 1.0
 
 
 @pytest.mark.asyncio

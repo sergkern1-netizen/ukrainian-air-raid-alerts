@@ -7,7 +7,7 @@ classification (keyword-based) for Ukrainian Air Force channel messages.
 
 import logging
 import re
-from typing import List, Optional
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -47,8 +47,9 @@ class LocationExtractor:
 
     # Major Ukrainian cities
     UKRAINIAN_CITIES = {
-        "kyiv": ["київ", "киев", "kiyiv"],
-        "kharkiv": ["харків", "харьков"],
+        # Stems for oblique cases: "Києві" -> "києв", "Харкові" -> "харков"
+        "kyiv": ["київ", "києв", "киев", "kiyiv"],
+        "kharkiv": ["харків", "харков", "харьков"],
         "donetsk": ["донецьк", "донецк"],
         "luhansk": ["луганськ", "луганск"],
         "zaporizhzhia": ["запоріжжя", "запорожье", "zaporizhia"],
@@ -79,7 +80,6 @@ class LocationExtractor:
         "slovyansk": ["слов'янськ", "славянск"],
         "druzhkivka": ["дружківка", "дружковка"],
         "kramatorsk": ["краматорськ", "краматорск"],
-        "sumy": ["суми", "сумы"],
         "irpin": ["ірпінь", "ирпень"],
         "bucha": ["буча"],
         "hostomel": ["гостомель"],
@@ -127,16 +127,17 @@ class LocationExtractor:
         # Extract locations by matching gazetteer
         found_locations = set()
 
-        # Check cities first (more specific)
+        # Check cities first (more specific). Match at word start only, with
+        # trailing inflection allowed: Ukrainian/Russian nouns decline
+        # ("Київ" -> "Київі", "Харків" -> "Харкові").
         for variant, canonical in self.cities.items():
-            # Use word boundary matching to avoid partial matches
-            pattern = r"\b" + re.escape(variant) + r"\b"
+            pattern = r"\b" + re.escape(variant) + r"\w*"
             if re.search(pattern, normalized):
                 found_locations.add(canonical)
 
         # Check oblasts (less specific)
         for variant, canonical in self.oblasts.items():
-            pattern = r"\b" + re.escape(variant) + r"\b"
+            pattern = r"\b" + re.escape(variant) + r"\w*"
             if re.search(pattern, normalized):
                 found_locations.add(canonical)
 
@@ -164,9 +165,10 @@ class EventClassifier:
         "en": ["uav", "drone", "unmanned"],
     }
 
+    # Stems: matched as word prefixes, so "ракет" covers ракета/ракети/ракету
     MISSILE_KEYWORDS = {
-        "uk": ["ракета", "крилата", "стратег", "кх"],
-        "ru": ["ракета", "крылатая", "стратег", "кх"],
+        "uk": ["ракет", "крилат", "стратег", "кх"],
+        "ru": ["ракет", "крылат", "стратег", "кх"],
         "en": ["missile", "cruise", "strategic"],
     }
 
@@ -198,10 +200,26 @@ class EventClassifier:
         Returns:
             Flattened list of keywords.
         """
+        # Dedupe: shared stems (e.g. "дрон", "атака") appear in several languages
+        # and would otherwise count twice toward the match score
         all_keywords = []
         for keywords in keyword_dict.values():
             all_keywords.extend(keywords)
-        return all_keywords
+        return list(dict.fromkeys(all_keywords))
+
+    @staticmethod
+    def _matches(keyword: str, normalized_text: str) -> bool:
+        """
+        Check whether a keyword occurs at the start of a word in the text.
+
+        Args:
+            keyword: Keyword stem to look for.
+            normalized_text: Lowercased message text.
+
+        Returns:
+            True if the keyword starts at a word boundary.
+        """
+        return re.search(r"\b" + re.escape(keyword), normalized_text) is not None
 
     def classify(self, text: str) -> str:
         """
@@ -219,10 +237,11 @@ class EventClassifier:
 
         normalized = text.lower()
 
-        # Count keyword matches for each event type
+        # Count keyword matches for each event type (word-prefix, so
+        # "ракета" also matches "ракети" and "крилаті" matches "крилата")
         scores = {}
         for event_type, keywords in self.keywords.items():
-            matches = sum(1 for kw in keywords if kw in normalized)
+            matches = sum(1 for kw in keywords if self._matches(kw, normalized))
             scores[event_type] = matches
 
         # Find highest scoring event type
@@ -245,19 +264,22 @@ class EventClassifier:
             text: Message text being classified.
 
         Returns:
-            Confidence score between 0.0 and 1.0.
+            0.0 when no keyword matched (the event type is only a default),
+            otherwise a score between 0.5 and 1.0 that rises with matches.
         """
         if not text:
-            return 0.5
+            return 0.0
 
         normalized = text.lower()
 
         # Count total keyword matches
         total_matches = 0
         for keywords in self.keywords.values():
-            total_matches += sum(1 for kw in keywords if kw in normalized)
+            total_matches += sum(1 for kw in keywords if self._matches(kw, normalized))
+
+        if total_matches == 0:
+            return 0.0
 
         # Confidence increases with more keyword matches
-        # 1+ match = 0.7, 2+ matches = 0.8, 3+ matches = 0.9
-        confidence = min(0.5 + (total_matches * 0.15), 1.0)
-        return confidence
+        # 1 match = 0.65, 2 matches = 0.8, 3+ matches = 0.95 (capped at 1.0)
+        return min(0.5 + (total_matches * 0.15), 1.0)
