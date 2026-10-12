@@ -1070,3 +1070,13 @@ ASSISTANT:
   alerts after the official feed ended (2026-09-07) as unmatched. Overlap-only post-break rate: 52.7%.
 - Western oblasts still drop sharply over the overlap: Lviv 74% -> 10%, Volyn 68% -> 11%.
 - Correction NOT yet applied to docs/gate3_results.md (approved record); pending owner decision.
+
+--------------------------------------------------------------------------------
+[2026-10-12] KAGGLE MISSILE DATASET PARKED (owner decision)
+- Owner: do not use the Telegram-derived Kaggle figures now; keep a future-plans record.
+- Removed from the repository: docs/enterprise/kaggle_missile_profile.md,
+  docs/enterprise/kaggle_missile_descriptive.md, scripts/kaggle_missile_descriptive.py.
+- Git history still contains these files. Rewriting history was not done; it needs its own decision.
+- Added docs/FUTURE_PLANS.md (parked, planned, blocked, dropped, open questions).
+- Updated README, docs/enterprise/STATUS.md, docs/enterprise/candidates_review.md.
+- Local raw copy in data/raw/kaggle_missile/ (gitignored) left in place pending owner decision.

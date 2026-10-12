@@ -1,7 +1,8 @@
 # Enterprise track status (closed 2026-10-12)
 
-Decision (owner): the enterprise track stops at the Kaggle missile dataset, used for descriptive
-reporting only. No enterprise source feeds the forecast.
+Decision (owner): the enterprise track is closed. No enterprise source feeds the forecast.
+On 2026-10-12 the owner also ruled that the Kaggle missile dataset is not used now; its figures
+were removed from the repository and it is parked in `docs/FUTURE_PLANS.md`.
 
 | Source | Outcome | Record |
 |---|---|---|
@@ -10,7 +11,7 @@ reporting only. No enterprise source feeds the forecast.
 | Telegram @kpszsu | Blocked. API terms prohibit aggregating Telegram-derived data for ML. Not pursued. | `candidates_review.md` |
 | Oryx | Blocked. No reuse rights found. Not pursued. | `candidates_review.md` |
 | Texty.org.ua | Reference only (CLAUDE.md). CC BY 4.0. | `candidates_review.md` |
-| Kaggle missile attacks | Descriptive use only. Telegram-derived provenance accepted by owner. | `kaggle_missile_profile.md`, `kaggle_missile_descriptive.md` |
+| Kaggle missile attacks | Parked. Telegram-derived; not used. Figures removed from the repository. | `docs/FUTURE_PLANS.md` |
 
 Future work, when the owner chooses to reopen: the alerts.in.ua real-time poller (needs a token),
 and any of the blocked sources after written permission.

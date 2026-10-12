@@ -11,8 +11,8 @@ it in a 52-origin backtest, or in shorter sensitivity windows. The decision and 
 missed their criteria, and real-time monitoring was descoped. See
 [`docs/gate4_status.md`](docs/gate4_status.md).
 
-Enterprise sources: the track is closed for now. The Kaggle missile dataset is used for descriptive
-reporting only; see [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
+Enterprise sources: the track is closed for now. See [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
+Parked and planned items are in [`docs/FUTURE_PLANS.md`](docs/FUTURE_PLANS.md).
 
 ## What it does
 
@@ -42,9 +42,8 @@ reporting only; see [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
 | [Vadimkin/ukrainian-air-raid-sirens-dataset](https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset) `volunteer_data_en.csv` | Target series | 2022-02-25 onward, oblast level | Manually posted by volunteers; 5% of end times are inferred (`naive`). MIT licence per the dataset. Credit: eTryvoga volunteer channel. |
 | Same repository, `official_data_en.csv` | Cross-check | 2022-03-15 to 2026-09-07 | Ends with the official Telegram feed. Changes to mostly raion level from December 2025. |
 
-Kaggle missile-attack dataset (Petro Ivaniuk, CC BY-NC-SA 4.0): used for descriptive reporting
-only. Its rows cite Telegram channels, so it is Telegram-derived; see `docs/enterprise/STATUS.md`.
-Not used: the Kaggle p0stscriptum air-raid dataset, alerts.in.ua and UkraineAlarm (no credentials
+Not used: the Kaggle missile-attack dataset (parked: Telegram-derived; see `docs/FUTURE_PLANS.md`),
+the Kaggle p0stscriptum air-raid dataset, alerts.in.ua and UkraineAlarm (no credentials
 available), ISW (terms do not permit dataset use), Oryx (no reuse rights found), ACLED (no API access
 on the project account), GDELT (no timing alignment with alerts). Other GitHub projects on this data
 are not independent sources.
