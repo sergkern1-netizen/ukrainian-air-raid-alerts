@@ -165,7 +165,13 @@ def main() -> None:
     in_night = is_night(s["t"].dt.hour)
     touched = s[in_night].groupby("night_date").size()
     first_day, last_day = s["night_date"].min(), s["night_date"].max()
-    all_nights = pd.Series(pd.date_range(first_day, last_day, freq="D").date)
+    # A night is complete only if the record reaches 07:00 the next morning (Kyiv time).
+    # The night starting on the last record date is usually incomplete and is left out.
+    last_local = starts_local.max()
+    complete_last = (last_local >= (pd.Timestamp(last_day) + pd.Timedelta(days=1)).tz_localize(LOCAL)
+                     + pd.Timedelta(hours=NIGHT_END))
+    end_day = last_day if complete_last else last_day - pd.Timedelta(days=1)
+    all_nights = pd.Series(pd.date_range(first_day, end_day, freq="D").date)
     nights = pd.DataFrame({"night_date": all_nights})
     nights["touched"] = nights["night_date"].isin(touched.index)
     nights["year"] = pd.to_datetime(nights["night_date"]).dt.year

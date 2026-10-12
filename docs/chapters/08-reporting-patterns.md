@@ -16,7 +16,7 @@ Terms used below. A *row* is one line in a file. An *oblast* is a region. The of
 
 This chapter checks how closely the volunteer and official lists agree, and how often starts in different oblasts are recorded at the same second.
 
-- **The western group had the highest match rate in 2022 and 2023 and the lowest in 2026.** Its match rate was 98.6% in 2023 and 30.3% in 2026. 2026 is a partial year (to 7 September). The rest of the country fell from 94.9% (2022) to about 53 to 55% in 2025 and 2026.
+- **The western group's match rate was slightly above the rest in 2022, well above it in 2023, and below the rest in 2026.** Its match rate was 98.6% in 2023 and 30.3% in 2026. 2026 is a partial year (to 7 September). The rest of the country fell from 94.9% (2022) to about 53 to 55% in 2025 and 2026.
 - **Match rates in Lvivska and Volynska dropped from 77.7% and 71.2% to about 10%** after 1 December 2025. These figures use any-level matching.
 - **Same-second starts are rare.** 4.8% of volunteer starts share their exact second with another oblast's start; for official oblast-level starts the figure is 4.5%. Only 10 of 600 ordered oblast pairs have at least 50 shared starts.
 - **The data cannot say why starts are shared.** The records have no ID for each alert message.
@@ -38,7 +38,7 @@ Share of volunteer alerts matched within five minutes, combined across the oblas
 | 2025 | 55.5% | 1,784 | 52.8% | 22,869 |
 | 2026 (to 7 September) | 30.3% | 2,149 | 54.9% | 24,476 |
 
-The western agreement was high early and fell sharply through 2025 and 2026. The rest of the country fell more gradually. An earlier note suggested volunteers recorded more western alerts. This chapter cannot confirm that, and the pattern reverses over time: the western group had the highest match rate in 2022 and 2023 and the lowest in 2026. This chapter does not explain the cause.
+The western agreement was high early and fell sharply through 2025 and 2026. The rest of the country fell more gradually. The pattern reverses over time: the western group's match rate was slightly above the rest in 2022 (97.9% against 94.9%), well above it in 2023, and below the rest in 2026. This chapter does not explain the cause.
 
 Two oblasts show the late drop clearly. Match rate, all area levels, within five minutes:
 
@@ -69,7 +69,9 @@ There are 600 ordered pairs of oblasts. Only 10 have at least 50 shared voluntee
 
 The "Shared starts" column is the volunteer count. The other five of the ten included pairs are not in the table above; they are in `output/analysis/chapter08_pair_batching.csv`, together with the pairs left out. One of the ten (Dnipropetrovska with Zaporizka) has a lower volunteer share than official. By chance alone, some oblasts that start alerts often will share a second sometimes; I did not model that.
 
-Overall, 4.8% of 109,771 volunteer starts are shared with another oblast. For official oblast-level rows it is 4.5% of 65,314. The overall shares are 4.8% and 4.5%, but they cover different periods: the official file has almost no oblast-level rows after 1 December 2025, so they are not directly comparable.
+The pair gaps in the table are not directly comparable: the official share covers the whole window, while official oblast-level rows thin out through 2025. The pairs are also selected on the volunteer side (at least 50 shared volunteer starts, ranked by volunteer minus official).
+
+Overall, 4.8% of 109,771 volunteer starts are shared with another oblast. For official oblast-level rows it is 4.5% of 65,314, but the two cover different periods (the official file has almost no oblast-level rows after 1 December 2025), so they are not directly comparable.
 
 ---
 
@@ -90,14 +92,14 @@ The official oblast-level figure for the whole period is 0.6% of 3,344 Kirovohra
 
 ## 4. Timing differences
 
-For matched alerts, the median lag is the typical time gap between the volunteer start and the nearest official start, where a positive gap means the volunteer alert came later. Matched alerts only; the western sample is mostly from earlier years.
+For matched alerts, the median lag is the typical time gap between the volunteer start and the nearest official start, where a positive gap means the volunteer alert came later. Matched alerts only. The western and rest groups differ in their mix of official area levels (district, community, oblast) and of years, so the two medians are not a clean comparison.
 
 | Group | Matched alerts (n) | Median signed lag |
 |---|---:|---:|
 | Western oblasts | 6,802 | 27.0 seconds |
 | Rest | 64,979 | 15.0 seconds |
 
-71,781 of 109,771 volunteer alerts are matched in total. The cause of the difference is not tested here. These lags are differences in the timestamps of the two lists; the cause is not known. They are not warning time, and they say nothing about how long anyone had before an event.
+71,781 of 109,771 volunteer alerts are matched in total. These lags are differences in the timestamps of the two lists; the cause is not known. They are not warning time, and they say nothing about how long anyone had before an event.
 
 ---
 
@@ -111,7 +113,7 @@ For matched alerts, the median lag is the typical time gap between the volunteer
 
 ## Corrections to earlier notes
 
-1. **The official record does have oblast-level rows after 1 December 2025.** There are 472, all for Kyiv City. For every other oblast the oblast-level check cannot be done after that date, because the official file has only district rows, plus some community rows in five oblasts (Dnipropetrovska, Donetska, Kharkivska, Zaporizka, Zhytomyrska).
+1. **The official record does have oblast-level rows after 1 December 2025.** There are 472, all for Kyiv City, after removing exact duplicates; the raw file has 551 Kyiv City oblast-level rows after 1 December 2025. For every other oblast the oblast-level check cannot be done after that date, because the official file has only district rows, plus some community rows in five oblasts (Dnipropetrovska, Donetska, Kharkivska, Zaporizka, Zhytomyrska).
 2. **Pre-break Kirovohradska with Poltavska shared-start figure.** An earlier note gave 5.8%; the correct figure is 5.9% (294 of 4,992).
 
 ---

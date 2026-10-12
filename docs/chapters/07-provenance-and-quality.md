@@ -4,7 +4,7 @@
 
 This chapter does not say how many alerts there were. It describes the two files every other chapter relies on, so you can judge how far to trust them.
 
-**"Quality" here means whether the files are well formed, internally consistent and has no obvious internal mistakes that this chapter could find.** From this chapter you can learn what each file contains, what was removed or flagged, and where gaps are. You cannot learn whether either file is correct about what happened on the ground.
+**"Quality" here means whether the files are well formed, internally consistent and free of the specific errors this chapter checks for.** From this chapter you can learn what each file contains, what was removed or flagged, and where gaps are. You cannot learn whether either file is correct about what happened on the ground.
 
 Source: the *official record* (the list kept by the official feed; the *feed* is the official alert system's data stream) and the *volunteer record* (a list of alerts kept by volunteers). Both are files in one public repository.
 
@@ -19,7 +19,7 @@ More terms. The *median* is the middle value: half are above it, half below. UTC
 - **Both files come from one public GitHub repository** and were downloaded together on 12 October 2026, 00:58 UTC. The files are the same ones that were downloaded; this says nothing about whether their contents are accurate.
 - **The official file is 38.0% exact copies** (rows identical in every column, so they are the same line repeated). 299,275 raw rows become 185,430 after removing 113,845 exact duplicates. The volunteer file has none.
 - **The volunteer file has at least one row for every day**, which does not mean every alert was logged, from 25 February 2022 to 11 October 2026. The official record has 3 empty days in a row (30 August to 1 September 2026). Empty days are reported, not filled.
-- **5.0% of volunteer rows are marked in a column named `naive`**, which marks rows whose end time was guessed, not recorded (the repository calls these inferred end times). The official file has no such column.
+- **5.0% of volunteer rows are marked in a column named `naive`**, which marks rows whose end time was guessed, not recorded (the project treats these as inferred end times). The official file has no such column.
 - **Every timestamp is written in a standard form that a computer can read (it ends in +00:00); this is a format check only.**
 - **Luhanska oblast is nearly empty in both files:** 3 volunteer rows and 1 official row.
 
@@ -42,12 +42,11 @@ The download was recorded in the project manifest on 12 October 2026 at 00:58 UT
 
 ---
 
-## 2. Duplicates and conflicts
+## 2. Duplicates and shared start times
 
 The official file contains 113,845 rows that are exact copies of another row: 38.0% of its raw rows. They are removed before any count in this project. The volunteer file has none.
 
-
-I do not choose between conflicting end times by hand. Where this matters, the later chapters say how they handle it.
+A second pattern is not a mistake. After removing exact copies, 9,173 official rows sit in 2,234 groups that share a region name and a start time but have different end times. (Counted before removing exact copies, the same groups hold 12,688 rows, 4.24% of raw rows; that figure includes the repeated lines.) These are not conflicting end times for one area. They are rows for different districts or communities within the same region that began at the same time, each with its own end. The test: adding the district field to the grouping still leaves 66 rows with differing ends, and adding both the district and community fields leaves none. So no single area has two different end times for one start. The volunteer file has no such rows.
 
 ---
 
@@ -92,7 +91,7 @@ Durations from these rows are partly estimated. The official file has no such co
 
 ## 5. Missing values and durations
 
-**Official record.** Oblast, level, start, end and source are complete. Raion is missing in 43.5% of rows and hromada in 87.7%. This is expected: each row describes one level, so a row at oblast level has no raion or hromada. **Volunteer record.** All four columns (region, start, end, `naive`) are complete.
+**Official record.** Oblast, level, start, end and source are complete. Raion is missing in 43.5% of rows and hromada in 87.7%. This is expected: each row describes one level, so a row at oblast level has no raion or hromada, and a raion row has no hromada value. **Volunteer record.** All four columns (region, start, end, `naive`) are complete.
 
 | | Official | Volunteer |
 |---|---:|---:|
@@ -136,9 +135,9 @@ oblast = region, raion = district, hromada = community. The change from oblast t
 ## What this chapter cannot tell you
 
 - **Whether either file is correct or complete.** This chapter does not check either file against an independent record. Passing these checks shows the files are well formed, not true.
-- **Why rows are missing, duplicated or in conflict.** The files do not say.
+- **Why rows are missing or duplicated, or why several rows share a start time.** The files do not say.
 - **Whether the 3 empty official days were quiet days or a gap in the feed.**
-- **Which conflicting end time is right** where the official file gives two for one start.
+- **Which of several rows with the same start time describes the whole event.** They are rows for different districts or communities, not rival answers.
 - **How many official end times were inferred.** The official file has no flag.
 - **Anything about threats.** Counts of rows say nothing about danger.
 - **A like-for-like comparison of counts.** The official and volunteer feeds differ in what they record (area levels, inferred end times), so their counts are not interchangeable.
@@ -153,8 +152,9 @@ oblast = region, raion = district, hromada = community. The change from oblast t
   - Windows PowerShell: `Get-FileHash -Algorithm SHA256 official_data_en.csv, volunteer_data_en.csv`
 
   The output should equal the hashes in section 1. This checks the files against the project's own manifest (`data/raw/MANIFEST.json`), not against the repository's current version.
-- **Exact duplicates:** rows identical in every column. **Conflicts:** groups of rows with the same area name and start but different ends, counted before removing exact duplicates, so the row count includes exact copies.
-- **Days:** calendar days in Kyiv time, from the first to the last start in each file. A day is empty if no row starts on it.
+- **Exact duplicates:** rows identical in every column. **Shared start times:** groups of rows with the same region name and start but different ends. After removing exact copies: 9,173 rows in 2,234 groups (12,688 rows before removing copies). These are rows for different districts or communities within the same region that began at the same time. Adding the district field leaves 66 rows with differing ends; adding district and community leaves 0. The 9,173 and 66 were checked separately from the script and are not in `chapter07_numbers.json`.
+- **Days and years:** days are Kyiv calendar days; years are counted in UTC.
+- **Days (detail):** calendar days in Kyiv time, from the first to the last start in each file. A day is empty if no row starts on it.
 - **`naive` share by year:** rows with `naive` true, over all raw rows that start that year (UTC year).
 - **Durations:** end minus start, in minutes, on raw rows in both files (before removing duplicates).
 - **Script and numbers:** `scripts/chapter07_provenance.py`; summary in `output/analysis/chapter07_numbers.json`; figure `docs/chapters/figures/ch07_coverage_by_year.png`.

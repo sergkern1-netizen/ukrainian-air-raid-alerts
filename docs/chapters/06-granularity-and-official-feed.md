@@ -25,9 +25,9 @@ clean cut: the record's share of district rows first rose in January 2025 and ha
 - **The official record moved from regions to districts.** Before 1 December 2025, oblast-level rows were the
   largest group (64,842). After it, raion rows are (79,980).
 - **The change came in stages.** Raion rows were about 4 to 8% of rows in early 2025, 14 to 20% in May to July 2025, 58% in
-  August and 73% in September. The share first rose in January 2025, rose again from May 2025, and passed half in August 2025; by the change it was already about 89%. This is the share of lines that name a district, not the share of alerts.
-- **One event now looks like several rows.** The official list now has about four times as many lines per region per day (2.92 before, 12.82 after). This is a change in how entries are written, not in the number of alerts.
-  Each volunteer alert now corresponds to about 2.4 times as many official lines (1.23 before, 2.96 after).
+  August and 73% in September. The share first rose in January 2025, rose again from May 2025, and passed half in August 2025; it was 89% in November. This is the share of lines that name a district, not the share of alerts.
+- **The official list now has more rows per start time, and more start times.** It has about four times as many rows per region per day (2.92 before, 12.82 after, 4.4 times). Two things combine. Distinct start times (an oblast plus a start time) per region per day went from 2.85 to 8.63 (about 3.0 times). Rows per start time went from 1.02 to 1.49 (about 1.45 times). So most of the rise comes from more distinct start times, and only part from several rows sharing one start. This measures rows; the data cannot say whether that reflects recording or events.
+  There are about 2.4 times as many official rows per volunteer alert (a ratio of totals; 1.23 before, 2.96 after). The 4.4 and 2.4 depend on the volunteer count, which may have changed too.
 - **Matching depends on which official rows count.** Counting oblast-level rows only, 63.7% of volunteer alerts match
   before the change and 1.0% after. The 1.0% is about the form of the rows, not about alerts. Counting all levels, 70.0% and 52.5%.
 - **After the change, oblast-level rows are only Kyiv City:** 472 rows, of which 448 are in 2026.
@@ -75,22 +75,23 @@ the old form with a growing share of the new one. Section 4 gives a check using 
 
 ---
 
-## 3. One event, several rows
+## 3. Several rows for one start time
 
-An *event* here is one oblast at one official start time. Counting official rows per event:
+A *start instant* here is one oblast at one official start time. It is not necessarily one siren event. Counting official rows per start instant:
 
 | Measure | Before | After |
 |---|---:|---:|
-| Events (oblast and start time) | 96,689 | 58,170 |
-| Median raion rows per event | 0 | 1 |
-| 90th percentile of raion rows per event (the value that 9 in 10 events stay at or below) | 1 | 4 |
-| Share of events with any raion row | 17.7% | 88.9% |
+| Start instants (oblast and start time) | 96,689 | 58,170 |
+| Median raion rows per start instant | 0 | 1 |
+| 90th percentile of raion rows per start instant (the value that 9 in 10 stay at or below) | 1 | 4 |
+| Share of start instants with any raion row | 17.7% | 88.9% |
+| Mean rows per start instant (all levels) | 1.02 | 1.49 |
 
-![Rows per event, before and after](figures/ch06_records_per_event.png)
+![Rows per start instant, before and after](figures/ch06_records_per_event.png)
 
-Before the change the middle event had no raion row at all, because it was recorded as one oblast row. After, the
-middle event has one raion row, and about one event in ten has four or more rows. So a single siren period in one
-oblast can appear as several rows. Counting rows after the change is not the same measure as counting rows before it.
+Before the change the middle start instant had no raion row at all, because it was recorded as one oblast row. After, the
+middle one has one raion row, and about one in ten has four or more rows. So one start time in one
+oblast can carry several rows. Counting rows after the change is not the same measure as counting rows before it.
 
 ---
 
@@ -99,22 +100,24 @@ oblast can appear as several rows. Counting rows after the change is not the sam
 | Measure | Before | After | After / before |
 |---|---:|---:|---:|
 | Official rows per oblast per day | 2.92 | 12.82 | 4.4 |
+| Start instants per oblast per day | 2.85 | 8.63 | 3.0 |
+| Mean rows per start instant | 1.02 | 1.49 | 1.45 |
 | Official rows per volunteer alert | 1.23 | 2.96 | 2.4 |
 
-I compare against volunteer alerts as a rough guide. The volunteer count itself varies, and I have not shown that its form is unchanged.
+The first row is the product of the next two (2.85 x 1.02 is about 2.92; 8.63 x 1.49 is about 12.82), so about 3.0 times from more start instants and about 1.45 times from more rows per start instant combine to 4.4 times. The 4.4 and the 2.4 both depend on the volunteer count too: the 2.4 uses it directly, and the volunteer count may itself have changed. I compare against volunteer alerts as a rough guide. The volunteer count itself varies, and I have not shown that its form is unchanged.
 
 **Choice of comparison period.** The "before" period includes the gradual change described in section 2. As a check using a different comparison period, I used 1 January 2024
 to 31 July 2025 instead. That gives 3.04 rows per oblast per day and 1.10 rows per volunteer
 alert. The ratios against the after period become about 4.2 and 2.7. The main ratios hold with either
 comparison period: official rows per day are roughly four times higher, and rows per volunteer alert more than doubled.
 
-Do not read these as more or fewer alerts. They are about how rows are written.
+Do not read these as more or fewer alerts. This measures rows; the data cannot say whether that reflects recording or events.
 
 ---
 
 ## 5. Names
 
-- 25 oblast names appear before the change and 24 after. The one that drops is Luhanska oblast, which has a
+- 25 region names appear before the change and 24 after (Kyiv City, a city, counts as a region here). The one that drops is Luhanska oblast, which has a
   single official row, on 24 March 2022.
 - Kyiv City has oblast-level rows only: 1,795 before and 472 after. Its first row after the change is on 3 December
   2025. All 448 oblast-level rows in 2026 are Kyiv City.
@@ -126,7 +129,7 @@ Do not read these as more or fewer alerts. They are about how rows are written.
 ## 6. What this does to matching
 
 Chapter 4 counts a volunteer alert as matched if the official list has an entry for the same region starting within five minutes.
-Which official rows are allowed to count changes the answer a great deal.
+Which official rows are allowed to count changes the answer a great deal. A district row inside the oblast, starting within five minutes, counts as a match.
 
 | Official rows counted | Before | After |
 |---|---:|---:|
@@ -138,15 +141,14 @@ Which official rows are allowed to count changes the answer a great deal.
 The oblast-only rate collapses because the rows it would match have mostly gone. After the change there are
 472 oblast-level rows, all Kyiv City, so almost no volunteer alert can match one. Only Kyiv
 City alerts can match here, so the 1.0% says nothing about other oblasts. **The all-levels figure is the one used in Chapter 4.**
-Even there, the rate after the change cannot be read as a drop in agreement by itself: the match was made against rows of a different kind. A district row inside the
-oblast, starting within five minutes, counts as a match.
+Even there, the rate after the change cannot be read as a drop in agreement by itself: the match was made against rows of a different kind.
 
 ---
 
 ## What this chapter cannot tell you
 
 - **Why the official feed changed granularity.** The data shows when and how, not why.
-- **Whether the change reflects more or fewer events.** More rows can come from more detail about the same events.
+- **Whether the change reflects more or fewer events.** The rows alone cannot separate a change in recording from a change in events.
 - **Whether the official record is complete.** Neither list is a complete, verified record of what happened.
 - **Anything about threats.** The rows do not record what an alert was for, and the counts here say nothing about danger.
 
@@ -161,13 +163,13 @@ oblast, starting within five minutes, counts as a match.
   start after the official feed's last start (05:28 UTC that day). Chapter 4 cut the window at that last start,
   so its figures differ slightly. For example, its all-levels rate after the change is 52.7% and this chapter's is 52.5%.
   The rate before is 70.0% in both.
-- **Event:** one oblast and one official start time. Rows per event, share with any raion row and percentiles use
+- **Start instant:** one oblast and one official start time. Rows per start instant, share with any raion row and percentiles use
   these.
 - **Matching:** same oblast, official start within 5 minutes of the volunteer start, for oblast-level rows only
   or for all levels. A nearest-match check against a brute-force search found 0 disagreements.
 - **Comparison period check:** 1 January 2024 to 31 July 2025 (578 days, 38,372 volunteer alerts).
 - **Figures and numbers:** `scripts/chapter06_granularity.py`; summary in
   `output/analysis/chapter06_numbers.json`, monthly counts in `output/analysis/chapter06_levels_by_month.csv`.
-- **Computed by the writer, not by the script:** the ratio 2.4 (the JSON gives 2.415), the ratios 4.2 and 2.7
+- **Computed by the writer, not by the script:** start instants per oblast per day (2.85 = 96,689 / (1,357 days x 25 names); 8.63 = 58,170 / (281 days x 24 names)), their ratio 3.0, the rows-per-start-instant ratio 1.45 (1.487 / 1.023, from `records_per_event_mean`), the ratio 2.4 (the JSON gives 2.415), the ratios 4.2 and 2.7
   (12.82 / 3.04 and 2.96 / 1.10) and the rounding of raion shares to ranges. The arithmetic that May to
   November 2025 is seven months is also mine. Chapter 4's 52.7% is quoted from that chapter.

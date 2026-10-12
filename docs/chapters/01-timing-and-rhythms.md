@@ -1,6 +1,6 @@
 # Chapter 1: When sirens sound, and how long they last
 
-*How long alerts last, when they start, and what that means for sleep and daily routines.*
+*How long alerts last and when they start.*
 
 Everything in this chapter comes from the volunteer alert record, from 25 February 2022 to 11
 October 2026. It counts **what was recorded**, not what happened. The record has no launch times,
@@ -13,7 +13,7 @@ Reproduce every number and chart with `python -m scripts.chapter01_timing`.
 
 ## The short version
 
-- **A typical alert lasts about half an hour.** Half of all alerts end within 30 minutes of starting.
+- **A typical alert lasts about 30 to 31 minutes.** Half of all alerts end within about that time.
 - **Most of the rest are short too, but about 1 in 13 alerts runs for more than two hours.**
 - **Alerts are grouped into waves, and there are many each day.** On a typical day there are 14
   separate alert waves across the country.
@@ -40,14 +40,15 @@ Reproduce every number and chart with `python -m scripts.chapter01_timing`.
 - **Over an hour:** 22% of alerts.
 - **Over three hours:** 3% of alerts.
 
-**What this means in practice.** The typical recorded alert lasted about 30 minutes. About one
-alert in five lasted over an hour, and about 1 in 13 ran past two hours.
+**In plain terms.** The typical recorded alert lasted about 30 to 31 minutes. More than one in
+five lasted over an hour, and about 1 in 13 ran past two hours.
 
 **Caveat.** About 5% of end times in the record were inferred, not recorded. Leaving them out
 moves the median from 30.0 to 31.1 minutes and the share over an hour from 22% to 23%. The
-difference is small, but it is in the direction of longer alerts. Also, 5% of durations are
-exactly 30.0 minutes, which may be a default end time. These sit right on the median, so the
-"typical alert is half an hour" statement is partly affected by them.
+difference is small, but it is in the direction of longer alerts. The spike at exactly 30.0
+minutes is the inferred rows: all 5,812 inferred rows are exactly 30.0 minutes, while only 43
+recorded alerts last exactly 30.0. Because the inferred end time sits on the median, the "about 30
+to 31 minutes" statement is partly affected by it.
 
 ---
 
@@ -56,7 +57,8 @@ exactly 30.0 minutes, which may be a default end time. These sit right on the me
 ![When alerts start, by hour](figures/ch01_hour_of_day.png)
 
 Alerts start at every hour, but not evenly. The busiest hours are late morning and early afternoon
-(about 10:00 to 13:00, Kyiv time). The quietest is about 06:00.
+(about 10:00 to 13:00, Kyiv time). The quietest is about 06:00. The 34% below and the hour
+shares count distinct start times, not alerts.
 
 **Night** here means 22:00 to 07:00. Night holds **34%** of alert starts, counted on distinct
 start times (113,142 of them, not all 115,989 rows). If alerts were spread evenly across the day,
@@ -70,9 +72,9 @@ spread would give: alerts start a little less often per night hour than per dayt
 ![Nights with an alert, by year](figures/ch01_nights_by_year.png)
 
 Across the country, 1,688 of 1,689 complete nights (99.9%) since February 2022 had at least one
-alert start between 22:00 and 07:00. The last night in the data (11 October 2026) is incomplete,
-because the record ends at 07:36 Kyiv time that day, so it is excluded. The one untouched complete
-night is 2022-12-25, which may be a gap in the feed rather than a truly quiet night.
+alert start between 22:00 and 07:00. The night beginning 22:00 on 11 October 2026 has not
+happened yet in the data, so it is excluded. The one untouched complete night is 2022-12-25. No
+start was recorded; the record cannot show whether the night was quiet or unrecorded.
 
 **Read this carefully.** This counts whether *any* oblast had an alert in the night window. It does
 not mean that every resident was woken on every night. A single alert in a distant oblast counts
@@ -85,17 +87,20 @@ chapter, with the same caveats.
 
 ![Separate alert waves per day](figures/ch01_waves_per_day.png)
 
-The record groups alerts into **waves**: runs of alerts in which each one starts within 30 minutes
+This analysis groups alerts into **waves**: runs of alerts in which each one starts within 30 minutes
 of the previous one (see [the glossary](../GLOSSARY.md)).
 
 - **Typical day:** 14 separate waves (median). The 90th percentile is 18 waves: nine days in ten
   had 18 or fewer. About 1 day in 7 had 18 or more.
-- **Almost every day has many waves.** Only one day out of 1,690 had fewer than three waves.
-- **Gaps with no alert active anywhere are short.** Gaps are computed only between non-overlapping
-  waves (14,747 of 23,680 gaps, 62%). Their median is **38 minutes**, and one in ten is 8 minutes
-  or less. For comparison, the median start-to-start interval between waves is 81 minutes.
+- **Almost every day has many waves.** Every full day had at least three
+  waves. The only exception is the final, partial day (11 October).
+- **Gaps with no alert active anywhere are short.** In 38% of wave pairs there was no gap at all,
+  because the waves overlapped. Gaps are computed only between non-overlapping waves (14,747 of
+  23,680 gaps, 62%). Their median is **38 minutes**, and one in ten is 8 minutes or less. For
+  comparison, the median start-to-start interval between waves is 81 minutes. Inferred end times
+  affect where some waves end, so these gaps carry that caveat.
 
-**What this means in practice.** Waves are national groupings of alerts, not one event in one
+**In plain terms.** Waves are national groupings of alerts, not one event in one
 place. Among non-overlapping waves, the median gap between waves is 38 minutes.
 
 ---

@@ -20,20 +20,23 @@ within five minutes of it. Five minutes is the project's standard (see the toler
 
 ## The short version
 
-- **About two in three volunteer alerts (65%) match an official alert** over the whole period. In the
+- **About 65% of volunteer alerts match an official alert** over the whole period. In the
   other direction, 79% of the official record's oblast-level alerts have a volunteer match. After the
-  break that second figure rests on only 472 official oblast-level rows (0.7% of 65,314) and is 63%,
-  against 79% before the break, so treat it as a small sample.
-- **Agreement fell in two steps, not steadily.** It dropped from about 98% to 83% in November to
-  December 2022, then from about 72% to 51% over August to November 2024, and has been roughly flat
-  through 2025. August 2026 is lower (47%) and the partial September 2026 is 37%.
+  break that second figure rests on only 472 official oblast-level rows (0.7% of 65,314), all of them
+  Kyiv City, and is 63%, against 79% before the break. The official-side figure cannot be compared
+  across the break.
+- **Agreement fell in two main steps plus a gradual slide, not steadily.** It dropped from about 98% to
+  83% in November to December 2022, then from about 72% in July 2024 to 51% in November 2024, and has
+  been roughly flat through 2025. August 2026 (47%) and the partial September 2026 (37%) are lower, but
+  may be affected by the official feed ending on 7 September 2026.
 - **There is no step at the December 2025 break.** The six months either side are 53.4% before and 53.7%
   after. An earlier version of this analysis read the break as the cause of a drop. The data does not support that.
 - **Some oblasts did drop sharply after the break.** Lvivska fell from 78% to 10% and Volynska from 71% to
-  11%. Donetska (74% to 25%) and Zaporizka also fell sharply. These are real differences between the
-  records, not part of the national pattern.
-- **When both records catch an alert, they agree closely on the time.** Most matched pairs (84%) start
-  within a minute of each other, and the volunteer record is usually a few seconds later.
+  11%. Donetska (74% to 25%) and Zaporizka also fell sharply. The cause is not established; the
+  official feed's granularity changed at the same date.
+- **Among pairs already selected as within five minutes, the start times agree closely.** Most matched
+  pairs (84%) start within a minute of each other, and the volunteer record is typically about 16 seconds
+  later. A match is not proof that both records describe the same event.
 
 ---
 
@@ -41,21 +44,22 @@ within five minutes of it. Five minutes is the project's standard (see the toler
 
 ![Monthly agreement with the official record](figures/ch04_monthly_agreement.png)
 
-Agreement was high in the first months of the record and then fell in two steps. The share of
-matched volunteer alerts was about 98% in mid-2022, fell to about 83% in November to December 2022, and
-was about 76 to 81% in early 2023. It averaged about 64% in 2024, with a fall during the second half
-(about 72% down to 51% over August to November 2024), and was roughly flat in 2025. August 2026 is 47%
-and the partial September 2026 is 37%.
+Agreement was high in the first months of the record and then fell in two main steps plus a gradual
+slide. The share of matched volunteer alerts was about 98% in mid-2022, fell to about 83% in November
+to December 2022, and was about 76 to 81% in early 2023. It averaged about 64% in 2024, with a fall
+during the second half (from about 72% in July 2024 to 51% in November), and was roughly flat in 2025.
+August 2026 is 47% and the partial September 2026 is 37%; both may be affected by the official feed
+ending on 7 September 2026.
 
 | Measure | Value |
 |---|---:|
 | Matched alerts, whole period (Mar 2022 to Sep 2026) | 65% |
 | Matched, six months before the break (Jun to Nov 2025) | 53.4% |
 | Matched, six months after the break (Dec 2025 to May 2026) | 53.7% |
-| Linear trend in 2023 to 2025 | about −12 points per year (an average that hides the two steps) |
+| Linear trend in 2023 to 2025 | about −12 points per year (an average that hides the steps) |
 
 The two six-month windows match each other, so the break itself is not a step in the national figure.
-The main falls were already over before it.
+The largest falls came before it.
 
 **Two cautions.** The series is monthly and the last month is partial. The early months are also
 affected by the start of the official record in March 2022.
@@ -70,7 +74,9 @@ For matched pairs, the median gap between the volunteer start and the official s
 The middle half (interquartile range) falls between **7 and 36 seconds**. **84%** of matched pairs start
 within a minute of each other.
 
-The volunteer record is usually a few seconds *later* than the official one. One possible reading is a
+The volunteer record is typically about 16 seconds *later* than the official one. These pairs were
+already selected as within five minutes in the same oblast, and a match is not proof of the same
+event. One possible reading is a
 volunteer recording an alert after it is announced; the data does not show this. The lag is computed only
 over pairs already within 5 minutes, using the nearest official start, so it cannot describe alerts
 that were not matched.
@@ -86,21 +92,26 @@ about how much warning anyone had before an alert started, and must not be prese
 ![Agreement by oblast, before and after the break](figures/ch04_agreement_by_oblast.png)
 
 The dumbbell chart shows each oblast's match rate before and after the break. It includes the 24
-oblasts with at least 50 alerts in both periods. Luhanska has two alerts before the break and none
+oblasts (Kyiv City counted with the oblasts) with at least 50 alerts in both periods. Luhanska has two alerts before the break and none
 after, so it is flagged and not scored.
 
 Grouped by size of change:
 
 - **Largest falls:** Lvivska (78% to 10%), Volynska (71% to 11%), Donetska (74% to 25%) and Zaporizka
-  (84% to 38%). These fall far more than the national average.
+  (84% to 38%). These fall far more than the national average. Lvivska and Volynska are in the west,
+  so a western location did not protect agreement.
+- **Other larger falls (12 to 31 points):** Kyiv City (83% to 52%), Odeska (82% to 58%), Zhytomyrska
+  (80% to 58%), Rivnenska (90% to 70%), Ternopilska (93% to 75%), Chernihivska (71% to 56%) and
+  Dnipropetrovska (59% to 47%).
 - **Moderate fall:** Ivano-Frankivska (90% to 80%, a 10-point fall; 86 alerts after the break).
 - **Small fall:** Cherkaska (85% to 79%).
 - **Little change:** Zakarpatska (97% before, 96% after; 74 alerts after the break) and Chernivetska
-  (95% before, 91% after; 100 alerts after the break). These western oblasts have small post-break
+  (95% before, 91% after; 100 alerts after the break). These far-western oblasts have small post-break
   samples, so their rates are imprecise.
-- **Rises:** Kirovohradska rose 19 points (65% to 84%) and Mykolaivska rose from 58% to 67%.
+- **Rises:** Kirovohradska rose about 20 points (65% to 84%) and Mykolaivska rose from 58% to 67%.
+- Other scored oblasts are in the full table below.
 
-Twenty-one of the 24 scored oblasts fell after the break. "Before" here is the whole pooled pre-break
+Twenty-one of the 24 scored oblasts fell after the break, including some near-zero changes. "Before" here is the whole pooled pre-break
 period, which is dominated by the 2022 months when agreement was highest, so this comparison mixes the
 earlier decline with any effect of the break. The six-month comparison in section 1 is the cleaner test.
 
@@ -118,8 +129,8 @@ The full table is in `output/analysis/chapter04_by_oblast.csv` (gitignored).
 | 30 minutes | 77% | 87% |
 
 Widening the window from one minute to thirty adds about 22 points to the volunteer match rate. Some
-unmatched alerts have an official alert in the same oblast within 30 minutes, so part of the gap is
-timing. The 5-minute standard is a choice; reporting any match rate without its tolerance would
+unmatched alerts have an official alert in the same oblast within 30 minutes, so some of the gap may be
+timing or coincidental nearby alerts. The 5-minute standard is a choice; reporting any match rate without its tolerance would
 overstate how well the records agree.
 
 ---
@@ -134,7 +145,7 @@ This chapter corrects two statements made earlier in this project:
    Caveat: the official record changed format at the break, so the two pools are not directly comparable.
 2. **The cause of the drop.** Earlier analysis presented the December 2025 break as the point where
    agreement fell. The six-month comparison above shows no step at that date (53.4% before, 53.7% after).
-   The falls came earlier, in late 2022 and in August to November 2024. The pooled 70.0% versus 52.7%
+   The largest falls came earlier, in late 2022 and in mid to late 2024. The pooled 70.0% versus 52.7%
    comparison should not be read as a break effect: the official record changed format at the break, so
    the pools are not directly comparable, and the pre-break pool is dominated by earlier, higher months.
    The break coincides with that change in the official record's granularity, which matters for
@@ -165,13 +176,14 @@ The corrections are noted in `docs/gate3_results.md` and `docs/analysis/feed_int
   pools are not directly comparable.
 - **Match rate, official side** (called recall in the scripts): share of official oblast-level alerts
   with a volunteer alert in the same oblast within the tolerance. 79.2% overall. After the break the
-  official record has only 472 oblast-level rows (0.7% of 65,314), so the post-break figure (62.7%,
-  against 79.3% before) is a small sample.
+  official record has only 472 oblast-level rows (0.7% of 65,314), all of them Kyiv City, so the
+  post-break figure (62.7%, against 79.3% before) is a small, single-city sample and cannot be compared
+  across the break.
 - **Independence:** the two records may not be independent; the volunteer record may draw on the
   official one.
 - **Step test:** the six months before and after 1 December 2025, compared directly (53.4% and 53.7%).
 - **Trend:** a linear fit to monthly agreement from January 2023 to November 2025 (about −11.9 points a
-  year). It is an average that hides the two steps.
+  year). It is an average that hides the steps.
 - **Lag:** volunteer start minus the nearest official start in the same oblast, computed only over
   pairs already within 5 minutes.
 - **Small samples:** oblasts with fewer than 50 alerts in a period are flagged and not scored.

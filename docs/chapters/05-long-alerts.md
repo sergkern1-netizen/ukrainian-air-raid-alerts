@@ -28,8 +28,8 @@ really lasted that long. For most long records the data cannot say which it is. 
 - **The integrity tests are mixed.** No long row has an end time the data filled in by rule (not one that was recorded), and none has an end time
   that is the same as another entry's. But only 45% have an official start nearby, and about one in eight of those that do is at least
   three times longer in the volunteer record.
-- **One cluster looks like a recording error.** Four western oblasts on 17 April 2026 show alerts of 108 to 177
-  hours, while the official record shows alerts of about 18 minutes at the same moment.
+- **One cluster fits a recording error; not proven.** Four western oblasts on 17 April 2026 show alerts of 108 to 177
+  hours, while the official record shows alerts of about 18 minutes at about the same time.
 - **For 2026 the oblast-level check cannot be done.** After December 2025 the official record has oblast-level rows only for Kyiv City (472 rows in total; 448 in 2026, all Kyiv City). For every other oblast the oblast-level check cannot be done for 2026.
 
 ---
@@ -96,7 +96,7 @@ counts are not adjusted for how many alerts each area has in total.
 spikes (for example March 2023 with 17 and January and December 2023 with 13 each) and three empty months (September and November 2022, June 2026).
 
 **Start hour.** Of the 370 long rows, 17.0% start in the hour beginning 23:00 (local time), 12.4% at 22:00,
-12.7% at 00:00 and 10.8% at 01:00. Across all alerts the equivalent shares are 4.2% to 4.7%. So more long records are opened in the late evening. This says nothing about when attacks happen. It describes
+12.7% at 00:00 and 10.8% at 01:00. Across all alerts the equivalent shares are 4.2% to 4.7%. So more long records are opened in the late evening and just after midnight. This says nothing about when attacks happen. It describes
 the records only, and this chapter offers no explanation for it.
 
 **Clustering in time.** 31% of long rows start within 24 hours of the previous long row, and 29% fall on
@@ -127,11 +127,11 @@ Four tests, each asking whether long rows look like recording errors.
 | Median official length (hours) | 6.7 | 6.7 |
 
 When an official match exists, the typical pair agrees closely on length. The median official length
-(6.7 hours) is itself over six hours, so for the typical matched pair the official record also says the alert was long.
-For these cases the two records agree on length, which is consistent with a real long alert but does not prove one. It is not proof, because the official record is a
-cross-check and not ground truth (Chapter 4).
+(6.7 hours) is itself over six hours. That supports "both feeds recorded a long span". It does not show that the
+alert was real. Matched pairs are also a selected group (those with an official start nearby), and the official
+feed may carry the same recording error.
 
-The 21 pairs at 3 times or more are the main concern, and the 17 April cluster below accounts for four of them. At least eight of the 21 matched pairs at three times or more are 15 hours or longer with ratios above 40; the 17 April cluster is the only one analysed in detail here. Examples from the row-level file (volunteer start UTC, length, ratio): Chernivetska 2025-03-03 (77.9 h, 199), Khmelnytska 2026-08-04 (69.9 h, 239), Ternopilska 2026-08-28 (93.9 h, 240), Zhytomyrska 2026-07-24 (36.5 h, 187), Kirovohradska 2026-07-17 (15.3 h, 40).
+The 21 pairs at 3 times or more are the main concern, and the 17 April cluster below accounts for four of them. 11 of the 21 matched pairs at three times or more last at least 15 hours with ratios above 40; the 17 April cluster is the only one analysed in detail here. That 17 April wave is also the second-longest wave in the record (177.2 hours, 26 records, 24 oblasts); the 22 other records in it are not discussed here. Examples from the row-level file (volunteer start UTC, length, ratio): Chernivetska 2025-03-03 (77.9 h, 199), Khmelnytska 2026-08-04 (69.9 h, 239), Ternopilska 2026-08-28 (93.9 h, 240), Zhytomyrska 2026-07-24 (36.5 h, 187), Kirovohradska 2026-07-17 (15.3 h, 40).
 
 **What the tests do not show.** The 203 long rows with no official match at any level (370 minus 167) are untested.
 Not matching does not mean the alert was false. Chapter 4 shows the two records disagree: about a third of volunteer alerts have no official start within five minutes.
@@ -150,8 +150,7 @@ Four western oblasts have long rows that begin within about three minutes of eac
 | Khmelnytska | 16:55:46 | 108.0 | 0.29 |
 | Chernivetska | 16:55:46 | 177.2 | 0.30 |
 
-The recorded lengths run from 108 to 177 hours, which is 4.5 to 7.4 days. The official record, matched
-at any level, shows an alert of about 18 minutes in each oblast. The volunteer length is 368 to 600 times
+The recorded lengths run from 108 to 177 hours, which is 4.5 to 7.4 days. The official record has raion-level rows in each of the four oblasts, starting about 16:52 and ending about 17:10 (about 18 minutes). None of the four has an oblast-level match. The volunteer length is 368 to 600 times
 the official one. (The official lengths and ratios are taken from rows in
 `output/analysis/chapter05_long_alerts.csv`. They are not in the summary JSON.)
 
@@ -164,11 +163,11 @@ out a real long alert that the official record chose to represent differently.
 ## 6. The longest wave
 
 At the 30-minute gap, the longest wave started on **4 March 2022** and ran **178.8 hours** (about 7.5 days),
-with **16 records across 14 oblasts**. That is about 0.09 records per hour, which is far below the typical rate; the check flags waves below one record per three hours. The wave is long because one Zaporizka row lasts about 178 hours (178.3): it starts at 08:02 UTC on
-4 March 2022 and ends at 18:18 UTC on 11 March. The other 15 records are short, mostly 0.2 to 0.6 hours, and
+with **16 records across 14 oblasts**. That is about 0.09 records per hour, which is below the flagging threshold of one record per three hours. 7 of the 20 longest waves are flagged this way. The wave is long because one Zaporizka row lasts about 178 hours (178.3): it starts at 08:02 UTC on
+4 March 2022 and ends at 18:18 UTC on 11 March. It is not known whether this record is real or unclosed. The other 15 records are short, mostly 0.2 to 0.6 hours, and
 one is 1.6 hours. The wave begins 32 minutes before that long row starts, with a short Zhytomyrska alert
 (07:30 UTC), so the wave runs 178.8 hours against 178.3 for the longest single row. The low record rate reflects
-that. Among the 20 longest waves listed in the summary file, 7 are flagged as low rate.
+that.
 
 ---
 

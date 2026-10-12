@@ -18,14 +18,14 @@ says nothing about impact or warning time.
 ## The short version
 
 - **There are 23,681 waves** in the record at the 30-minute gap.
-- **A typical wave spans about an hour** (median 64 minutes, from first to last recorded alert), but **one in ten lasts over three and a
+- **A typical wave spans about an hour** (median 64 minutes, from the first alert start to the last recorded alert end; alert durations, not danger), but **one in ten lasts over three and a
   half hours** (90th percentile 212 minutes).
 - **Waves usually touch few oblasts.** A third (33%) touch only one. The median is two, and one wave in
   ten reaches ten or more.
-- **Since 2026, waves have spread wider.** Nearly one wave in five (20%) now touches ten or more
-  oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4.
-- **The longest wave may be a recording error.** It lasts 179 hours across 14 oblasts, from
-  only 16 records. It needs checking before anyone reads it as an event.
+- **Since 2026, waves now touch more oblasts.** Nearly one wave in five (20%) now touches ten or more
+  oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4. This comparison
+  was not tested at other gaps and covers 284 days, not a full year, so it is not seasonally matched.
+- **The longest wave may be a recording error.** It lasts 179 hours across 14 oblasts, driven by a single row of about 178 hours (Chapter 5). The other 15 records are short. It needs checking before anyone reads it as an event.
 
 ---
 
@@ -33,7 +33,7 @@ says nothing about impact or warning time.
 
 ![How long a wave lasts](figures/ch03_wave_duration.png)
 
-| Wave length (first to last alert) | Share of waves |
+| Wave length (first alert start to last alert end) | Share of waves |
 |---|---:|
 | Under 30 minutes | 17% |
 | 30 to 60 minutes | 30% |
@@ -43,7 +43,7 @@ says nothing about impact or warning time.
 | 8 to 24 hours | 0.8% |
 | Over 24 hours | 0.05% |
 
-Just under half of all waves (48%) last under an hour, and about nine in ten last under four hours. Only about 2% of
+Just under half of all waves (48%) last under an hour, and about 92% last under four hours. Only about 2% of
 waves exceed six hours. Those long waves need care: they can be real periods of repeated alerts or
 artefacts of how the record was kept. Chapter 5 examines them.
 
@@ -60,9 +60,9 @@ of starts, with the duration mostly coming from how long each alert stays on.
 - **One oblast:** 33% of waves.
 - **Two oblasts** (the median): the typical wave.
 - **Ten or more:** about 1 wave in 10.
-- **23 or more:** about 1.5% of waves (366 waves). 194 waves (0.8%) touched all 24 oblast names in the feed.
+- **23 or more:** about 1.5% of waves (366 waves).
 
-194 waves touched all 24 oblast names in the feed. They occur in every year: 42 in 2022, 69 in 2023,
+194 waves (0.8%) touched all 24 oblast names in the feed. They occur in every year: 42 in 2022, 69 in 2023,
 45 in 2024, 25 in 2025 and 13 in 2026 (to 11 October). The count does not single out one period.
 
 ---
@@ -79,10 +79,11 @@ of starts, with the duration mostly coming from how long each alert stays on.
 | 2025 | 5,844 | 490 | 8% | 2 |
 | 2026 (to 11 Oct) | 3,668 | 727 | 20% | 4 |
 
-The number of waves per year rose from 2022 to 2025. 2026 has 3,668 waves in 284 days, about 12.9 per day, against 16.0 per day in 2025 (5,844 waves in 365 days).
+The number of waves per year rose from 2022 (a partial year, from 25 February) to 2025. 2026 has 3,668 waves in 284 days, about 12.9 per day, against 16.0 per day in 2025 (5,844 waves in 365 days).
 The change that stands out is in **breadth**: a larger share of recorded waves group starts in ten or more
 oblasts (20% in 2026, against 6% to 11% earlier). No cause is identified here, and the gap setting was not
-tested for this trend. Chapter 2 showed the same
+tested for this trend. The 2026 comparison is not tested at other gaps, and it covers 284 days,
+not a full year, so it is not seasonally matched. Chapter 2 showed the same
 shift in the oblast-level rates.
 
 **Read this with care.** The 2026 change may reflect the events, the way the volunteer record was kept,
@@ -93,9 +94,8 @@ or both. The record cannot separate them, and this chapter does not test either 
 ## 4. The longest wave
 
 The longest wave in the record began on **4 March 2022**. It lasts 179 hours (about seven and a half
-days), touches 14 oblasts, and is built from only 16 records. A wave that long from so few records
-suggests alerts whose end times were never closed or were recorded far too late, rather than a
-continuous sequence of alerts. The record does not say which. Chapter 5 checks it against the
+days) and touches 14 oblasts. The duration is driven by a single row of about 178 hours (Chapter 5).
+The other 15 records are short. The record does not say whether that row is real. Chapter 5 checks it against the
 long-alert register.
 
 ---
@@ -113,7 +113,7 @@ The 30-minute gap is a choice. Changing it changes the picture.
 | 60 min | 10,543 | 5 | 16 | 113 | 12.9% |
 
 A shorter gap splits waves into many small bursts. A longer gap joins separate bursts into fewer, larger
-waves. At 60 minutes, about one wave in eight lasts more than six hours, probably because chaining joins
+waves. At 60 minutes, about one wave in eight lasts more than six hours, consistent with chaining joining
 separate bursts. The 30-minute setting is a reasonable middle, but **no single gap is correct**. Any
 headline number about waves should name its gap.
 

@@ -23,8 +23,7 @@ nearly everyone in Ukraine was elsewhere. Nothing here measures effect on people
   below 39.2%, and one in ten is above 88.1%.
 - **Every one of the 1,688 days analysed has at least one covered minute.** 80.2% of days are above 50%,
   and 38.8% are above 75%.
-- **The weekday barely matters.** Medians run from 68.6% (Monday) to 72.3% (Thursday), a spread of about
-  3.7 points. This was not tested for significance and is small.
+- **Weekday medians differ little** (68.6% to 72.3%, about 3.7 points); this was not tested.
 - **The yearly rise in recorded covered share is large** (42.6% in 2022 to 85.2% in 2026; both years are partial). It may reflect how much the volunteer
   record covers over time, not only more alert time, and this data cannot separate the two.
 - **Dropping the inferred-end rows lowers the daily median by about 2 points** (to 68.1%). The overall
@@ -45,7 +44,7 @@ nearly everyone in Ukraine was elsewhere. Nothing here measures effect on people
 | Days above 50% | 80.2% |
 | Days above 75% | 38.8% |
 
-The first day (25 February 2022) and the last (11 October 2026) are partial and are left out. Of the
+The first day (25 February 2022) and the last (11 October 2026) are partial and are left out, so the days analysed run from 26 February 2022 to 10 October 2026. Of the
 1,688 days kept, none has zero covered minutes. The spread is wide: a day in the lowest tenth has under 40%
 covered, and a day in the highest tenth has more than 88% covered. A high share means recorded alerts
 were active somewhere in the country for much of the day. It does not say how many oblasts were
@@ -175,6 +174,8 @@ instructions and live warnings, use official channels only (see `docs/SAFETY.md`
   on both sides.
 - **Days:** 1,690 calendar days have records; 25 February 2022 and 11 October 2026 are partial and
   excluded, leaving 1,688. Weeks: 242 have records and 240 are analysed.
+- **Clock changes:** the two days a year with a clock change (23 or 25 hours) are measured against a
+  fixed 1,440 minutes (10,080 for their weeks). The effect is negligible.
 - **Checks:** no day exceeds 1,440 minutes and no week exceeds 10,080. A brute-force recount on sampled
   days matched exactly.
 - **What is counted:** the daily and weekly figures count only minutes where a recorded alert was active;

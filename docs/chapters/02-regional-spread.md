@@ -19,8 +19,8 @@ these figures are not per person.
   (11%) lead. The top ten oblasts hold about three-quarters (74%) of all alerts.
 - **Busy and long are not the same thing.** Dnipropetrovska has the most alerts, but a typical one
   lasts 23 minutes. Donetska has fewer alerts, but 40% of them last over an hour.
-- **In 2026 the recorded rate rose in most oblasts.** Some rose by more than 150% against 2025 per
-  day. This may reflect the reporting, not only the events, so read the change with care.
+- **In 2026 the recorded rate rose in 20 of 24 regions.** (Those 24 are 23 oblasts and Kyiv city; Luhanska has no alerts in either year.) Some rose by more than 150% against 2025 per
+  day. Not the whole west rose: Chernivetska (+15%) and Khmelnytska (+16%) barely rose, and Zakarpatska, Ivano-Frankivska and Ternopilska fell. This may reflect the reporting, not only the events, so read the change with care.
 - **Some oblasts have far fewer recorded alerts.** Zakarpatska and Ivano-Frankivska had one on about
   a third of days (33% and 37%).
 
@@ -72,7 +72,7 @@ The western figures are low in this record. That does **not** mean the west is s
 
 ![Median alert duration by oblast](figures/ch02_median_duration.png)
 
-Duration is where the oblasts differ most. The median ranges from **23 minutes** in Dnipropetrovska
+Duration differs clearly between oblasts. The median ranges from **23 minutes** in Dnipropetrovska
 to **45 minutes** in Chernivetska. The share of alerts over one hour shows the same spread:
 
 | Oblast | Median (min) | Over one hour | 90th percentile (min) |
@@ -88,7 +88,7 @@ to **45 minutes** in Chernivetska. The share of alerts over one hour shows the s
 The 90th percentile column is the length that 9 in 10 alerts stay under. Donetska's 170 minutes
 means that one alert in ten there lasts at least 170 minutes (about 2 hours 50 minutes).
 
-**Sample size.** Luhanska has three records, all before 5 April 2022. It is shown for completeness only.
+**Sample size.** Luhanska has three records, and the record has nothing after 5 April 2022. That is a gap in the record, not evidence that no alerts happened there. It is shown for completeness only. The same applies to any region absent from the record: absence here means no recorded alerts, not no alerts.
 
 ---
 
@@ -99,8 +99,7 @@ varies from about **30%** (Dnipropetrovska) to about **46%** (Khmelnytska). Zaka
 Ivano-Frankivska are at 32% and 34%. Kyiv city is at 41%.
 
 Some oblasts with the most alerts have a lower night share, and some with fewer alerts have a higher one.
-A higher night share means more of an oblast's alerts start between 22:00 and 07:00. Smaller oblasts
-have fewer alerts, so their shares move more from year to year.
+A higher night share means more of an oblast's alerts start between 22:00 and 07:00. Shares from few alerts are less stable.
 
 ---
 
@@ -108,8 +107,10 @@ have fewer alerts, so their shares move more from year to year.
 
 ![Recorded alerts by oblast and year](figures/ch02_heatmap_by_year.png)
 
+*Both 2022 (from 25 February) and 2026 (to 11 October) are partial years, so their counts are not comparable with full years.*
+
 2026 is a partial year (1 January to 11 October, 284 days). The table compares **alerts per day**,
-so the years line up:
+so the years line up. It shows all 23 oblasts and Kyiv city with alerts in both years, ordered from the largest rise to the largest fall (Luhanska has none in either year). **20 of the 24 rose; 4 fell.**
 
 | Oblast | 2025 (alerts per day) | 2026 (alerts per day) | Change |
 |---|---:|---:|---:|
@@ -119,10 +120,24 @@ so the years line up:
 | Mykolaivska | 3.9 | 8.0 | +107% |
 | Kyivska | 2.5 | 5.2 | +106% |
 | Kharkivska | 7.8 | 15.4 | +97% |
+| Zhytomyrska | 1.1 | 2.2 | +94% |
+| Rivnenska | 0.5 | 1.0 | +92% |
+| Chernihivska | 4.2 | 7.5 | +76% |
 | Dnipropetrovska | 8.4 | 14.4 | +72% |
-| Zakarpatska | 0.3 | 0.2 | −34% |
-| Ivano-Frankivska | 0.4 | 0.3 | −24% |
+| Kyiv city | 1.5 | 2.4 | +64% |
+| Sumska | 6.1 | 9.8 | +60% |
+| Poltavska | 3.9 | 6.1 | +57% |
+| Khersonska | 3.9 | 5.9 | +50% |
+| Vinnytska | 1.0 | 1.4 | +42% |
+| Kirovohradska | 3.4 | 4.4 | +28% |
+| Zaporizka | 5.3 | 6.3 | +18% |
+| Cherkaska | 2.6 | 3.0 | +17% |
+| Khmelnytska | 0.6 | 0.7 | +16% |
+| Chernivetska | 0.4 | 0.4 | +15% |
+| Ternopilska | 0.4 | 0.4 | −11% |
 | Donetska | 4.5 | 3.9 | −12% |
+| Ivano-Frankivska | 0.4 | 0.3 | −24% (based on under 150 alerts a year) |
+| Zakarpatska | 0.3 | 0.2 | −34% (based on under 150 alerts a year) |
 
 **Read this carefully.** The rise is wide, and it is largest in Lvivska, Volynska and Odeska. It may
 reflect the events. It may also reflect the volunteer record: how many people report, how quickly,
