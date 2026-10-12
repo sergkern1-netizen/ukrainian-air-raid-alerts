@@ -14,7 +14,7 @@ is reproduced by the chapter's script.
 | 6 | [Granularity and the official feed](06-granularity-and-official-feed.md) | How did the official record change in December 2025, and what does that mean for comparisons? | Done |
 | 7 | [Data provenance and quality](07-provenance-and-quality.md) | What is in each file, how were duplicates handled, and what is missing? | Done |
 | 8 | [Reporting patterns](08-reporting-patterns.md) | Why do the records disagree in the west, and what is the batching pattern in one oblast pair? | Done |
-| 9 | Daily and weekly disruption | How much of each day or week is interrupted, for schools, employers and logistics? | Planned |
+| 9 | [Daily and weekly coverage](09-daily-and-weekly-coverage.md) | On what share of each day and week was a recorded alert active somewhere in Ukraine, and how has that changed? (A national measure, not an effect on people.) | Done |
 | 10 | Method and reproducibility | How to rerun every chapter, and what each script reads and writes. | Planned |
 
 Safety boundaries for every chapter are in [`../SAFETY.md`](../SAFETY.md). Plain definitions are
