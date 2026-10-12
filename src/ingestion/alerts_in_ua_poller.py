@@ -10,7 +10,7 @@ import asyncio
 import json
 import logging
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 import aiohttp
 from confluent_kafka import Producer
@@ -62,6 +62,7 @@ class AsyncAlertsPoller:
         poll_interval: float = 15.0,
         backoff_max: float = 60.0,
         heartbeat_timeout: float = 30.0,
+        backup_endpoints: Sequence[str] = (),
     ) -> None:
         """
         Initialize the async poller.
@@ -73,6 +74,8 @@ class AsyncAlertsPoller:
             poll_interval: Seconds between API polls (default 15).
             backoff_max: Maximum exponential backoff delay in seconds.
             heartbeat_timeout: Seconds before standby election triggered.
+            backup_endpoints: Alternative API URLs tried in order when the primary
+                is unreachable, times out, or returns 5xx. Rate limits (429) do not fail over.
         """
         self.config = config
         self.kafka_producer = kafka_producer
@@ -82,6 +85,7 @@ class AsyncAlertsPoller:
         self.heartbeat_timeout = heartbeat_timeout
 
         self.api_endpoint = "https://api.alerts.in.ua/v1/alerts/active.json"
+        self.endpoints: List[str] = [self.api_endpoint, *backup_endpoints]
         self.topic = "alerts.raw"
         self.source_id = "alerts.in.ua"
 
@@ -185,20 +189,35 @@ class AsyncAlertsPoller:
 
         timeout = aiohttp.ClientTimeout(total=10.0)
 
+        last_error: Optional[Exception] = None
         async with aiohttp.ClientSession(timeout=timeout) as session:
-            async with session.get(self.api_endpoint, headers=headers) as response:
-                if response.status == 429:
-                    logger.warning("Rate limit hit (429). Applying exponential backoff")
-                    self.backoff_delay = min(self.backoff_delay * 2, self.backoff_max)
-                    raise Exception("Rate limit (429)")
+            for endpoint in self.endpoints:
+                try:
+                    async with session.get(endpoint, headers=headers) as response:
+                        if response.status == 429:
+                            logger.warning("Rate limit hit (429). Applying exponential backoff")
+                            self.backoff_delay = min(self.backoff_delay * 2, self.backoff_max)
+                            raise Exception("Rate limit (429)")
 
-                response.raise_for_status()
+                        response.raise_for_status()
 
-                data = await response.json()
-                alerts = data.get("alerts", [])
+                        data = await response.json()
+                        alerts = data.get("alerts", [])
+                except (aiohttp.ClientConnectionError, asyncio.TimeoutError) as e:
+                    logger.warning(f"Endpoint {endpoint} unreachable ({e}); trying next endpoint")
+                    last_error = e
+                    continue
+                except aiohttp.ClientResponseError as e:
+                    if e.status < 500:
+                        raise
+                    logger.warning(f"Endpoint {endpoint} returned {e.status}; trying next endpoint")
+                    last_error = e
+                    continue
 
-                logger.info(f"Polled {len(alerts)} active alerts")
+                logger.info(f"Polled {len(alerts)} active alerts from {endpoint}")
                 return alerts
+
+        raise last_error if last_error else RuntimeError("no alert endpoints configured")
 
     async def publish_to_kafka(self, alerts: List[Dict[str, Any]]) -> None:
         """

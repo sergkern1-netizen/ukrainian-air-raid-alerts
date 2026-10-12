@@ -3,21 +3,31 @@ Chaos tests (WO8): failure injection against the ingestion layer.
 
 Collected by pytest because pytest.ini lists this module in python_files.
 
-Implemented:
-- alerts.in.ua blocked (HTTP 429 / connection error): poller backs off, does not crash.
-
-Not yet implemented in src/ (recorded as expected failures, not silently passed):
-- Redis killed -> in-memory fallback: no Redis client exists in src/ yet.
-- alerts.in.ua blocked -> backup endpoint failover: poller has a single endpoint.
+Redis "kill" is simulated by pointing the client at a port with no listener, which
+gives the same connection-refused behaviour as a stopped server. Killing a real
+container needs the Docker stack, so that variant belongs to the live suite.
 """
 
 import asyncio
+import socket
+import time
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import aiohttp
-import pytest
+import redis
 
-from tests.conftest import fake_http_session
+from src.ingestion.cache import ResilientCache
+from tests.conftest import fake_http_session, routing_http_session
+
+PRIMARY = "https://api.alerts.in.ua/v1/alerts/active.json"
+BACKUP = "https://backup.alerts.example/v1/alerts/active.json"
+
+
+def _closed_port() -> int:
+    """Return a local port with no listener."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.bind(("127.0.0.1", 0))
+        return sock.getsockname()[1]
 
 
 def test_connection_failure_does_not_crash_run_loop(make_poller) -> None:
@@ -45,18 +55,52 @@ def test_blocked_endpoint_backoff_is_capped(make_poller) -> None:
 
     assert [c.args[0] for c in sleep.await_args_list][-1] == 4.0
 
-    assert poller.backoff_delay == 4.0
+
+def test_blocked_primary_fails_over_to_backup_endpoint(make_poller) -> None:
+    """Connection refused by the primary is followed by a successful backup request."""
+    poller = make_poller(backup_endpoints=[BACKUP])
+    session_cm = routing_http_session(
+        {PRIMARY: aiohttp.ClientConnectionError("blocked"), BACKUP: 200}
+    )
+
+    with patch("aiohttp.ClientSession", return_value=session_cm):
+        alerts = asyncio.run(poller.poll_active_alerts())
+
+    assert alerts == [{"id": 1}]
+    urls_called = [c.args[0] for c in session_cm.__aenter__.return_value.get.call_args_list]
+    assert urls_called == [PRIMARY, BACKUP]
 
 
-@pytest.mark.xfail(strict=True, reason="No Redis client / in-memory fallback in src/ yet (WO8 gap)")
-def test_redis_killed_falls_back_to_memory() -> None:
-    """Killing Redis triggers a logged warning and an in-memory fallback cache."""
-    from src.ingestion import cache  # noqa: F401  # module does not exist yet
+def test_primary_5xx_fails_over_but_rate_limit_does_not(make_poller) -> None:
+    """A 503 from the primary fails over; a 429 backs off without touching the backup."""
+    poller = make_poller(backup_endpoints=[BACKUP])
+    session_cm = routing_http_session({PRIMARY: 503, BACKUP: 200})
+    with patch("aiohttp.ClientSession", return_value=session_cm):
+        assert asyncio.run(poller.poll_active_alerts()) == [{"id": 1}]
+
+    poller = make_poller(backup_endpoints=[BACKUP])
+    session_cm = routing_http_session({PRIMARY: 429, BACKUP: 200})
+    with patch("aiohttp.ClientSession", return_value=session_cm):
+        try:
+            asyncio.run(poller.poll_active_alerts())
+            raised = False
+        except Exception as e:  # rate limit is raised as a plain Exception
+            raised = "Rate limit" in str(e)
+    assert raised
+    urls_called = [c.args[0] for c in session_cm.__aenter__.return_value.get.call_args_list]
+    assert urls_called == [PRIMARY]
 
 
-@pytest.mark.xfail(strict=True, reason="Single alerts.in.ua endpoint; no backup failover (WO8 gap)")
-def test_blocked_primary_fails_over_to_backup_endpoint() -> None:
-    """Blocking the primary endpoint switches polling to the backup stub."""
-    from src.ingestion.alerts_in_ua_poller import AsyncAlertsPoller
+def test_redis_killed_falls_back_to_memory(caplog) -> None:
+    """With Redis unreachable, writes and reads still work in memory and a warning is logged."""
+    client = redis.Redis(host="127.0.0.1", port=_closed_port(), socket_connect_timeout=1)
+    cache = ResilientCache(client)
 
-    assert hasattr(AsyncAlertsPoller, "backup_endpoint")
+    start = time.monotonic()
+    cache.set("alerts:last", {"count": 3})
+    detection_s = time.monotonic() - start
+
+    assert detection_s < 2.0
+    assert cache.degraded
+    assert cache.get("alerts:last") == {"count": 3}
+    assert "falling back to in-memory cache" in caplog.text

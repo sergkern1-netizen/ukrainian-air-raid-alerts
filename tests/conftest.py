@@ -10,6 +10,7 @@ import os
 from typing import Any, Callable
 from unittest.mock import AsyncMock, MagicMock, Mock, patch
 
+import aiohttp
 import pytest
 
 from src.ingestion.alerts_in_ua_poller import AsyncAlertsPoller
@@ -51,6 +52,40 @@ def fake_http_session(status: int) -> MagicMock:
     session = MagicMock()
     session.get = MagicMock(return_value=get_cm)
 
+    session_cm = MagicMock()
+    session_cm.__aenter__ = AsyncMock(return_value=session)
+    session_cm.__aexit__ = AsyncMock(return_value=False)
+    return session_cm
+
+
+def routing_http_session(routes: dict) -> MagicMock:
+    """
+    Build an aiohttp.ClientSession stand-in that answers per URL.
+
+    Args:
+        routes: Map of URL -> HTTP status (int) or exception raised on connect.
+    """
+
+    def _get(url: str, headers: Any = None) -> MagicMock:
+        outcome = routes[url]
+        get_cm = MagicMock()
+        if isinstance(outcome, Exception):
+            get_cm.__aenter__ = AsyncMock(side_effect=outcome)
+        else:
+            response = MagicMock()
+            response.status = outcome
+            response.json = AsyncMock(return_value={"alerts": [{"id": 1}]})
+            response.raise_for_status = MagicMock()
+            if outcome >= 500:
+                response.raise_for_status.side_effect = aiohttp.ClientResponseError(
+                    request_info=MagicMock(), history=(), status=outcome
+                )
+            get_cm.__aenter__ = AsyncMock(return_value=response)
+        get_cm.__aexit__ = AsyncMock(return_value=False)
+        return get_cm
+
+    session = MagicMock()
+    session.get = MagicMock(side_effect=_get)
     session_cm = MagicMock()
     session_cm.__aenter__ = AsyncMock(return_value=session)
     session_cm.__aexit__ = AsyncMock(return_value=False)

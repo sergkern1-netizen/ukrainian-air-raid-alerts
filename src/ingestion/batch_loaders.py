@@ -17,6 +17,10 @@ import pandas as pd
 import requests
 from avro.io import BinaryEncoder, DatumWriter
 from avro.schema import parse as parse_schema
+from confluent_kafka import Producer
+from confluent_kafka.schema_registry import SchemaRegistryClient
+
+from src.ingestion.avro_wire import frame, register_value_schema
 
 logger = logging.getLogger(__name__)
 
@@ -84,41 +88,46 @@ class BatchLoader(ABC):
         logger.info(f"Saved {len(df)} records to {output_path}")
         return output_path
 
-    def publish_to_kafka(self, df: pd.DataFrame, topic: str, schema: Dict[str, Any]) -> int:
-        """Publish DataFrame records to Kafka topic as Avro.
+    def publish_to_kafka(
+        self,
+        df: pd.DataFrame,
+        topic: str,
+        schema: Dict[str, Any],
+        schema_registry: Optional[SchemaRegistryClient] = None,
+    ) -> int:
+        """Publish DataFrame records to a Kafka topic as Avro, in Confluent wire format.
 
         Args:
             df: DataFrame with records to publish.
             topic: Kafka topic name.
             schema: Avro schema dict.
+            schema_registry: Registry used to register the schema. Required when
+                brokers are configured, so records are never published unframed.
 
         Returns:
             Number of records published.
+
+        Raises:
+            ValueError: If brokers are configured but no schema registry is given.
         """
         if not self.kafka_brokers:
             logger.warning(f"No Kafka brokers configured; skipping publish to {topic}")
             return 0
+        if schema_registry is None:
+            raise ValueError("schema_registry is required to publish to Kafka")
 
-        try:
-            from kafka import KafkaProducer
-        except ImportError:
-            logger.warning("kafka-python not installed; skipping Kafka publish")
-            return 0
-
+        schema_id = register_value_schema(schema_registry, topic, schema)
         avro_schema = parse_schema(json.dumps(schema))
-        producer = KafkaProducer(bootstrap_servers=self.kafka_brokers.split(","))
+        producer = Producer({"bootstrap.servers": self.kafka_brokers})
 
         count = 0
         for _, row in df.iterrows():
-            record = row.to_dict()
-            encoder = BinaryEncoder(BytesIO())
-            writer = DatumWriter(avro_schema)
-            writer.write(record, encoder)
-            producer.send(topic, encoder.writer.getvalue())
+            buffer = BytesIO()
+            DatumWriter(avro_schema).write(row.to_dict(), BinaryEncoder(buffer))
+            producer.produce(topic=topic, value=frame(schema_id, buffer.getvalue()))
             count += 1
 
         producer.flush()
-        producer.close()
         logger.info(f"Published {count} records to Kafka topic '{topic}'")
         return count
 
