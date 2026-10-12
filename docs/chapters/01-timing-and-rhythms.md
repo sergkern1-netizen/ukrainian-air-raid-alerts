@@ -68,7 +68,7 @@ than an even spread would suggest.
 ![Nights with an alert, by year](figures/ch01_nights_by_year.png)
 
 Across the country, **99.9% of nights** since February 2022 had at least one alert start between
-22:00 and 07:00. In every full year the share was at least 99.7%.
+22:00 and 07:00. In every year the share was at least 99.6% (2026 is a partial year).
 
 **Read this carefully.** This counts whether *any* oblast had an alert in the night window. It does
 not mean that every resident was woken on every night. A single alert in a distant oblast counts
