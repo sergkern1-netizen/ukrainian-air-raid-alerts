@@ -81,6 +81,7 @@ def test_sustained_rate_and_latency_live() -> None:
 
     latencies = []
     request_times = []
+    errors = []
     deadline = time.monotonic() + LIVE_WINDOW_MINUTES * 60
 
     async def _run() -> None:
@@ -89,14 +90,17 @@ def test_sustained_rate_and_latency_live() -> None:
             request_times.append(time.monotonic())
             try:
                 await poller.poll_active_alerts()
-            except Exception:
-                # Rate-limit failures are recorded by the request count; the
-                # rate assertion below will catch a 429 storm.
-                pass
-            latencies.append((time.perf_counter() - start) * 1000)
+            except Exception as exc:
+                # Failures are counted, not hidden: a 401 from an invalid token
+                # or a 429 storm must fail this test, not pass it with fake latency.
+                errors.append(repr(exc))
+            else:
+                latencies.append((time.perf_counter() - start) * 1000)
             await asyncio.sleep(poller.poll_interval)
 
     asyncio.run(_run())
+
+    assert not errors, f"{len(errors)}/{len(request_times)} polls failed; first: {errors[0]}"
 
     window_minutes = (request_times[-1] - request_times[0]) / 60
     assert len(request_times) / max(window_minutes, 1e-9) <= MAX_REQUESTS_PER_MINUTE + 0.5
