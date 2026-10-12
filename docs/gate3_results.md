@@ -67,8 +67,9 @@ Backtest: 52 one-week-ahead origins, refit on all earlier weeks at each origin.
 
 - **Volunteer (`volunteer_data_en.csv`) is the primary target.** It is the only feed that
   continues after 2026-09-07. It is oblast-level throughout, so its resolution does not change.
-  Its licence is MIT, per the forecasting project that uses it. It was accepted as the target by
-  the project owner, with its caveats.
+  The repository's root LICENSE is MIT (checked 2026-10-12). Whether that licence covers the data
+  files was not confirmed: `datasets/README.md` returned HTTP 503 when checked. It was accepted as
+  the target by the project owner, with its caveats.
 - **Official (`official_data_en.csv`) is the cross-check.** It is the official record, but it
   ends on 2026-09-07 (the official Telegram feed ended the same day) and changes to raion level
   in December 2025.
@@ -112,7 +113,9 @@ feed is more accurate. This is why the target carries a documented western over-
 ## Reliability methods
 
 - Rolling-origin backtest: 52 one-week-ahead origins; each model refit using only earlier weeks.
-- The regime indicator (1 from 2025-12-01) is known in advance, so it is not leakage.
+- The regime indicator (1 from 2025-12-01) is known in advance, so using it inside a model is not
+  leakage. The break date itself was chosen after inspecting the full series, so the choice of
+  date is a judgement made with hindsight, not a leakage-free out-of-sample choice.
 - Primary metric WAPE on weekly totals; secondary daily WAPE with each weekly forecast spread
   evenly over seven days (the least favourable assumption for weekly models).
 - Diebold–Mariano test on absolute loss against the baseline (one-step horizon, so no HAC

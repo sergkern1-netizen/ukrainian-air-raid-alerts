@@ -30,8 +30,9 @@ reporting only; see [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
    `--as-of` date.
 5. **Backtest.** 52 one-week-ahead origins. Each origin refits only on earlier weeks. Compares the
    baseline with a negative-binomial regression and ARIMA(1,1,0) on log-scale weekly totals.
-6. **Forecast.** The baseline's point forecast for the next week, with intervals from the
-   backtest residuals (see limits below).
+6. **Forecast.** The baseline's point forecast for the next week. Its intervals are quantiles of
+   in-sample backtest residuals. Their coverage was never checked against the approved bands, so
+   they are optimistic (see limits below).
 7. **Report.** Writes `output/forecast_results.csv` and `output/pipeline_report.json`.
 
 ## Data sources
@@ -41,9 +42,12 @@ reporting only; see [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
 | [Vadimkin/ukrainian-air-raid-sirens-dataset](https://github.com/Vadimkin/ukrainian-air-raid-sirens-dataset) `volunteer_data_en.csv` | Target series | 2022-02-25 onward, oblast level | Manually posted by volunteers; 5% of end times are inferred (`naive`). MIT licence per the dataset. Credit: eTryvoga volunteer channel. |
 | Same repository, `official_data_en.csv` | Cross-check | 2022-03-15 to 2026-09-07 | Ends with the official Telegram feed. Changes to mostly raion level from December 2025. |
 
-Not used: Kaggle datasets (not needed; the Vadimkin data covers the same period), alerts.in.ua
-and UkraineAlarm (no credentials available), ISW, Oryx, ACLED (not needed for the current
-target). Other GitHub projects on this data are not independent sources.
+Kaggle missile-attack dataset (Petro Ivaniuk, CC BY-NC-SA 4.0): used for descriptive reporting
+only. Its rows cite Telegram channels, so it is Telegram-derived; see `docs/enterprise/STATUS.md`.
+Not used: the Kaggle p0stscriptum air-raid dataset, alerts.in.ua and UkraineAlarm (no credentials
+available), ISW (terms do not permit dataset use), Oryx (no reuse rights found), ACLED (no API access
+on the project account), GDELT (no timing alignment with alerts). Other GitHub projects on this data
+are not independent sources.
 
 ## Results (52 origins, weekly WAPE)
 
