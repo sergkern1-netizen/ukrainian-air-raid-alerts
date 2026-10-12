@@ -46,7 +46,9 @@ def mock_kafka_producer() -> Mock:
 @pytest.fixture
 def mock_schema_registry() -> Mock:
     """Create mock schema registry client."""
-    return Mock()
+    registry = Mock()
+    registry.register_schema.return_value = 1
+    return registry
 
 
 @pytest.fixture

@@ -16,6 +16,8 @@ import avro.io
 import avro.schema
 from confluent_kafka import Producer
 from confluent_kafka.schema_registry import SchemaRegistryClient
+
+from src.ingestion.avro_wire import frame, register_value_schema
 from io import BytesIO
 from telethon import TelegramClient
 from telethon.events import NewMessage
@@ -90,6 +92,10 @@ class TelegramStreamConsumer:
 
         # Load Avro schema
         self.avro_schema = self._load_avro_schema()
+
+        self.schema_id = register_value_schema(
+            self.schema_registry, self.topic, self.avro_schema
+        )
 
     def _load_avro_schema(self) -> Dict[str, Any]:
         """
@@ -280,7 +286,7 @@ class TelegramStreamConsumer:
             self.kafka_producer.produce(
                 topic=self.topic,
                 key=str(msg_id).encode("utf-8"),
-                value=avro_bytes,
+                value=frame(self.schema_id, avro_bytes),
                 on_delivery=self._delivery_report,
             )
 

@@ -15,6 +15,8 @@ from typing import Any, Dict, List, Optional
 import aiohttp
 from confluent_kafka import Producer
 from confluent_kafka.schema_registry import SchemaRegistryClient
+
+from src.ingestion.avro_wire import frame, register_value_schema
 from pydantic import BaseModel
 
 from src.config import Settings
@@ -90,6 +92,10 @@ class AsyncAlertsPoller:
 
         # Load Avro schema
         self.avro_schema = self._load_avro_schema()
+
+        self.schema_id = register_value_schema(
+            self.schema_registry, self.topic, self.avro_schema
+        )
 
     def _load_avro_schema(self) -> Dict[str, Any]:
         """
@@ -243,7 +249,7 @@ class AsyncAlertsPoller:
                 self.kafka_producer.produce(
                     topic=self.topic,
                     key=alert.get("id", "unknown").encode("utf-8"),
-                    value=avro_bytes,
+                    value=frame(self.schema_id, avro_bytes),
                     on_delivery=self._delivery_report,
                 )
 
