@@ -62,22 +62,22 @@ working sessions.
 |---|---|---|
 | `README.md` | current | The main page. |
 | `CLAUDE.md` | current | Working instructions for AI assistants; its success criteria are updated, but its header ("Research Complete — Ready for Implementation") and source notes are from 11 October. |
-| `AI_INTERACTION_LOG.txt` | internal log | Running record of requests and decisions across sessions; still being added to. |
-| `AIR_ALERTS_IMPLEMENTATION_PLAN.md` | historical (kept for the record) | Architecture plan for a "prediction system"; replaced by the weekly baseline and `docs/MASTER_PLAN.md`. |
-| `ARBITRATION_SUMMARY.md` | historical (kept for the record) | Rulings from a research-phase debate between AI agents before any data was downloaded. |
-| `COMPLETE_SOURCE_INVENTORY.md` | historical (kept for the record) | List of sources consulted during research; current source decisions are in `docs/enterprise/STATUS.md` and `docs/FUTURE_PLANS.md`. |
-| `COMPRESSION_READY.md` | internal log | Status note written before a session's context was compressed. |
-| `CONVERSATION_SUMMARY.md` | internal log | Summary of the first research conversation. |
-| `IMPLEMENTATION_CHECKLIST.md` | historical (kept for the record) | Pre-implementation checklist built on the v2.0 research document; its blockers were resolved or dropped. |
-| `MILESTONE_1_WORK_ORDERS.md` | historical (kept for the record) | Work orders for the real-time infrastructure milestone, which is not part of the pipeline. |
-| `ORCHESTRATOR_REVIEW_LOG.md` | internal log | Review log of those work orders. |
-| `RESEARCH_FINDINGS_MASTER.md` | historical (kept for the record) | Research-phase audit; lists sources (Kaggle, alerts.in.ua) that are not used now. |
-| `RESEARCH_METHODOLOGY_AND_PROVENANCE_AUDIT.md` | historical (kept for the record) | How the research phase was run; useful for provenance, not for current findings. |
-| `SESSION_COMPLETION_SUMMARY.md` | internal log | End-of-session summary from 11–12 October. |
-| `SESSION_CONTINUATION_LOG.md` | internal log | Session log for the infrastructure milestone. |
-| `STRESS_TEST_CONSOLIDATED_FINDINGS.md` | historical (kept for the record) | Research-phase stress test with viability and cost estimates made before any data was checked. |
-| `UKRAINIAN_AIR_RAID_ALERTS_RESEARCH_v2.0.md` | historical (kept for the record) | Research brief marked "Authoritative" in its header, but replaced by the gate records and chapters. |
-| `air_raid_prediction_architecture.html` | historical (kept for the record) | Architecture diagram for the replaced prediction-system plan. |
+| `archive/AI_INTERACTION_LOG.txt` | internal log | Running record of requests and decisions across sessions; still being added to. |
+| `archive/AIR_ALERTS_IMPLEMENTATION_PLAN.md` | historical (kept for the record) | Architecture plan for a "prediction system"; replaced by the weekly baseline and `docs/MASTER_PLAN.md`. |
+| `archive/ARBITRATION_SUMMARY.md` | historical (kept for the record) | Rulings from a research-phase debate between AI agents before any data was downloaded. |
+| `archive/COMPLETE_SOURCE_INVENTORY.md` | historical (kept for the record) | List of sources consulted during research; current source decisions are in `docs/enterprise/STATUS.md` and `docs/FUTURE_PLANS.md`. |
+| `archive/COMPRESSION_READY.md` | internal log | Status note written before a session's context was compressed. |
+| `archive/CONVERSATION_SUMMARY.md` | internal log | Summary of the first research conversation. |
+| `archive/IMPLEMENTATION_CHECKLIST.md` | historical (kept for the record) | Pre-implementation checklist built on the v2.0 research document; its blockers were resolved or dropped. |
+| `archive/MILESTONE_1_WORK_ORDERS.md` | historical (kept for the record) | Work orders for the real-time infrastructure milestone, which is not part of the pipeline. |
+| `archive/ORCHESTRATOR_REVIEW_LOG.md` | internal log | Review log of those work orders. |
+| `archive/RESEARCH_FINDINGS_MASTER.md` | historical (kept for the record) | Research-phase audit; lists sources (Kaggle, alerts.in.ua) that are not used now. |
+| `archive/RESEARCH_METHODOLOGY_AND_PROVENANCE_AUDIT.md` | historical (kept for the record) | How the research phase was run; useful for provenance, not for current findings. |
+| `archive/SESSION_COMPLETION_SUMMARY.md` | internal log | End-of-session summary from 11–12 October. |
+| `archive/SESSION_CONTINUATION_LOG.md` | internal log | Session log for the infrastructure milestone. |
+| `archive/STRESS_TEST_CONSOLIDATED_FINDINGS.md` | historical (kept for the record) | Research-phase stress test with viability and cost estimates made before any data was checked. |
+| `archive/UKRAINIAN_AIR_RAID_ALERTS_RESEARCH_v2.0.md` | historical (kept for the record) | Research brief marked "Authoritative" in its header, but replaced by the gate records and chapters. |
+| `archive/air_raid_prediction_architecture.html` | historical (kept for the record) | Architecture diagram for the replaced prediction-system plan. |
 | `DATA_SOURCES_REFERENCE.json` | historical (kept for the record) | Research-phase source metadata. Not in git: `.gitignore` ignores all `*.json`, so readers of the public repository cannot see it, although `CLAUDE.md` lists it. |
 
 ### Code, configuration and setup files
@@ -140,7 +140,7 @@ working sessions.
 4. `tests/`: run `pytest` (live tests are skipped unless `RUN_LOAD_TESTS=1`).
 5. [Future plans](FUTURE_PLANS.md): what is blocked and what would unblock it.
 6. Historical files only if you need the reasoning behind the real-time parts in `src/ingestion/`:
-   `MILESTONE_1_WORK_ORDERS.md`, then `AIR_ALERTS_IMPLEMENTATION_PLAN.md`.
+   `archive/MILESTONE_1_WORK_ORDERS.md`, then `archive/AIR_ALERTS_IMPLEMENTATION_PLAN.md`.
 
 ---
 
@@ -151,7 +151,7 @@ working sessions.
    hold only the README, `CLAUDE.md`, the entry point, and set-up files.
 2. Add a one-line note at the top of each historical file: "Historical. Not the project's
    current position. See README.md."
-3. Decide whether `AI_INTERACTION_LOG.txt` should stay public. It is pushed to GitHub and names
+3. Decide whether `archive/AI_INTERACTION_LOG.txt` should stay public. It is pushed to GitHub and names
    the owner's personal email address.
 4. Decide what to do with `DATA_SOURCES_REFERENCE.json`: add it to git with an exception in
    `.gitignore`, or remove the references to it in `CLAUDE.md`.

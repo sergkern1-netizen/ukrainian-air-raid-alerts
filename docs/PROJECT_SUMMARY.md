@@ -146,7 +146,7 @@ Each item quotes both places. None changes a number; they are wording or status 
    confirmed".
 2. **Gate 5 status.** `README.md` line 100: "MVP shipped 2026-10-12 with documented misses." versus
    `docs/gate4_status.md` lines 89–90: "Gate 5 (ship the MVP or expand to the enterprise scope) is
-   the next owner decision." `AI_INTERACTION_LOG.txt` (entry "~16:50") records the answer "Gate 5:
+   the next owner decision." `archive/AI_INTERACTION_LOG.txt` (entry "~16:50") records the answer "Gate 5:
    Ship the MVP" and the local tag `mvp-v0.1.0`, so `gate4_status.md` is stale.
 3. **RMSE target.** `README.md` line 231: "Replaces the RMSE < 5 target in CLAUDE.md". `CLAUDE.md`
    no longer contains an RMSE < 5 target; its criterion 1 (line 74) is now the weekly WAPE
@@ -172,7 +172,7 @@ Each item quotes both places. None changes a number; they are wording or status 
 9. **"Every number is reproduced by the chapter's script."** `docs/chapters/README.md` line 4
    versus the chapters' own notes, for example `docs/chapters/07-provenance-and-quality.md` line
    161 ("Computed by the writer, not by the script: the 38.0% share") and Chapter 6 line 171.
-10. **Stale headers on historical files.** `UKRAINIAN_AIR_RAID_ALERTS_RESEARCH_v2.0.md` line 3:
+10. **Stale headers on historical files.** `archive/UKRAINIAN_AIR_RAID_ALERTS_RESEARCH_v2.0.md` line 3:
     "Status: Authoritative"; `CLAUDE.md` line 5: "Research Complete — Ready for Implementation
     Phase"; `CLAUDE.md` lines 54–55: Vadimkin "299K+ records", "2022-02-24 to 2026-09-07". Chapter 7
     lines 34–37: 299,275 raw official rows of which 113,845 are exact duplicates; the volunteer file
@@ -213,7 +213,7 @@ Each item quotes both places. None changes a number; they are wording or status 
   historical, 6 internal logs; see the tables in `docs/NAVIGATION.md`).
   Several carry headers that read as current ("Authoritative", "Ready for Implementation",
   "Final & Binding").
-- **Evidence.** `docs/NAVIGATION.md`, "Root-level files, one by one". `AI_INTERACTION_LOG.txt`
+- **Evidence.** `docs/NAVIGATION.md`, "Root-level files, one by one". `archive/AI_INTERACTION_LOG.txt`
   line 10 names the owner's personal email address and is on the pushed `origin/master`.
   `DATA_SOURCES_REFERENCE.json` is listed in `CLAUDE.md` "References" but ignored by
   `.gitignore` line 29 (`*.json`), so public readers cannot see it.
