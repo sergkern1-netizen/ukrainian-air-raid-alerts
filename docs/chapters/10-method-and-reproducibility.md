@@ -54,7 +54,7 @@ The scripts do not depend on each other, so the order is for reading, not for ru
 | `chapter06_granularity` | What the December 2025 change does to counts | both | two `ch06_*.png`; monthly levels, numbers | 6 |
 | `chapter07_provenance` | What is in each file, and what is missing | both, plus `MANIFEST.json` | `ch07_coverage_by_year.png`; numbers | 7 |
 | `chapter08_reporting` | Reporting patterns in the west and one oblast pair | both | three `ch08_*.png`; numbers and three tables | 8 |
-| `chapter09_disruption` | Daily and weekly national alert-time coverage | volunteer | two `ch09_*.png`; numbers, daily table | 9 |
+| `chapter09_coverage` | Daily and weekly national alert-time coverage | volunteer | two `ch09_*.png`; numbers, daily table | 9 |
 | `alert_waves` | Waves at several gap sizes | volunteer | `output/analysis/alert_waves.md` and wave tables | supports 3 |
 | `feed_integrity` | Agreement over time and place | both | `output/analysis/feed_integrity.md` and tables | supports 4 |
 | `wave_anatomy` | Which oblasts take part in each wave | volunteer | `docs/analysis/wave_anatomy.md`; participation table | supports 3 |
@@ -130,7 +130,7 @@ python -m scripts.chapter05_long_alerts
 python -m scripts.chapter06_granularity
 python -m scripts.chapter07_provenance
 python -m scripts.chapter08_reporting
-python -m scripts.chapter09_disruption
+python -m scripts.chapter09_coverage
 ```
 
 Supporting analyses. The last four overwrite files in `docs/analysis/`:

@@ -3,7 +3,7 @@
 *How much of each day and week had an alert active somewhere in Ukraine, and what that does and does not mean.*
 
 Source: the volunteer alert record, 25 February 2022 to 11 October 2026. Reproduce everything with
-`python -m scripts.chapter09_disruption`.
+`python -m scripts.chapter09_coverage`.
 
 A **record** is one row: one alert in one oblast (a region). A minute is **covered** if at least one alert
 was active somewhere in Ukraine during it, in any oblast. Alerts from all oblasts are merged, and alerts that
@@ -185,6 +185,4 @@ instructions and live warnings, use official channels only (see `docs/SAFETY.md`
 - **What is counted:** the daily and weekly figures count only minutes where a recorded alert was active;
   minutes with no record are not counted as quiet.
 - **Not done:** no significance test on weekdays, months or years.
-- **Script name:** the script name (chapter09_disruption) is historical; the measure is national
-  coverage, not disruption to people.
-- **Script:** `scripts/chapter09_disruption.py`; output in `output/analysis/chapter09_numbers.json`.
+- **Script:** `scripts/chapter09_coverage.py`; output in `output/analysis/chapter09_numbers.json`.

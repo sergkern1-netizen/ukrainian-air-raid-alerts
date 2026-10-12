@@ -7,8 +7,8 @@ of Ukraine, like a province).*
 the same region starting within five minutes.
 
 Source: the volunteer alert record (25 February 2022 to 11 October 2026), kept by volunteers who maintain
-the open Vadimkin dataset, and the official record (15 March 2022 to 7 September 2026), the official
-feed that the same dataset carries until it stopped. The matched figures use only the window from 15 March 2022 to 7
+the open Vadimkin dataset, and the official record (15 March 2022 to 7 September 2026): the public Telegram
+channel @air_alert_ua, as carried by the Vadimkin dataset until it stopped. The matched figures use only the window from 15 March 2022 to 7
 September 2026, where both records exist; volunteer data after 7 September 2026 is not scored.
 Reproduce everything with `python -m scripts.chapter04_reliability`.
 
