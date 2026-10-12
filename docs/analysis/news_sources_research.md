@@ -126,3 +126,9 @@ Recommendation: stop the GDELT timing path for alert-wave reconciliation. It fai
 feasibility test, and it does not identify threat types (code 190 is generic, code 195 is rare).
 If the owner still wants a news layer, the next step is a manual reading of 20 anomalous waves
 against GDELT source URLs, which the owner must approve as a separate task.
+
+## 8. Decision (owner, 2026-10-12)
+
+GDELT is dropped for alert-wave attribution. The four-week test (section 7) showed no hourly
+alignment with volunteer alerts. The manual reading of anomalous waves is not approved. The news
+track is closed for attribution. Raw GDELT files remain in the session scratch folder only.
