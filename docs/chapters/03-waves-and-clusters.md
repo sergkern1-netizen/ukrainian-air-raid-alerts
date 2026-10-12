@@ -18,13 +18,13 @@ says nothing about impact or warning time.
 ## The short version
 
 - **There are 23,681 waves** in the record at the 30-minute gap.
-- **A typical wave lasts about an hour** (median 64 minutes), but **one in ten lasts over three and a
+- **A typical wave spans about an hour** (median 64 minutes, from first to last recorded alert), but **one in ten lasts over three and a
   half hours** (90th percentile 212 minutes).
 - **Waves usually touch few oblasts.** A third (33%) touch only one. The median is two, and one wave in
   ten reaches ten or more.
 - **Since 2026, waves have spread wider.** Nearly one wave in five (20%) now touches ten or more
   oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4.
-- **The longest wave is probably a recording artefact.** It lasts 179 hours across 14 oblasts, from
+- **The longest wave may be a recording error.** It lasts 179 hours across 14 oblasts, from
   only 16 records. It needs checking before anyone reads it as an event.
 
 ---
@@ -60,10 +60,10 @@ of starts, with the duration mostly coming from how long each alert stays on.
 - **One oblast:** 33% of waves.
 - **Two oblasts** (the median): the typical wave.
 - **Ten or more:** about 1 wave in 10.
-- **23 or more:** about 1% of waves. At the extreme, a few waves reached 24 oblasts, the whole country.
+- **23 or more:** about 1.5% of waves (366 waves). 194 waves (0.8%) touched all 24 oblast names in the feed.
 
-The widest waves all fall in 2022. The ten widest, each touching 24 oblasts, date from April to
-September 2022, when the record was dense with nationwide alerts.
+194 waves touched all 24 oblast names in the feed. They occur in every year: 42 in 2022, 69 in 2023,
+45 in 2024, 25 in 2025 and 13 in 2026 (to 11 October). The count does not single out one period.
 
 ---
 
@@ -79,14 +79,14 @@ September 2022, when the record was dense with nationwide alerts.
 | 2025 | 5,844 | 490 | 8% | 2 |
 | 2026 (to 11 Oct) | 3,668 | 727 | 20% | 4 |
 
-The number of waves per year rose from 2022 to 2025. 2026 has 3,668 waves in 284 days, a pace of about
-4,700 for the year, below 2025. The change
-that stands out is in **breadth**: waves in 2026 touch more oblasts. In plain terms, when a wave now
-starts, it is more likely to reach many oblasts at once than it was before. Chapter 2 showed the same
+The number of waves per year rose from 2022 to 2025. 2026 has 3,668 waves in 284 days, about 12.9 per day, against 16.0 per day in 2025 (5,844 waves in 365 days).
+The change that stands out is in **breadth**: a larger share of recorded waves group starts in ten or more
+oblasts (20% in 2026, against 6% to 11% earlier). No cause is identified here, and the gap setting was not
+tested for this trend. Chapter 2 showed the same
 shift in the oblast-level rates.
 
 **Read this with care.** The 2026 change may reflect the events, the way the volunteer record was kept,
-or both. The record cannot separate them. Chapter 8 looks at the reporting side.
+or both. The record cannot separate them, and this chapter does not test either explanation. Chapter 8 looks at the reporting side.
 
 ---
 
@@ -113,8 +113,8 @@ The 30-minute gap is a choice. Changing it changes the picture.
 | 60 min | 10,543 | 5 | 16 | 113 | 12.9% |
 
 A shorter gap splits waves into many small bursts. A longer gap joins separate bursts into fewer, larger
-waves. At 60 minutes, about one wave in eight lasts more than six hours, because gaps between alerts
-get absorbed. The 30-minute setting is a reasonable middle, but **no single gap is correct**. Any
+waves. At 60 minutes, about one wave in eight lasts more than six hours, probably because chaining joins
+separate bursts. The 30-minute setting is a reasonable middle, but **no single gap is correct**. Any
 headline number about waves should name its gap.
 
 ---
