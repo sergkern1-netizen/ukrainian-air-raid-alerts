@@ -94,6 +94,10 @@ Backtest: 52 one-week-ahead origins, refit on all earlier weeks at each origin.
    volunteer alerts after the official feed ended (2026-09-07) as unmatched, which biased the
    post-break rate low. Western figures in the original (Lviv 74% → 8%, Volyn 68% → 9%) also
    included those months. Source: `scripts/feed_integrity.py`, `docs/analysis/feed_integrity.md`.
+   *Further correction (Chapter 4, 2026-10-12):* the pre-break 69.0% also counted 1,149 alerts
+   from before the official record starts (2022-03-15), so the restricted figure is 70.0%. The
+   break is not a step: the six months either side average about 53%, and the decline is gradual
+   from 2023 (about 12 points a year). See `docs/chapters/04-feed-reliability.md`.
 5. **Weekly agreement (counted per distinct oblast and start time):**
 
    | Period | Weeks | Correlation | Volunteer ÷ official |

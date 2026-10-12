@@ -27,7 +27,8 @@ BREAK = pd.Timestamp("2025-12-01", tz="UTC")
 MIN_ALERTS_FOR_RATE = 50
 
 
-def nearest_match(left: pd.DataFrame, right: pd.DataFrame, left_name: str, right_name: str) -> pd.DataFrame:
+def nearest_match(left: pd.DataFrame, right: pd.DataFrame, left_name: str, right_name: str,
+                  tol: pd.Timedelta = TOLERANCE) -> pd.DataFrame:
     """Attach the nearest same-oblast start from `right` to each row of `left`, within tolerance."""
     a = left[["started_at", left_name]].rename(columns={left_name: "oblast"}).reset_index()
     b = right[["started_at", right_name]].rename(columns={right_name: "oblast"}).copy()
@@ -35,7 +36,7 @@ def nearest_match(left: pd.DataFrame, right: pd.DataFrame, left_name: str, right
     a = a.sort_values("started_at")
     merged = pd.merge_asof(
         a, b, left_on="started_at", right_on="other_start", by="oblast",
-        direction="nearest", tolerance=TOLERANCE,
+        direction="nearest", tolerance=tol,
     )
     merged["lag_sec"] = (merged["started_at"] - merged["other_start"]).dt.total_seconds()
     return merged.set_index("index").sort_index()

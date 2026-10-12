@@ -35,3 +35,14 @@ Full table: `output/analysis/feed_integrity_monthly.csv`. Months with fewer than
 ## By oblast
 
 Full table: `output/analysis/feed_integrity_by_oblast.csv`. Oblasts with fewer than 50 alerts in a period are small-sample.
+
+## Correction (2026-10-12, Chapter 4)
+
+- **Pre-break figure.** The 69.0% pre-break match rate above includes 1,149 volunteer alerts from
+  25 February to 14 March 2022, before the official record starts (15 March 2022). Those cannot be
+  matched. Restricted to the official coverage window, the pre-break rate is **70.0%**. The post-break
+  52.7% is unchanged.
+- **No step at the break.** The six months before and after 1 December 2025 both average about 53%.
+  The decline is gradual from 2023 (about 12 points a year), not a step at the break. Read the
+  "drop after the break" wording above as a comparison of two periods, not as an event at that date.
+- See `docs/chapters/04-feed-reliability.md` for the full analysis.
