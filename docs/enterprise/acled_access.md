@@ -45,3 +45,17 @@ https://developer.acleddata.com/rehd/cms/views/acled_api/documents/FAQs_ACLED-Re
 2. Read the myACLED terms before registering.
 3. Once access is granted, the API guide must be read for the current auth method. Then we
    confirm the Ukraine filter and the row limit.
+
+## Account check (2026-10-12, after login and consent)
+
+- Login works. The consent page (privacy policy and Terms and Conditions) was completed by the
+  owner.
+- The profile page (`/user/edit`) shows no access level.
+- A minimal read-only request to `https://acleddata.com/api/acled/read?_format=json&country=Ukraine&limit=1`
+  with the owner's browser session returned `{"message":"Access denied"}`.
+- Likely cause: the account is still at Open level, because the email domain is personal
+  (gmail.com). The cause is not confirmed. The API docs page could not be read from this session
+  (site permission denied), so the current auth method is still unconfirmed.
+
+Next: confirm the access level in the myACLED area. If it is Open, request Research access from
+access@acleddata.com with the project description, or register with an institutional email.
