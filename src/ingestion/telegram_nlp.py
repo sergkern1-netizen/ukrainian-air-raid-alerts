@@ -1,112 +1,64 @@
 """
 NLP components for Telegram message processing.
 
-Includes location extraction (NER + gazetteer matching) and event type
-classification (keyword-based) for Ukrainian Air Force channel messages.
+Location and event keywords are explicit word-form lists generated offline from
+the Ukrainian/Russian dictionaries by scripts/build_telegram_forms.py. Matching
+is on whole tokens, so "кримінальна" does not match Crimea, and "луганськгаз"
+(a company) does not match Luhansk. Homographs such as "суми" ("sums") only
+match when capitalized after a locative preposition.
 """
 
+import json
 import logging
 import re
-from typing import List
+from functools import lru_cache
+from pathlib import Path
+from typing import Any, Dict, List, Set, Tuple
 
 logger = logging.getLogger(__name__)
+
+DATA_PATH = Path(__file__).resolve().parent / "data" / "telegram_forms.json"
+
+# Letters, with internal apostrophes and hyphens kept ("слов'янськ", "івано-франківськ")
+TOKEN_RE = re.compile(r"[^\W\d_]+(?:['’\-][^\W\d_]+)*")
+
+LOCATIVE_PREPOSITIONS = {"в", "у", "на", "до", "з", "із", "від", "біля", "над", "під", "поблизу",
+                         "около", "возле", "к"}
+
+EVENT_ORDER = ("launch", "uav", "missile", "all_clear")
+
+
+@lru_cache(maxsize=1)
+def _load_data() -> Dict[str, Any]:
+    """Load the generated form lists once per process."""
+    with DATA_PATH.open(encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _normalize(token: str) -> str:
+    """Lowercase a token and unify the typographic apostrophe with the ASCII one."""
+    return token.lower().replace("’", "'")
 
 
 class LocationExtractor:
     """
-    Extract location mentions from text using gazetteer matching.
+    Extract location mentions from text by whole-token matching of generated forms.
 
-    Matches Ukrainian and Russian toponyms to known cities/oblasts.
+    Covers Ukrainian and Russian names, including declined and adjectival forms.
     """
 
-    # Ukrainian oblasts (administrative regions)
-    UKRAINIAN_OBLASTS = {
-        "kyiv": ["київ", "киев"],
-        "kharkiv": ["харків", "харьков"],
-        "donetsk": ["донецьк", "донецк"],
-        "luhansk": ["луганськ", "луганск"],
-        "zaporizhzhia": ["запоріжжя", "запорожье"],
-        "dnipropetrovsk": ["дніпропетровськ", "днепропетровск"],
-        "odesa": ["одеса", "одесса"],
-        "mykolaiv": ["миколаїв", "николаев"],
-        "kherson": ["херсон"],
-        "crimea": ["крим", "крым"],
-        "lviv": ["львів", "львов"],
-        "ivano-frankivsk": ["івано-франківськ", "ивано-франковск"],
-        "ternopil": ["тернопіль", "тернополь"],
-        "khmelnytskyi": ["хмельницький", "хмельницкий"],
-        "vinnytsia": ["вінниця", "винница"],
-        "cherkasy": ["черкаси", "черкассы"],
-        "poltava": ["полтава"],
-        "sumy": ["суми", "сумы"],
-        "chernihiv": ["чернігів", "чернигов"],
-        "zhytomyr": ["житомир"],
-        "rivne": ["рівне", "ровно"],
-        "volyn": ["волинь", "волынь"],
-    }
-
-    # Major Ukrainian cities
-    UKRAINIAN_CITIES = {
-        # Stems for oblique cases: "Києві" -> "києв", "Харкові" -> "харков"
-        "kyiv": ["київ", "києв", "киев", "kiyiv"],
-        "kharkiv": ["харків", "харков", "харьков"],
-        "donetsk": ["донецьк", "донецк"],
-        "luhansk": ["луганськ", "луганск"],
-        "zaporizhzhia": ["запоріжжя", "запорожье", "zaporizhia"],
-        "dnipro": ["дніпро", "днепр"],
-        "odesa": ["одеса", "одесса"],
-        "mykolaiv": ["миколаїв", "николаев"],
-        "kherson": ["херсон"],
-        "mariupol": ["маріуполь", "мариуполь"],
-        "melitopol": ["мелітополь", "мелитополь"],
-        "lviv": ["львів", "львов"],
-        "ivano-frankivsk": ["івано-франківськ", "ивано-франковск"],
-        "ternopil": ["тернопіль", "тернополь"],
-        "khmelnytskyi": ["хмельницький", "хмельницкий"],
-        "vinnytsia": ["вінниця", "винница"],
-        "cherkasy": ["черкаси", "черкассы"],
-        "poltava": ["полтава"],
-        "sumy": ["суми", "сумы"],
-        "chernihiv": ["чернігів", "чернигов"],
-        "zhytomyr": ["житомир"],
-        "rivne": ["рівне", "ровно"],
-        "lutsk": ["луцьк", "луцк"],
-        "chernivtsi": ["чернівці", "черновцы"],
-        "krivyy-rih": ["кривий-ріг", "кривой-рог"],
-        "makiivka": ["макіївка", "макеевка"],
-        "horlivka": ["горлівка", "горловка"],
-        "severodonetsk": ["сєвєродонецьк", "северодонецк"],
-        "lysychansk": ["лисичанськ", "лисичанск"],
-        "slovyansk": ["слов'янськ", "славянск"],
-        "druzhkivka": ["дружківка", "дружковка"],
-        "kramatorsk": ["краматорськ", "краматорск"],
-        "irpin": ["ірпінь", "ирпень"],
-        "bucha": ["буча"],
-        "hostomel": ["гостомель"],
-    }
-
     def __init__(self) -> None:
-        """Initialize location extractor with gazetteer."""
-        self.oblasts = self._build_gazetteer(self.UKRAINIAN_OBLASTS)
-        self.cities = self._build_gazetteer(self.UKRAINIAN_CITIES)
-
-    def _build_gazetteer(self, location_dict: dict) -> dict:
-        """
-        Build gazetteer with normalized variants.
-
-        Args:
-            location_dict: Dictionary of location name to variants.
-
-        Returns:
-            Flattened gazetteer with all variants normalized.
-        """
-        gazetteer = {}
-        for canonical, variants in location_dict.items():
-            for variant in variants:
-                # Normalize: lowercase, strip punctuation
-                normalized = variant.lower().strip()
-                gazetteer[normalized] = canonical
-        return gazetteer
+        """Load the location forms and build the lookup tables."""
+        data = _load_data()
+        self._forms: Dict[str, str] = {}
+        self._phrases: List[Tuple[str, str]] = []
+        for canonical, forms in data["locations"].items():
+            for form in forms:
+                if " " in form:
+                    self._phrases.append((form, canonical))
+                else:
+                    self._forms[form] = canonical
+        self._homographs: Set[str] = set(data["location_homographs"])
 
     def extract(self, text: str) -> List[str]:
         """
@@ -116,110 +68,91 @@ class LocationExtractor:
             text: Message text to extract locations from.
 
         Returns:
-            List of unique location names found.
+            Sorted list of unique canonical location names found.
         """
         if not text:
             return []
 
-        # Normalize text
-        normalized = text.lower()
+        found: Set[str] = set()
+        tokens = list(TOKEN_RE.finditer(text))
+        for index, match in enumerate(tokens):
+            key = _normalize(match.group(0))
+            canonical = self._forms.get(key)
+            if canonical is None:
+                continue
+            if key in self._homographs and not self._is_locative_context(tokens, index):
+                continue
+            found.add(canonical)
 
-        # Extract locations by matching gazetteer
-        found_locations = set()
+        lowered = text.lower()
+        for phrase, canonical in self._phrases:
+            if re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", lowered):
+                found.add(canonical)
 
-        # Check cities first (more specific). Match at word start only, with
-        # trailing inflection allowed: Ukrainian/Russian nouns decline
-        # ("Київ" -> "Київі", "Харків" -> "Харкові").
-        for variant, canonical in self.cities.items():
-            pattern = r"\b" + re.escape(variant) + r"\w*"
-            if re.search(pattern, normalized):
-                found_locations.add(canonical)
+        logger.debug(f"Found locations: {found}")
+        return sorted(found)
 
-        # Check oblasts (less specific)
-        for variant, canonical in self.oblasts.items():
-            pattern = r"\b" + re.escape(variant) + r"\w*"
-            if re.search(pattern, normalized):
-                found_locations.add(canonical)
+    @staticmethod
+    def _is_locative_context(tokens: List["re.Match[str]"], index: int) -> bool:
+        """
+        Check that a homograph is capitalized and follows a locative preposition.
 
-        logger.debug(f"Found locations: {found_locations}")
-        return sorted(list(found_locations))
+        Args:
+            tokens: All word tokens of the message, in order.
+            index: Position of the homograph token.
+
+        Returns:
+            True if the token looks like a place name in context.
+        """
+        word = tokens[index].group(0)
+        if not word[0].isupper() or index == 0:
+            return False
+        return _normalize(tokens[index - 1].group(0)) in LOCATIVE_PREPOSITIONS
 
 
 class EventClassifier:
     """
     Classify event type from Telegram message text.
 
-    Uses keyword matching to classify messages into: launch, uav, missile, all_clear.
+    Keyword groups are keyed by lemma, so the Ukrainian and Russian forms of one
+    word count once. Types: launch, uav, missile, all_clear.
     """
-
-    # Keywords for each event type
-    LAUNCH_KEYWORDS = {
-        "uk": ["запуск", "раунд", "хвиля", "атака"],
-        "ru": ["запуск", "раунд", "волна", "атака"],
-        "en": ["launch", "round", "wave", "attack"],
-    }
-
-    UAV_KEYWORDS = {
-        "uk": ["дрон", "бпла", "безпілотник"],
-        "ru": ["дрон", "бпла", "беспилотник"],
-        "en": ["uav", "drone", "unmanned"],
-    }
-
-    # Stems: matched as word prefixes, so "ракет" covers ракета/ракети/ракету
-    MISSILE_KEYWORDS = {
-        "uk": ["ракет", "крилат", "стратег", "кх"],
-        "ru": ["ракет", "крылат", "стратег", "кх"],
-        "en": ["missile", "cruise", "strategic"],
-    }
-
-    ALL_CLEAR_KEYWORDS = {
-        "uk": ["відбій", "відмінено", "закінчено"],
-        "ru": ["отбой", "отменено", "закончено"],
-        "en": ["all clear", "cancelled", "finished"],
-    }
 
     # Confidence thresholds
     CONFIDENCE_THRESHOLD = 0.7
 
     def __init__(self) -> None:
-        """Initialize event classifier with keyword patterns."""
-        self.keywords = {
-            "launch": self._flatten_keywords(self.LAUNCH_KEYWORDS),
-            "uav": self._flatten_keywords(self.UAV_KEYWORDS),
-            "missile": self._flatten_keywords(self.MISSILE_KEYWORDS),
-            "all_clear": self._flatten_keywords(self.ALL_CLEAR_KEYWORDS),
-        }
+        """Load the event keyword groups and build the lookup tables."""
+        data = _load_data()
+        self._form_groups: Dict[str, Set[Tuple[str, str]]] = {}
+        self._phrase_groups: List[Tuple[str, Tuple[str, str]]] = []
+        for event_type, groups in data["events"].items():
+            for group in groups:
+                group_id = (event_type, group["lemma"])
+                for form in group["forms"]:
+                    if " " in form:
+                        self._phrase_groups.append((form, group_id))
+                    else:
+                        self._form_groups.setdefault(form, set()).add(group_id)
 
-    def _flatten_keywords(self, keyword_dict: dict) -> List[str]:
+    def _matched_groups(self, text: str) -> Set[Tuple[str, str]]:
         """
-        Flatten language-specific keywords into single list.
+        Return the keyword groups (event type, lemma) present in the text.
 
         Args:
-            keyword_dict: Dict of language -> list of keywords.
+            text: Message text.
 
         Returns:
-            Flattened list of keywords.
+            Set of (event type, lemma) pairs.
         """
-        # Dedupe: shared stems (e.g. "дрон", "атака") appear in several languages
-        # and would otherwise count twice toward the match score
-        all_keywords = []
-        for keywords in keyword_dict.values():
-            all_keywords.extend(keywords)
-        return list(dict.fromkeys(all_keywords))
-
-    @staticmethod
-    def _matches(keyword: str, normalized_text: str) -> bool:
-        """
-        Check whether a keyword occurs at the start of a word in the text.
-
-        Args:
-            keyword: Keyword stem to look for.
-            normalized_text: Lowercased message text.
-
-        Returns:
-            True if the keyword starts at a word boundary.
-        """
-        return re.search(r"\b" + re.escape(keyword), normalized_text) is not None
+        groups: Set[Tuple[str, str]] = set()
+        for match in TOKEN_RE.finditer(text):
+            groups |= self._form_groups.get(_normalize(match.group(0)), set())
+        lowered = text.lower()
+        for phrase, group_id in self._phrase_groups:
+            if re.search(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)", lowered):
+                groups.add(group_id)
+        return groups
 
     def classify(self, text: str) -> str:
         """
@@ -230,30 +163,22 @@ class EventClassifier:
 
         Returns:
             Event type: 'launch', 'uav', 'missile', or 'all_clear'.
-            Defaults to 'launch' if no clear match found.
+            Defaults to 'launch' if no keyword matched; check get_confidence to
+            tell a match from the default.
         """
         if not text:
             return "launch"
 
-        normalized = text.lower()
+        scores = {event: 0 for event in EVENT_ORDER}
+        for event_type, _ in self._matched_groups(text):
+            scores[event_type] += 1
 
-        # Count keyword matches for each event type (word-prefix, so
-        # "ракета" also matches "ракети" and "крилаті" matches "крилата")
-        scores = {}
-        for event_type, keywords in self.keywords.items():
-            matches = sum(1 for kw in keywords if self._matches(kw, normalized))
-            scores[event_type] = matches
-
-        # Find highest scoring event type
-        best_event = max(scores, key=scores.get)
-        best_score = scores[best_event]
-
-        # If no keywords matched, default to launch
-        if best_score == 0:
+        best_event = max(EVENT_ORDER, key=lambda event: scores[event])
+        if scores[best_event] == 0:
             logger.debug("No keywords matched, defaulting to 'launch'")
             return "launch"
 
-        logger.debug(f"Classified as '{best_event}' with {best_score} keyword matches")
+        logger.debug(f"Classified as '{best_event}' with {scores[best_event]} keyword groups")
         return best_event
 
     def get_confidence(self, text: str) -> float:
@@ -265,21 +190,14 @@ class EventClassifier:
 
         Returns:
             0.0 when no keyword matched (the event type is only a default),
-            otherwise a score between 0.5 and 1.0 that rises with matches.
+            otherwise a score between 0.5 and 1.0 that rises with matched keyword groups.
         """
         if not text:
             return 0.0
 
-        normalized = text.lower()
-
-        # Count total keyword matches
-        total_matches = 0
-        for keywords in self.keywords.values():
-            total_matches += sum(1 for kw in keywords if self._matches(kw, normalized))
-
-        if total_matches == 0:
+        total = len(self._matched_groups(text))
+        if total == 0:
             return 0.0
 
-        # Confidence increases with more keyword matches
-        # 1 match = 0.65, 2 matches = 0.8, 3+ matches = 0.95 (capped at 1.0)
-        return min(0.5 + (total_matches * 0.15), 1.0)
+        # 1 group = 0.65, 2 groups = 0.8, 3+ groups = 0.95 (capped at 1.0)
+        return min(0.5 + (total * 0.15), 1.0)
