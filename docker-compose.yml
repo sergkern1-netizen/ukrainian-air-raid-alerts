@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Redpanda Cluster (Kafka-compatible, KRaft mode)
   redpanda-broker-1:
-    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1@sha256:3387a7ac6b2307129032562bf957653de13373a2748f82de7ab588a39d50b88d
     container_name: redpanda-broker-1
     hostname: redpanda-broker-1
     ports:
@@ -14,16 +14,14 @@ services:
     command:
       - redpanda
       - start
-      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:29092
-      - --advertise-kafka-addr internal://redpanda-broker-1:9092,external://localhost:9092
-      - --rpc-addr 0.0.0.0:33145
-      - --advertise-rpc-addr redpanda-broker-1:33145
-      - --schema-registry-addr 0.0.0.0:8081
-      - --mode dev-container
-      - --smp 1
-      - --memory 1G
-      - --default-topic-replications 3
-      - --default-topic-partitions 1
+      - --kafka-addr=internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr=internal://redpanda-broker-1:9092,external://localhost:19092
+      - --rpc-addr=0.0.0.0:33145
+      - --advertise-rpc-addr=redpanda-broker-1:33145
+      - --schema-registry-addr=0.0.0.0:8081
+      - --mode=dev-container
+      - --smp=1
+      - --memory=1G
     volumes:
       - redpanda-data-1:/var/lib/redpanda/data
     networks:
@@ -33,12 +31,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-    depends_on:
-      - redpanda-broker-2
-      - redpanda-broker-3
 
   redpanda-broker-2:
-    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1@sha256:3387a7ac6b2307129032562bf957653de13373a2748f82de7ab588a39d50b88d
     container_name: redpanda-broker-2
     hostname: redpanda-broker-2
     ports:
@@ -49,17 +44,15 @@ services:
     command:
       - redpanda
       - start
-      - --kafka-addr internal://0.0.0.0:9093,external://0.0.0.0:29093
-      - --advertise-kafka-addr internal://redpanda-broker-2:9093,external://localhost:9093
-      - --rpc-addr 0.0.0.0:33146
-      - --advertise-rpc-addr redpanda-broker-2:33146
-      - --schema-registry-addr 0.0.0.0:8081
-      - --mode dev-container
-      - --smp 1
-      - --memory 1G
-      - --default-topic-replications 3
-      - --default-topic-partitions 1
-      - --seeds redpanda-broker-1:33145
+      - --kafka-addr=internal://0.0.0.0:9093,external://0.0.0.0:19093
+      - --advertise-kafka-addr=internal://redpanda-broker-2:9093,external://localhost:19093
+      - --rpc-addr=0.0.0.0:33146
+      - --advertise-rpc-addr=redpanda-broker-2:33146
+      - --schema-registry-addr=0.0.0.0:8081
+      - --mode=dev-container
+      - --smp=1
+      - --memory=1G
+      - --seeds=redpanda-broker-1:33145
     volumes:
       - redpanda-data-2:/var/lib/redpanda/data
     networks:
@@ -73,7 +66,7 @@ services:
       - redpanda-broker-1
 
   redpanda-broker-3:
-    image: docker.redpanda.com/redpanda/redpanda:v24.1.1
+    image: docker.redpanda.com/redpandadata/redpanda:v24.1.1@sha256:3387a7ac6b2307129032562bf957653de13373a2748f82de7ab588a39d50b88d
     container_name: redpanda-broker-3
     hostname: redpanda-broker-3
     ports:
@@ -84,17 +77,15 @@ services:
     command:
       - redpanda
       - start
-      - --kafka-addr internal://0.0.0.0:9094,external://0.0.0.0:29094
-      - --advertise-kafka-addr internal://redpanda-broker-3:9094,external://localhost:9094
-      - --rpc-addr 0.0.0.0:33147
-      - --advertise-rpc-addr redpanda-broker-3:33147
-      - --schema-registry-addr 0.0.0.0:8081
-      - --mode dev-container
-      - --smp 1
-      - --memory 1G
-      - --default-topic-replications 3
-      - --default-topic-partitions 1
-      - --seeds redpanda-broker-1:33145
+      - --kafka-addr=internal://0.0.0.0:9094,external://0.0.0.0:19094
+      - --advertise-kafka-addr=internal://redpanda-broker-3:9094,external://localhost:19094
+      - --rpc-addr=0.0.0.0:33147
+      - --advertise-rpc-addr=redpanda-broker-3:33147
+      - --schema-registry-addr=0.0.0.0:8081
+      - --mode=dev-container
+      - --smp=1
+      - --memory=1G
+      - --seeds=redpanda-broker-1:33145
     volumes:
       - redpanda-data-3:/var/lib/redpanda/data
     networks:
@@ -109,7 +100,7 @@ services:
 
   # Redpanda Console (Web UI for debugging)
   redpanda-console:
-    image: docker.redpanda.com/redpanda/console:v0.20.1
+    image: docker.redpanda.com/redpandadata/console:v2.5.2@sha256:58dbd75a425b3c60e79a6b6fb46d91d6553594a51751d19e2f47202860cb06e7
     container_name: redpanda-console
     hostname: redpanda-console
     ports:
@@ -130,7 +121,7 @@ services:
 
   # TimescaleDB (PostgreSQL 15 with TimescaleDB + PostGIS)
   timescaledb:
-    image: timescale/timescaledb:latest-pg15
+    image: timescale/timescaledb:latest-pg15@sha256:6343bdc87ca132c6b53acb26113a6bad1821d188fa39975a745f32ddd9757634
     container_name: timescaledb
     hostname: timescaledb
     ports:
@@ -152,7 +143,7 @@ services:
 
   # Redis Cache (7-alpine with persistence)
   redis:
-    image: redis:7-alpine
+    image: redis:7-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499
     container_name: redis
     hostname: redis
     ports:
@@ -171,7 +162,7 @@ services:
 
   # Schema Registry (Confluent)
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.5.0
+    image: confluentinc/cp-schema-registry:7.5.0@sha256:e51684b472a2481f065f44616d3d8ad2182029a7011f949a612d35b54566a1f6
     container_name: schema-registry
     hostname: schema-registry
     ports:
@@ -180,6 +171,7 @@ services:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "redpanda-broker-1:9092,redpanda-broker-2:9093,redpanda-broker-3:9094"
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC_REPLICATION_FACTOR: "3"
       SCHEMA_REGISTRY_DEBUG: "false"
       SCHEMA_REGISTRY_SUBJECT_NAME_STRATEGY: io.confluent.kafka.schemaregistry.strategies.TopicNameStrategy
     networks:
