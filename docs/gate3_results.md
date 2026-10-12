@@ -86,8 +86,13 @@ Backtest: 52 one-week-ahead origins, refit on all earlier weeks at each origin.
    Kharkiv +3.5). Luhanska oblast disappears after 2022-04-04, which matches the README's note
    about a permanent siren not in the data.
 4. **Event-level overlap.** Volunteer alerts matched to any official alert in the same oblast
-   within 5 minutes: 69.0% before December 2025, 44.8% after. The 24-point drop is widespread
-   (13 of 24 regions) and largest in the west (Lviv 74% → 8%, Volyn 68% → 9%).
+   within 5 minutes: 69.0% before December 2025, 52.7% after, over the period when both feeds
+   overlap (to 2026-09-07). The 16-point drop is widespread (21 of 24 oblasts with at least 50
+   alerts in both periods) and largest in the west (Lviv 74% → 10%, Volyn 68% → 11%).
+   *Correction (2026-10-12):* the original figures, 44.8% after and a 24-point drop, counted
+   volunteer alerts after the official feed ended (2026-09-07) as unmatched, which biased the
+   post-break rate low. Western figures in the original (Lviv 74% → 8%, Volyn 68% → 9%) also
+   included those months. Source: `scripts/feed_integrity.py`, `docs/analysis/feed_integrity.md`.
 5. **Weekly agreement (counted per distinct oblast and start time):**
 
    | Period | Weeks | Correlation | Volunteer ÷ official |
