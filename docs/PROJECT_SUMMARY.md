@@ -146,7 +146,7 @@ Each item quotes both places. None changes a number; they are wording or status 
    confirmed".
 2. **Gate 5 status.** `README.md` line 100: "MVP shipped 2026-10-12 with documented misses." versus
    `docs/gate4_status.md` lines 89–90: "Gate 5 (ship the MVP or expand to the enterprise scope) is
-   the next owner decision." `archive/AI_INTERACTION_LOG.txt` (entry "~16:50") records the answer "Gate 5:
+   the next owner decision." the full session log, kept on the owner's PC and not in the repository (entry "~16:50") records the answer "Gate 5:
    Ship the MVP" and the local tag `mvp-v0.1.0`, so `gate4_status.md` is stale.
 3. **RMSE target.** `README.md` line 231: "Replaces the RMSE < 5 target in CLAUDE.md". `CLAUDE.md`
    no longer contains an RMSE < 5 target; its criterion 1 (line 74) is now the weekly WAPE
@@ -213,7 +213,7 @@ Each item quotes both places. None changes a number; they are wording or status 
   historical, 6 internal logs; see the tables in `docs/NAVIGATION.md`).
   Several carry headers that read as current ("Authoritative", "Ready for Implementation",
   "Final & Binding").
-- **Evidence.** `docs/NAVIGATION.md`, "Root-level files, one by one". `archive/AI_INTERACTION_LOG.txt`
+- **Evidence.** `docs/NAVIGATION.md`, "Root-level files, one by one". the full session log, kept on the owner's PC and not in the repository
   line 10 names the owner's personal email address and is on the pushed `origin/master`.
   `DATA_SOURCES_REFERENCE.json` is listed in `CLAUDE.md` "References" but ignored by
   `.gitignore` line 29 (`*.json`), so public readers cannot see it.

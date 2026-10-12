@@ -62,7 +62,7 @@ working sessions.
 |---|---|---|
 | `README.md` | current | The main page. |
 | `CLAUDE.md` | current | Working instructions for AI assistants; its success criteria are updated, but its header ("Research Complete — Ready for Implementation") and source notes are from 11 October. |
-| `archive/AI_INTERACTION_LOG.txt` | internal log | Running record of requests and decisions across sessions; still being added to. |
+| the full session log, kept on the owner's PC and not in the repository | internal log | Running record of requests and decisions across sessions; still being added to. |
 | `archive/AIR_ALERTS_IMPLEMENTATION_PLAN.md` | historical (kept for the record) | Architecture plan for a "prediction system"; replaced by the weekly baseline and `docs/MASTER_PLAN.md`. |
 | `archive/ARBITRATION_SUMMARY.md` | historical (kept for the record) | Rulings from a research-phase debate between AI agents before any data was downloaded. |
 | `archive/COMPLETE_SOURCE_INVENTORY.md` | historical (kept for the record) | List of sources consulted during research; current source decisions are in `docs/enterprise/STATUS.md` and `docs/FUTURE_PLANS.md`. |
@@ -151,7 +151,7 @@ working sessions.
    hold only the README, `CLAUDE.md`, the entry point, and set-up files.
 2. Add a one-line note at the top of each historical file: "Historical. Not the project's
    current position. See README.md."
-3. Decide whether `archive/AI_INTERACTION_LOG.txt` should stay public. It is pushed to GitHub and names
+3. Decide whether the full session log, kept on the owner's PC and not in the repository should stay public. It is pushed to GitHub and names
    the owner's personal email address.
 4. Decide what to do with `DATA_SOURCES_REFERENCE.json`: add it to git with an exception in
    `.gitignore`, or remove the references to it in `CLAUDE.md`.
