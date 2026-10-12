@@ -10,6 +10,10 @@
 
 ---
 
+> **STATUS: DISMISSED 2026-10-12.** ISW's Fair Use & Attribution Policy does not permit
+> scraping, dataset incorporation or redistribution without written permission. The owner
+> dismissed ISW. The next enterprise source is ACLED; see `docs/enterprise/acled_access.md`.
+
 ## Starting point (verified 2026-10-12)
 
 - `src/ingestion/batch_loaders.py:500-640`: `IswLoader` exists. Its docstring says "mock implementation", which is stale: `load()` makes a real `requests.get`.
