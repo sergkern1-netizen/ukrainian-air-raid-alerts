@@ -8,17 +8,17 @@ This chapter does not say where alerts were more frequent or more dangerous. It 
 
 Source: the *official record* (the list kept by the official feed) and the *volunteer record* (a list of alerts kept by volunteers), both from the public repository described in Chapter 7. All figures use the period where both exist: 15 March 2022 to 7 September 2026 (the last official start).
 
-Terms used below. A *row* is one line in a file. An *oblast* is a region. The official file lists alerts at three levels: a whole oblast, a district inside it, or a smaller community. A *match* is a volunteer alert with an official alert in the same oblast starting within five minutes. *Any-level matching* means an official alert of any size (district, oblast or community) counts. The *match rate* is the share of volunteer alerts that are matched. The *median* is the middle value: half are above it, half below. *Western oblasts* means eight: Chernivetska, Ivano-Frankivska, Khmelnytska, Lvivska, Rivnenska, Ternopilska, Volynska and Zakarpatska. *Rest* means all other oblasts, including Kyiv City.
+Terms used below. A *row* is one line in a file. An *oblast* is a region. A *start* is the time an alert begins. The official file lists alerts at three levels: a whole oblast, a district inside it, or a smaller community. A *match* is a volunteer alert with an official alert in the same oblast starting within five minutes. *Any-level matching* means an official alert of any size (district, oblast or community) counts. The *match rate* is the share of volunteer alerts that are matched. The *median* is the middle value: half are above it, half below. *Western oblasts* means eight: Chernivetska, Ivano-Frankivska, Khmelnytska, Lvivska, Rivnenska, Ternopilska, Volynska and Zakarpatska. *Rest* means all other oblasts, including Kyiv City.
 
 ---
 
 ## The short version
 
-This chapter checks how closely the volunteer and official lists agree, and how often starts in different oblasts are recorded at the same second.
+This chapter checks how closely the volunteer and official lists agree, and how often two lists recorded alerts starting at the same time in neighbouring regions.
 
 - **The western group's match rate was slightly above the rest in 2022, well above it in 2023, and below the rest in 2026.** Its match rate was 98.6% in 2023 and 30.3% in 2026. 2026 is a partial year (to 7 September). The rest of the country fell from 94.9% (2022) to about 53 to 55% in 2025 and 2026.
-- **Match rates in Lvivska and Volynska dropped from 77.7% and 71.2% to about 10%** after 1 December 2025. These figures use any-level matching.
-- **Same-second starts are rare.** 4.8% of volunteer starts share their exact second with another oblast's start; for official oblast-level starts the figure is 4.5%. Only 10 of 600 ordered oblast pairs have at least 50 shared starts.
+- **In Lvivska and Volynska, the share of volunteer alerts with a matching official alert fell to about 10%** after 1 December 2025 (from 77.7% and 71.2%). These figures use any-level matching (an official alert of any size counts).
+- **Same-second starts are rare.** 4.8% of volunteer alerts start in the exact second of another oblast's start; for official oblast-level alerts the figure is 4.5%. Only 10 of 600 ordered oblast pairs have at least 50 shared starts.
 - **The data cannot say why starts are shared.** The records have no ID for each alert message.
 - **Two earlier statements are corrected** (see "Corrections to earlier notes").
 
@@ -38,7 +38,7 @@ Share of volunteer alerts matched within five minutes, combined across the oblas
 | 2025 | 55.5% | 1,784 | 52.8% | 22,869 |
 | 2026 (to 7 September) | 30.3% | 2,149 | 54.9% | 24,476 |
 
-The western agreement was high early and fell sharply through 2025 and 2026. The rest of the country fell more gradually. The pattern reverses over time: the western group's match rate was slightly above the rest in 2022 (97.9% against 94.9%), well above it in 2023, and below the rest in 2026. This chapter does not explain the cause.
+These are match rates between the two lists, not alert counts. The western agreement was high early and fell sharply through 2025 and 2026. The rest of the country fell more gradually. The pattern reverses over time: the western group's match rate was slightly above the rest in 2022 (97.9% against 94.9%), well above it in 2023, and below the rest in 2026. This chapter does not explain the cause.
 
 Two oblasts show the late drop clearly. Match rate, all area levels, within five minutes:
 
@@ -47,15 +47,15 @@ Two oblasts show the late drop clearly. Match rate, all area levels, within five
 | Lvivska | 77.7% | 896 | 9.9% | 718 |
 | Volynska | 71.2% | 1,061 | 10.7% | 948 |
 
-1 December 2025 is used as a marker date. Chapter 6 shows the official list changed format gradually from early 2025, so the date is not a clean cut. A fall in the match rate means fewer volunteer alerts have a matching official alert. It does not show which one changed.
+1 December 2025 is used as a marker date (a date chosen to split the data, not a known event). Chapter 6 shows the official list changed format gradually from early 2025, so the date is not a clean cut. A fall in the match rate means fewer volunteer alerts have a matching official alert. It does not show which one changed.
 
 ---
 
 ## 2. Same-second starts by pair
 
-*A shared start* here means a volunteer start whose timestamp is identical, to the second, to a start in another oblast. Two starts count as shared only if their timestamps match to the second, which is rare. Requiring an exact match to the second is strict, so the shares are low. Matching to the whole minute would count far more. For an ordered pair (A, B), the share is the part of A's starts that have a B start at the same second. Official oblast-level starts are used for comparison.
+*A shared start* (several regions' alerts starting in the same second) is a start whose timestamp is identical, to the second, to a start in another oblast. This is strict, so the shares are low; matching to the whole minute would count far more. An *ordered pair (A, B)* means oblast A is the one being counted and B is the other: for example, (Kirovohradska, Poltavska) asks how many Kirovohradska starts have a Poltavska start in the same second, and (Poltavska, Kirovohradska) asks the reverse. The share is the part of A's starts that have a B start at that second. Official oblast-level starts are used for comparison.
 
-There are 600 ordered pairs of oblasts. Only 10 have at least 50 shared volunteer starts, so only these are included in the table. The five with the largest volunteer-minus-official difference:
+There are 600 ordered pairs of oblasts. Only 10 have at least 50 shared volunteer starts, so only these are included in the table. The five with the largest difference, meaning the volunteer share minus the official share (a bigger gap means volunteers recorded more shared starts):
 
 | Oblast A | Oblast B | Shared starts (n) | Volunteer share | Official share |
 |---|---|---:|---:|---:|
@@ -67,11 +67,11 @@ There are 600 ordered pairs of oblasts. Only 10 have at least 50 shared voluntee
 
 ![Shared starts by oblast pair, volunteer and official](figures/ch08_batching_pairs.png)
 
-The "Shared starts" column is the volunteer count. The other five of the ten included pairs are not in the table above; they are in `output/analysis/chapter08_pair_batching.csv`, together with the pairs left out. One of the ten (Dnipropetrovska with Zaporizka) has a lower volunteer share than official. By chance alone, some oblasts that start alerts often will share a second sometimes; I did not model that.
+The "Shared starts" column is the volunteer count. The other five of the ten included pairs are not in the table above; they are in `output/analysis/chapter08_pair_batching.csv`, together with the pairs left out. One of the ten pairs, Dnipropetrovska with Zaporizka, is the exception: its volunteer share is lower than the official share. Chance alone could produce some shared seconds; this chapter did not test that.
 
 The pair gaps in the table are not directly comparable: the official share covers the whole window, while official oblast-level rows thin out through 2025. The pairs are also selected on the volunteer side (at least 50 shared volunteer starts, ranked by volunteer minus official).
 
-Overall, 4.8% of 109,771 volunteer starts are shared with another oblast. For official oblast-level rows it is 4.5% of 65,314, but the two cover different periods (the official file has almost no oblast-level rows after 1 December 2025), so they are not directly comparable.
+Overall, 4.8% of 109,771 volunteer alerts have a start shared with another oblast. For official oblast-level rows it is 4.5% of 65,314, but the two cover different periods (the official file has almost no oblast-level rows after 1 December 2025), so they are not directly comparable.
 
 ---
 
@@ -92,7 +92,7 @@ The official oblast-level figure for the whole period is 0.6% of 3,344 Kirovohra
 
 ## 4. Timing differences
 
-For matched alerts, the median lag is the typical time gap between the volunteer start and the nearest official start, where a positive gap means the volunteer alert came later. Matched alerts only. The western and rest groups differ in their mix of official area levels (district, community, oblast) and of years, so the two medians are not a clean comparison.
+For matched alerts, the median lag is the typical time gap between the volunteer start and the nearest official start. This is a *signed lag*: the gap in seconds, where a plus sign means the volunteer timestamp was later than the official one, on average. Matched alerts only. The western and rest groups differ in their mix of official area levels (district, community, oblast) and of years, so the two medians are not a clean comparison.
 
 | Group | Matched alerts (n) | Median signed lag |
 |---|---:|---:|
@@ -113,7 +113,7 @@ For matched alerts, the median lag is the typical time gap between the volunteer
 
 ## Corrections to earlier notes
 
-1. **The official record does have oblast-level rows after 1 December 2025.** There are 472, all for Kyiv City, after removing exact duplicates; the raw file has 551 Kyiv City oblast-level rows after 1 December 2025. For every other oblast the oblast-level check cannot be done after that date, because the official file has only district rows, plus some community rows in five oblasts (Dnipropetrovska, Donetska, Kharkivska, Zaporizka, Zhytomyrska).
+1. **The official record does have oblast-level rows after 1 December 2025.** The official file has 472 Kyiv City oblast-level rows after 1 December 2025 (after removing exact duplicates; 551 before), and none for other oblasts. For every other oblast the oblast-level check cannot be done after that date, because the official file has only district rows, plus some community rows in five oblasts (Dnipropetrovska, Donetska, Kharkivska, Zaporizka, Zhytomyrska).
 2. **Pre-break Kirovohradska with Poltavska shared-start figure.** An earlier note gave 5.8%; the correct figure is 5.9% (294 of 4,992).
 
 ---

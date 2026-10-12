@@ -3,8 +3,10 @@
 *How often alerts occur in each oblast, how long they last there, and how the pattern has moved
 over time.*
 
-Source: the volunteer alert record, 25 February 2022 to 11 October 2026. Reproduce everything with
-`python -m scripts.chapter02_regions`.
+This chapter uses the **volunteer alert record**: a public log of alert start and end times,
+compiled by volunteers, covering 25 February 2022 to 11 October 2026. An **oblast** is a region of
+Ukraine, like a province. There is also an official record; where this chapter compares the volunteer
+record and the official record, it says so.
 
 Read this chapter with the limits in mind. Counts describe **recorded alerts in each oblast**. They
 do not describe how many people were affected, how strong any threat was, or where anything was
@@ -17,10 +19,9 @@ these figures are not per person.
 
 - **Two oblasts account for nearly a quarter (23%) of all recorded alerts.** Dnipropetrovska (12%) and Kharkivska
   (11%) lead. The top ten oblasts hold about three-quarters (74%) of all alerts.
-- **Busy and long are not the same thing.** Dnipropetrovska has the most alerts, but a typical one
-  lasts 23 minutes. Donetska has fewer alerts, but 40% of them last over an hour.
-- **In 2026 the recorded rate rose in 20 of 24 regions.** (Those 24 are 23 oblasts and Kyiv city; Luhanska has no alerts in either year.) Some rose by more than 150% against 2025 per
-  day. Not the whole west rose: Chernivetska (+15%) and Khmelnytska (+16%) barely rose, and Zakarpatska, Ivano-Frankivska and Ternopilska fell. This may reflect the reporting, not only the events, so read the change with care.
+- **Busy and long are not the same thing.** Dnipropetrovska has the most alerts, but a typical alert
+  stays active for 23 minutes in the record. Donetska has fewer alerts, but more of them stay active for over an hour.
+- **In 2026 the recorded rate rose in 20 of 24 regions.** (Of the 25 regions, 24 had alerts in both years; Luhanska had none.) The number of alerts per day more than doubled in some regions. Not every western region rose: Chernivetska (+15%) and Khmelnytska (+16%) barely rose, and Zakarpatska, Ivano-Frankivska and Ternopilska fell. This may reflect changes in how alerts are reported, not only changes in the alerts themselves, so read the change with care.
 - **Some oblasts have far fewer recorded alerts.** Zakarpatska and Ivano-Frankivska had one on about
   a third of days (33% and 37%).
 
@@ -63,8 +64,8 @@ Over the 1,690 days in the record, some oblasts had an alert on almost every day
 - **Western oblasts** (eight: Chernivetska, Ivano-Frankivska, Khmelnytska, Lvivska, Rivnenska, Ternopilska,
   Volynska, Zakarpatska): on about 33% to 55% of days.
 
-The western figures are low in this record. That does **not** mean the west is safe. Chapter 8
-(reporting patterns) shows how the two records agree less in the west over time, without explaining why.
+The western figures are low in this record. Low counts in the west do **not** mean fewer threats; they reflect fewer recorded alerts. Chapter 8
+(reporting patterns) shows how the volunteer record and the official record agree less in the west over time, without explaining why.
 
 ---
 
@@ -72,7 +73,7 @@ The western figures are low in this record. That does **not** mean the west is s
 
 ![Median alert duration by oblast](figures/ch02_median_duration.png)
 
-Duration differs clearly between oblasts. The median ranges from **23 minutes** in Dnipropetrovska
+Duration differs clearly between oblasts. The median (the typical middle alert) ranges from **23 minutes** in Dnipropetrovska
 to **45 minutes** in Chernivetska. The share of alerts over one hour shows the same spread:
 
 | Oblast | Median (min) | Over one hour | 90th percentile (min) |
@@ -85,10 +86,10 @@ to **45 minutes** in Chernivetska. The share of alerts over one hour shows the s
 | Chernivetska | 45 | 40% | 141 |
 | Zakarpatska | 42 | 38% | 127 |
 
-The 90th percentile column is the length that 9 in 10 alerts stay under. Donetska's 170 minutes
-means that one alert in ten there lasts at least 170 minutes (about 2 hours 50 minutes).
+The 90th percentile column is the length that only 1 alert in 10 exceeds (9 in 10 stay under it). Donetska's 170 minutes
+means that one alert in ten stays active for at least 170 minutes in the record (about 2 hours 50 minutes).
 
-**Sample size.** Luhanska has three records, and the record has nothing after 5 April 2022. That is a gap in the record, not evidence that no alerts happened there. It is shown for completeness only. The same applies to any region absent from the record: absence here means no recorded alerts, not no alerts.
+**Sample size.** Luhanska has three records, all from before 5 April 2022. The record has nothing after that date, so this is a gap in the data, not proof that no alerts happened. It is shown for completeness only. The same applies to any region absent from the record.
 
 ---
 
@@ -99,7 +100,7 @@ varies from about **30%** (Dnipropetrovska) to about **46%** (Khmelnytska). Zaka
 Ivano-Frankivska are at 32% and 34%. Kyiv city is at 41%.
 
 Some oblasts with the most alerts have a lower night share, and some with fewer alerts have a higher one.
-A higher night share means more of an oblast's alerts start between 22:00 and 07:00. Shares from few alerts are less stable.
+A higher night share means more of its alerts begin between 22:00 and 07:00 Kyiv time. Percentages based on few alerts swing more from year to year.
 
 ---
 
@@ -109,8 +110,8 @@ A higher night share means more of an oblast's alerts start between 22:00 and 07
 
 *Both 2022 (from 25 February) and 2026 (to 11 October) are partial years, so their counts are not comparable with full years.*
 
-2026 is a partial year (1 January to 11 October, 284 days). The table compares **alerts per day**,
-so the years line up. It shows all 23 oblasts and Kyiv city with alerts in both years, ordered from the largest rise to the largest fall (Luhanska has none in either year). **20 of the 24 rose; 4 fell.**
+2026 is a **partial year**: it covers 1 January to 11 October (284 days). The table compares **alerts per day**,
+so the years line up. It shows the 24 regions (of the 25) with alerts in both years, ordered from the largest rise to the largest fall (Luhanska has none in either year). **20 of the 24 rose; 4 fell.**
 
 | Oblast | 2025 (alerts per day) | 2026 (alerts per day) | Change |
 |---|---:|---:|---:|
@@ -150,15 +151,17 @@ records agree over time, but they do not settle the cause. This chapter does not
 
 - **How many people were affected.** Oblasts have very different populations, and there is no
   population data here.
-- **Which alerts were for missiles, drones or aircraft.** The record does not say.
+- **What kind of threat each alert was linked to.** The record does not say.
 - **Whether the rise in 2026 reflects more threat.** The record measures recorded alerts, and its
   reporting may have changed.
-- **Whether an oblast with few alerts is safer.** A low count means few recorded alerts, nothing more.
+- **Whether a low count means lower risk.** A low count means few recorded alerts, nothing more.
 
 ---
 
 ## Method
 
+- **Source:** the volunteer alert record, 25 February 2022 to 11 October 2026. Reproduce everything with
+  `python -m scripts.chapter02_regions`.
 - **Data:** the volunteer alert record: 115,989 rows, of which 115,983 remain after removing 6 rows with zero or negative duration.
 - **Oblast:** the record's `region` field.
 - **Day:** the calendar day in Kyiv local time. A day counts for an oblast if it has at least one

@@ -1,31 +1,34 @@
 # Chapter 3: Waves and clusters
 
-*How alerts group into waves, how long a wave lasts, how many oblasts a wave touches, and how that has
+*How alerts group into waves, how long a wave lasts, how many oblasts (regions of Ukraine) a wave touches, and how that has
 changed.*
 
 Source: the volunteer alert record, 25 February 2022 to 11 October 2026. Reproduce everything with
 `python -m scripts.chapter03_waves`.
 
 A **wave** is a run of alert starts in which each start comes no more than 30 minutes after the
-previous one, counted across all oblasts together. The 30-minute gap is the primary setting. Chapter 1
+previous one, counted across all oblasts together. This is the 30-minute gap: a wave is a burst of alerts with no
+quiet period longer than 30 minutes. It is the primary setting. Chapter 1
 introduced the idea; this chapter looks inside the waves.
 
-A wave is a grouping of recorded alerts. It is not an attack, a threat type or a known cause, and it
-says nothing about impact or warning time.
+A wave is a grouping of alert records only. It does not say what was launched, where it landed, or how
+much notice people had.
 
 ---
 
 ## The short version
 
 - **There are 23,681 waves** in the record at the 30-minute gap.
-- **A typical wave spans about an hour** (median 64 minutes, from the first alert start to the last recorded alert end; alert durations, not danger), but **one in ten lasts over three and a
-  half hours** (90th percentile 212 minutes).
+- **A typical wave spans about an hour** (median 64 minutes, the middle value, from the first alert
+  start to the last recorded alert end; the time the alert records stayed open, not how long anyone was
+  at risk). **One in ten lasts over three and a half hours** (90th percentile 212 minutes, the value
+  only one in ten waves exceeds).
 - **Waves usually touch few oblasts.** A third (33%) touch only one. The median is two, and one wave in
   ten reaches ten or more.
 - **Since 2026, waves now touch more oblasts.** Nearly one wave in five (20%) now touches ten or more
-  oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4. This comparison
-  was not tested at other gaps and covers 284 days, not a full year, so it is not seasonally matched.
-- **The longest wave may be a recording error.** It lasts 179 hours across 14 oblasts, driven by a single row of about 178 hours (Chapter 5). The other 15 records are short. It needs checking before anyone reads it as an event.
+  oblasts, against 6% to 11% in earlier years. The median has risen from 2 oblasts to 4. The 2026 comparison was
+  checked only at the 30-minute gap and covers 284 days, not a full year, so it is not seasonally matched.
+- **The longest wave may be a recording error.** It lasts 179 hours across 14 oblasts, driven by a single row of about 178 hours (Chapter 5). The other 15 alert records in that wave are short. It needs checking before anyone reads it as an event.
 
 ---
 
@@ -44,12 +47,12 @@ says nothing about impact or warning time.
 | Over 24 hours | 0.05% |
 
 Just under half of all waves (48%) last under an hour, and about 92% last under four hours. Only about 2% of
-waves exceed six hours. Those long waves need care: they can be real periods of repeated alerts or
+waves exceed six hours. Those long waves need care: they can be long stretches of repeated alert records or
 artefacts of how the record was kept. Chapter 5 examines them.
 
 **Within a wave, the alerts are spread out.** The median time from the first start to the last start
 in a wave is **9 minutes**, and the 90th percentile is **70 minutes**. So most waves are a short burst
-of starts, with the duration mostly coming from how long each alert stays on.
+of starts, with the duration mostly coming from how long each alert record stays open.
 
 ---
 
@@ -62,7 +65,7 @@ of starts, with the duration mostly coming from how long each alert stays on.
 - **Ten or more:** about 1 wave in 10.
 - **23 or more:** about 1.5% of waves (366 waves).
 
-194 waves (0.8%) touched all 24 oblast names in the feed. They occur in every year: 42 in 2022, 69 in 2023,
+194 waves (0.8%) touched all 24 oblast names in the alert record. They occur in every year: 42 in 2022, 69 in 2023,
 45 in 2024, 25 in 2025 and 13 in 2026 (to 11 October). The count does not single out one period.
 
 ---
@@ -81,10 +84,9 @@ of starts, with the duration mostly coming from how long each alert stays on.
 
 The number of waves per year rose from 2022 (a partial year, from 25 February) to 2025. 2026 has 3,668 waves in 284 days, about 12.9 per day, against 16.0 per day in 2025 (5,844 waves in 365 days).
 The change that stands out is in **breadth**: a larger share of recorded waves group starts in ten or more
-oblasts (20% in 2026, against 6% to 11% earlier). No cause is identified here, and the gap setting was not
-tested for this trend. The 2026 comparison is not tested at other gaps, and it covers 284 days,
-not a full year, so it is not seasonally matched. Chapter 2 showed the same
-shift in the oblast-level rates.
+oblasts (20% in 2026, against 6% to 11% earlier). No cause is identified here. The 2026 comparison was checked only at the 30-minute gap and covers 284
+days, not a full year, so it is not seasonally matched. Chapter 2 showed the same
+shift in the share of alerts by region.
 
 **Read this with care.** The 2026 change may reflect the events, the way the volunteer record was kept,
 or both. The record cannot separate them, and this chapter does not test either explanation. Chapter 8 looks at the reporting side.
@@ -95,8 +97,8 @@ or both. The record cannot separate them, and this chapter does not test either 
 
 The longest wave in the record began on **4 March 2022**. It lasts 179 hours (about seven and a half
 days) and touches 14 oblasts. The duration is driven by a single row of about 178 hours (Chapter 5).
-The other 15 records are short. The record does not say whether that row is real. Chapter 5 checks it against the
-long-alert register.
+The other 15 alert records in that wave are short. The record does not say whether that row is real.
+Chapter 5 checks it against the long-alert register (the list of records lasting over six hours).
 
 ---
 
@@ -122,8 +124,8 @@ headline number about waves should name its gap.
 ## What this chapter cannot tell you
 
 - **What caused a wave.** A wave is a grouping of records, not a known attack.
-- **Which kind of threat a wave involved.** The record does not record threat types.
-- **How much warning anyone had.** There are no launch or impact times.
+- **What was launched.** The record does not record threat types.
+- **How much notice people had.** There are no launch or impact times.
 - **Whether a long wave was real.** The longest waves may be record artefacts, and Chapter 5 tests that.
 
 ---
