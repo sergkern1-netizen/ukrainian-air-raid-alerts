@@ -1032,3 +1032,15 @@ STATE AT END OF THIS SESSION (2026-10-12, second session):
 - Stack healthy. Criterion 3 not measured (no real API token).
 - Open: commit the compose/redis/env/doc fixes (awaiting owner go-ahead); decide replication
   factor for brokers; fix the poller test exception handling before it is used for measurement.
+
+--------------------------------------------------------------------------------
+[2026-10-12 ~16:30] USER MESSAGES:
+"lets continue on gate 4 rn"
+"what apies should i provide"
+"alerts.in.ua (api.alerts.in.ua) we can not get api for it rn so lets dissmiss it and ad it for future plans after project will be done"
+
+ASSISTANT:
+- Updated docs/gate4_status.md: criterion 3 is descoped to future work by owner decision, not
+  marked as met. Gate 4 remains not passed (criteria 1 and 2 unmet).
+- Answered "what APIs": alerts.in.ua token is the only key the settings require. Others
+  (Vadimkin, Open-Meteo, ISW) need no key. ACLED and Kaggle are optional.
