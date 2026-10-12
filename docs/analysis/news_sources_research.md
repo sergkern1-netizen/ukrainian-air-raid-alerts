@@ -100,3 +100,29 @@ Caveats for the next step:
 - One day is too short. The next test should cover several weeks, including the known volunteer
   wave on 2026-10-09 at 07:00–08:00 UTC (the GDELT peak falls in the same hour, but that is one
   observation).
+
+## 7. GDELT 2.0, four-week test, 2026-09-14 to 2026-10-11 (2026-10-12)
+
+Downloaded with owner approval: 2,688 files, `http://data.gdeltproject.org/gdeltv2/YYYYMMDDHHMMSS.export.CSV.zip`,
+every 15 minutes, 169.6 MB. None missing. Stored in the session scratch folder, not the repository.
+
+Coverage over 672 hours (28 days):
+- Ukraine events (ActionGeo `UP`): 45,515. Attack-coded (180–195 family): 6,529.
+- Hours with at least one attack-coded event: 632 of 672. Hours with a volunteer alert start: 646.
+
+Hourly correlation between GDELT counts and volunteer alert starts, offsets −6 to +6 hours:
+- Broad family (180–195): highest absolute correlation 0.13 (lag −5). Lag 0: 0.08.
+- Narrow code 195 ("employ aerial weapons", 281 events): lag 0: 0.09; highest absolute 0.10 (lag −6).
+
+**Result: no meaningful hourly alignment.** Every value is below 0.15, and the sign changes with the
+lag. A news-coded attack count does not track when alerts sounded at hourly resolution.
+
+Interpretation: GDELT counts follow news volume, which is spread through the day, not the timing of
+alerts. A reconciliation that matches waves to GDELT would mostly match noise. A link would need
+the article text, a person reading each match, and a hit rate far above chance. The sample test
+here does not support that.
+
+Recommendation: stop the GDELT timing path for alert-wave reconciliation. It fails the
+feasibility test, and it does not identify threat types (code 190 is generic, code 195 is rare).
+If the owner still wants a news layer, the next step is a manual reading of 20 anomalous waves
+against GDELT source URLs, which the owner must approve as a separate task.
