@@ -11,6 +11,9 @@ it in a 52-origin backtest, or in shorter sensitivity windows. The decision and 
 missed their criteria, and real-time monitoring was descoped. See
 [`docs/gate4_status.md`](docs/gate4_status.md).
 
+Enterprise sources: the track is closed for now. The Kaggle missile dataset is used for descriptive
+reporting only; see [`docs/enterprise/STATUS.md`](docs/enterprise/STATUS.md).
+
 ## What it does
 
 `python run_pipeline.py` runs these stages, each logged with a UTC timestamp:

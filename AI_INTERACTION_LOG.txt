@@ -1055,3 +1055,10 @@ ASSISTANT:
 - README updated: Docker status, descoped real-time criterion, MVP status line. Commit 35f5e85.
 - Re-ran `python run_pipeline.py --offline --as-of 2026-10-12`: exit 0, forecast 2026-10-05.
 - Local tag mvp-v0.1.0. Not pushed; origin is github.com/sergkern1-netizen/ukrainian-air-raid-alerts.
+
+--------------------------------------------------------------------------------
+[2026-10-12] ENTERPRISE TRACK CLOSED (owner decision)
+- ISW dismissed (terms). ACLED dismissed (no API access). Telegram and Oryx blocked (terms).
+- Kaggle missile dataset downloaded with owner's signed-in Chrome session; used for descriptive
+  reporting only (option 2). Telegram-derived provenance accepted by owner.
+- Track closed. Record: docs/enterprise/STATUS.md. README updated.
