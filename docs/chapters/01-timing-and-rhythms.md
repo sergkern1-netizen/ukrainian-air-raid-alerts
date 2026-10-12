@@ -15,10 +15,10 @@ Reproduce every number and chart with `python -m scripts.chapter01_timing`.
 
 - **A typical alert lasts about half an hour.** Half of all alerts end within 30 minutes of starting.
 - **Most of the rest are short too, but about 1 in 13 alerts runs for more than two hours.**
-- **Alerts come in clusters, and they come often.** On a typical day there are 14 separate alert
-  waves across the country.
-- **Night is not quiet.** Almost every night since 2022 has had at least one alert somewhere in
-  Ukraine.
+- **Alerts are grouped into waves, and there are many each day.** On a typical day there are 14
+  separate alert waves across the country.
+- **Night is not quiet.** Of 1,689 complete nights since 2022, all but one had at least one alert
+  start somewhere in Ukraine.
 
 ---
 
@@ -40,12 +40,14 @@ Reproduce every number and chart with `python -m scripts.chapter01_timing`.
 - **Over an hour:** 22% of alerts.
 - **Over three hours:** 3% of alerts.
 
-**What this means in practice.** A 30-minute wait is the usual case. Plan for an hour or more for
-about one alert in five. Plan for longer waits for the few that run past two hours (about 1 in 13).
+**What this means in practice.** The typical recorded alert lasted about 30 minutes. About one
+alert in five lasted over an hour, and about 1 in 13 ran past two hours.
 
 **Caveat.** About 5% of end times in the record were inferred, not recorded. Leaving them out
 moves the median from 30.0 to 31.1 minutes and the share over an hour from 22% to 23%. The
-difference is small, but it is in the direction of longer alerts.
+difference is small, but it is in the direction of longer alerts. Also, 5% of durations are
+exactly 30.0 minutes, which may be a default end time. These sit right on the median, so the
+"typical alert is half an hour" statement is partly affected by them.
 
 ---
 
@@ -56,10 +58,10 @@ difference is small, but it is in the direction of longer alerts.
 Alerts start at every hour, but not evenly. The busiest hours are late morning and early afternoon
 (about 10:00 to 13:00, Kyiv time). The quietest is about 06:00.
 
-**Night** here means 22:00 to 07:00. Night holds **34%** of alert starts. If alerts were spread
-evenly across the day, night would hold 29%, because it covers 7 of 24 hours. So night is slightly
-over-represented, not avoided. A night alert is no rarer than a daytime one, and it is more likely
-than an even spread would suggest.
+**Night** here means 22:00 to 07:00. Night holds **34%** of alert starts, counted on distinct
+start times (113,142 of them, not all 115,989 rows). If alerts were spread evenly across the day,
+night would hold 37.5%, because it covers 9 of 24 hours. So night holds slightly less than an even
+spread would give: alerts start a little less often per night hour than per daytime hour.
 
 ---
 
@@ -67,8 +69,10 @@ than an even spread would suggest.
 
 ![Nights with an alert, by year](figures/ch01_nights_by_year.png)
 
-Across the country, **99.9% of nights** since February 2022 had at least one alert start between
-22:00 and 07:00. In every year the share was at least 99.6% (2026 is a partial year).
+Across the country, 1,688 of 1,689 complete nights (99.9%) since February 2022 had at least one
+alert start between 22:00 and 07:00. The last night in the data (11 October 2026) is incomplete,
+because the record ends at 07:36 Kyiv time that day, so it is excluded. The one untouched complete
+night is 2022-12-25, which may be a gap in the feed rather than a truly quiet night.
 
 **Read this carefully.** This counts whether *any* oblast had an alert in the night window. It does
 not mean that every resident was woken on every night. A single alert in a distant oblast counts
@@ -84,14 +88,15 @@ chapter, with the same caveats.
 The record groups alerts into **waves**: runs of alerts in which each one starts within 30 minutes
 of the previous one (see [the glossary](../GLOSSARY.md)).
 
-- **Typical day:** 14 separate waves (median). **Busy days:** 18 or more waves (1 day in 10).
-- **Almost no day is quiet.** Only 0.1% of days had fewer than three waves.
-- **Quiet gaps are short.** The median gap between one wave and the next is **38 minutes**. One gap
-  in ten is 8 minutes or less.
+- **Typical day:** 14 separate waves (median). The 90th percentile is 18 waves: nine days in ten
+  had 18 or fewer. About 1 day in 7 had 18 or more.
+- **Almost every day has many waves.** Only one day out of 1,690 had fewer than three waves.
+- **Gaps with no alert active anywhere are short.** Gaps are computed only between non-overlapping
+  waves (14,747 of 23,680 gaps, 62%). Their median is **38 minutes**, and one in ten is 8 minutes
+  or less. For comparison, the median start-to-start interval between waves is 81 minutes.
 
-**What this means in practice.** The main effect on daily life is not one long alert. It is the
-repeated pattern of stopping, waiting and restarting. People who plan a commute, a lesson or a
-shift face many short pauses, and the gap between them is often too short to settle back in.
+**What this means in practice.** Waves are national groupings of alerts, not one event in one
+place. Among non-overlapping waves, the median gap between waves is 38 minutes.
 
 ---
 
@@ -100,6 +105,7 @@ shift face many short pauses, and the gap between them is often too short to set
 - **How much warning anyone had.** There are no launch or impact times in the record.
 - **Whether a given alert was for a missile, a drone or an aircraft.** The record does not say.
 - **What any one person experienced.** The figures count oblast alerts across the country.
+- **Risk by place.** This is not a measure of risk by place.
 - **Whether the record is complete.** It is a volunteer record with no ground truth to check it
   against.
 
@@ -118,5 +124,5 @@ authorities.
   if any oblast starts an alert inside that window.
 - **Waves:** a 30-minute gap rule on the start times across all oblasts (see
   `scripts/alert_waves.py`).
-- **Script:** `scripts/chapter01_timing.py`. Its numbers are saved to `output/analysis/`
-  (gitignored).
+- **Script:** `scripts/chapter01_timing.py`. The numbers are reproduced by the script and saved to
+  `output/analysis/` (gitignored); the chapter text is written by hand.
