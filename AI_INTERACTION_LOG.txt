@@ -1062,3 +1062,11 @@ ASSISTANT:
 - Kaggle missile dataset downloaded with owner's signed-in Chrome session; used for descriptive
   reporting only (option 2). Telegram-derived provenance accepted by owner.
 - Track closed. Record: docs/enterprise/STATUS.md. README updated.
+
+--------------------------------------------------------------------------------
+[2026-10-12] FEED INTEGRITY ANALYSIS (pivot: event-level and feed integrity)
+- scripts/feed_integrity.py: volunteer vs official match (same oblast, within 5 min, Gate 3 definition).
+- Reproduced Gate 3 pre-break 69.0%. Post-break Gate 3 figure 44.8% is biased low: it counted volunteer
+  alerts after the official feed ended (2026-09-07) as unmatched. Overlap-only post-break rate: 52.7%.
+- Western oblasts still drop sharply over the overlap: Lviv 74% -> 10%, Volyn 68% -> 11%.
+- Correction NOT yet applied to docs/gate3_results.md (approved record); pending owner decision.
