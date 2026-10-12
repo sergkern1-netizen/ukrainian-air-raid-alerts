@@ -1044,3 +1044,14 @@ ASSISTANT:
   marked as met. Gate 4 remains not passed (criteria 1 and 2 unmet).
 - Answered "what APIs": alerts.in.ua token is the only key the settings require. Others
   (Vadimkin, Open-Meteo, ISW) need no key. ACLED and Kaggle are optional.
+
+--------------------------------------------------------------------------------
+[2026-10-12 ~16:50] USER MESSAGES:
+"okey lets proceed further"
+(answers to AskUserQuestion) Gate 4: "Accept Gate 3 results"; Gate 5: "Ship the MVP"
+
+ASSISTANT:
+- Gate 4 closed with documented misses (criteria 1 and 2 unmet; criterion 3 descoped). Commit ceb8093.
+- README updated: Docker status, descoped real-time criterion, MVP status line. Commit 35f5e85.
+- Re-ran `python run_pipeline.py --offline --as-of 2026-10-12`: exit 0, forecast 2026-10-05.
+- Local tag mvp-v0.1.0. Not pushed; origin is github.com/sergkern1-netizen/ukrainian-air-raid-alerts.
